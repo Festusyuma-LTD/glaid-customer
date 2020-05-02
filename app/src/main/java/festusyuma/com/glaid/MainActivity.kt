@@ -17,4 +17,9 @@ class MainActivity : AppCompatActivity() {
         var signUpMailIntent = Intent(this, SignUpActivity::class.java)
         startActivity(signUpMailIntent)
     }
+
+    fun signInMethod(view: View){
+        var signInIntent = Intent(this, LogInActivity::class.java)
+        startActivity(signInIntent)
+    }
 }
