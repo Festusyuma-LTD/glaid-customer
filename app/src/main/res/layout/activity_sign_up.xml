@@ -101,7 +101,6 @@
                     android:singleLine="false"
                     android:text="Let’s get you signed up so you can begin ordering your diesel"
                     android:textSize="16dp"
-                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView10" />
