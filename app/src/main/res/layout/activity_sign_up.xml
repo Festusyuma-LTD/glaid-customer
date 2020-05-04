@@ -31,16 +31,38 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
-
-        <ScrollView
+        <Button
+            android:id="@+id/button7"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="59dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/mail_button_drawable"
+            android:drawableRight="@mipmap/chevron_right"
+            android:fontFamily="@font/sfpro"
+            android:gravity="left|center_vertical"
+            android:padding="16dp"
+            android:text="Continue"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ScrollView
+            android:id="@+id/scrollView2"
+            android:layout_width="0dp"
+            android:layout_height="764dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/button7"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0">
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -61,9 +83,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="50dp"
-                    android:fontFamily="@font/baloo"
+                    android:fontFamily="@font/sfpro"
                     android:text="Hi There!"
                     android:textSize="18dp"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/imageView" />
@@ -73,7 +96,7 @@
                     android:layout_width="254dp"
                     android:layout_height="61dp"
                     android:layout_marginTop="10dp"
-                    android:fontFamily="@font/molengo"
+                    android:fontFamily="@font/sfpro"
                     android:gravity="center_horizontal"
                     android:singleLine="false"
                     android:text="Let’s get you signed up so you can begin ordering your diesel"
@@ -88,6 +111,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
+                    android:fontFamily="@font/sfpro"
                     android:text="Full name"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.06"
@@ -105,6 +129,7 @@
                     android:layout_marginRight="16dp"
                     android:background="@drawable/input_drawable"
                     android:ems="10"
+                    android:fontFamily="@font/sfpro"
                     android:hint="Full Name"
                     android:inputType="textPersonName"
                     android:padding="20dp"
@@ -119,6 +144,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
+                    android:fontFamily="@font/sfpro"
                     android:text="Email"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
@@ -134,6 +160,7 @@
                     android:layout_marginTop="10dp"
                     android:background="@drawable/input_drawable"
                     android:ems="10"
+                    android:fontFamily="@font/sfpro"
                     android:hint="Email"
                     android:inputType="textEmailAddress"
                     android:padding="20dp"
@@ -148,6 +175,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
+                    android:fontFamily="@font/sfpro"
                     android:text="Phone Number"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
@@ -161,6 +189,7 @@
                     android:layout_marginTop="10dp"
                     android:background="@drawable/input_drawable"
                     android:ems="10"
+                    android:fontFamily="@font/sfpro"
                     android:hint="Phone Number"
                     android:inputType="phone"
                     android:padding="20dp"
@@ -174,6 +203,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
+                    android:fontFamily="@font/sfpro"
                     android:text="Password"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
@@ -187,6 +217,7 @@
                     android:layout_marginTop="10dp"
                     android:background="@drawable/input_drawable"
                     android:ems="10"
+                    android:fontFamily="@font/sfpro"
                     android:hint="Password"
                     android:inputType="textPassword"
                     android:padding="20dp"
@@ -199,6 +230,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
+                    android:fontFamily="@font/sfpro"
                     android:text="Re-enter Password"
                     app:layout_constraintStart_toStartOf="@+id/textView12"
                     app:layout_constraintTop_toBottomOf="@+id/editText10" />
@@ -210,6 +242,7 @@
                     android:layout_marginTop="10dp"
                     android:background="@drawable/input_drawable"
                     android:ems="10"
+                    android:fontFamily="@font/sfpro"
                     android:hint="Re-enter Password"
                     android:inputType="textPassword"
                     android:padding="20dp"
@@ -226,46 +259,39 @@
                     android:layout_marginTop="32dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginRight="16dp"
+                    android:layout_marginBottom="16dp"
                     android:background="#f2f2f2"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/editText11" />
 
-                <Button
-                    android:id="@+id/continueSignUpBtn"
-                    android:layout_width="0dp"
-                    android:layout_height="59dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:background="@drawable/mail_button_drawable"
-                    android:drawableRight="@mipmap/chevron_right"
-                    android:gravity="left|center_vertical"
-                    android:onClick="signUpMethod"
-                    android:padding="16dp"
-                    android:text="Continue"
-                    android:textColor="#FFFFFF"
-                    android:textSize="16sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/view"
-                    app:layout_constraintVertical_bias="0.0" />
+<!--                <Button-->
+<!--                    android:id="@+id/continueSignUpBtn"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="59dp"-->
+<!--                    android:layout_marginStart="16dp"-->
+<!--                    android:layout_marginLeft="16dp"-->
+<!--                    android:layout_marginTop="24dp"-->
+<!--                    android:layout_marginEnd="16dp"-->
+<!--                    android:layout_marginRight="16dp"-->
+<!--                    android:layout_marginBottom="16dp"-->
+<!--                    android:background="@drawable/mail_button_drawable"-->
+<!--                    android:drawableRight="@mipmap/chevron_right"-->
+<!--                    android:gravity="left|center_vertical"-->
+<!--                    android:padding="16dp"-->
+<!--                    android:text="Continue"-->
+<!--                    android:textColor="#FFFFFF"-->
+<!--                    android:textSize="16sp"-->
+<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintHorizontal_bias="1.0"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/view"-->
+<!--                    app:layout_constraintVertical_bias="0.0" />-->
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="0dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
