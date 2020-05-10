@@ -152,7 +152,7 @@
         <Button
             android:id="@+id/button2"
             android:layout_width="0dp"
-            android:layout_height="59dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
@@ -162,11 +162,12 @@
             android:drawableRight="@mipmap/chevron_right"
             android:fontFamily="@font/sfpro"
             android:gravity="center|start"
-            android:padding="20dp"
+            android:paddingLeft="20dp"
             android:text="@string/sign_in"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
             android:textStyle="bold"
+            app:cornerRadius="15dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view" />
