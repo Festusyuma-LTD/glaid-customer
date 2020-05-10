@@ -23,7 +23,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
     }
     fun getOtpTypeMethod(view: View){
         if (otpChoice !== "") {
-            var getOtpIntent = Intent(this, ForgotPasswordOtpActivity::class.java)
+            var getOtpIntent = Intent(this, ForgotPasswordOtpOptionsActivity::class.java)
             getOtpIntent.putExtra(EXTRA_FORGOT_PASSWORD_CHOICE, otpChoice)
             startActivity(getOtpIntent)
         } else {

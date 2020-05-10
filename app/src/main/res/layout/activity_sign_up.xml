@@ -31,34 +31,10 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
-        <Button
-            android:id="@+id/button7"
-            android:layout_width="0dp"
-            android:layout_height="59dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/mail_button_drawable"
-            android:drawableRight="@mipmap/chevron_right"
-            android:fontFamily="@font/sfpro"
-            android:gravity="left|center_vertical"
-            android:padding="16dp"
-            android:text="Continue"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent" />
-
         <ScrollView
             android:id="@+id/scrollView2"
             android:layout_width="0dp"
             android:layout_height="764dp"
-            android:layout_marginBottom="16dp"
             app:layout_constraintBottom_toTopOf="@+id/button7"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -255,39 +231,38 @@
                     android:layout_height="4dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginLeft="16dp"
-                    android:layout_marginTop="32dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginRight="16dp"
-                    android:layout_marginBottom="16dp"
                     android:background="#f2f2f2"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/editText11" />
 
-<!--                <Button-->
-<!--                    android:id="@+id/continueSignUpBtn"-->
-<!--                    android:layout_width="0dp"-->
-<!--                    android:layout_height="59dp"-->
-<!--                    android:layout_marginStart="16dp"-->
-<!--                    android:layout_marginLeft="16dp"-->
-<!--                    android:layout_marginTop="24dp"-->
-<!--                    android:layout_marginEnd="16dp"-->
-<!--                    android:layout_marginRight="16dp"-->
-<!--                    android:layout_marginBottom="16dp"-->
-<!--                    android:background="@drawable/mail_button_drawable"-->
-<!--                    android:drawableRight="@mipmap/chevron_right"-->
-<!--                    android:gravity="left|center_vertical"-->
-<!--                    android:padding="16dp"-->
-<!--                    android:text="Continue"-->
-<!--                    android:textColor="#FFFFFF"-->
-<!--                    android:textSize="16sp"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintHorizontal_bias="1.0"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toBottomOf="@+id/view"-->
-<!--                    app:layout_constraintVertical_bias="0.0" />-->
+                <Button
+                    android:id="@+id/continueSignUpBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="59dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/mail_button_drawable"
+                    android:drawableRight="@mipmap/chevron_right"
+                    android:gravity="left|center_vertical"
+                    android:onClick="signUpMethod"
+                    android:padding="16dp"
+                    android:text="Continue"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view"
+                    app:layout_constraintVertical_bias="0.0" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
