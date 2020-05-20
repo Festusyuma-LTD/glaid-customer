@@ -17,4 +17,8 @@
     <string name="i_know_my_email">I know my email</string>
     <string name="i_know_my_phone_number">I know my phone number</string>
     <string name="title_activity_maps">Map</string>
+    <string name="help_support"><![CDATA[Help & Support]]></string>
+    <string name="payment">Payment</string>
+    <string name="order_history">Order History</string>
+    <string name="invite_friends">Invite Friends</string>
 </resources>
