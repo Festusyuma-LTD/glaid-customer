@@ -120,7 +120,7 @@
         <Button
             android:id="@+id/button4"
             android:layout_width="0dp"
-            android:layout_height="59dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
@@ -130,9 +130,10 @@
             android:drawableRight="@mipmap/chevron_right"
             android:gravity="start|center_vertical"
             android:onClick="resetPasswordMethod"
-            android:padding="20dp"
+            android:paddingLeft="20dp"
             android:text="Continue"
             android:textColor="#FFFFFF"
+            app:cornerRadius="15dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/dividerLine" />
