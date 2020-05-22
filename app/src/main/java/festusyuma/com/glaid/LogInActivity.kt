@@ -16,4 +16,9 @@ class LogInActivity : AppCompatActivity() {
         var forgotPasswordIntent = Intent(this, ForgotPasswordActivity::class.java)
         startActivity(forgotPasswordIntent)
     }
+
+    fun homeIntentMethod(view: View) {
+        val homePageIntent = Intent(this, MapsActivity::class.java)
+        startActivity(homePageIntent)
+    }
 }
