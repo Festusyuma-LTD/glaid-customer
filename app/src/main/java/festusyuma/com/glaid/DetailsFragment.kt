@@ -19,12 +19,24 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
 //        // Inflate the layout for this fragment
 //        return inflater.inflate(R.layout.fragment_root, container, false)
 //    }
-//override fun onActivityCreated(savedInstanceState: Bundle?) {
-//    super.onActivityCreated(savedInstanceState)
-//    textView42.bringToFront()
-//}
-companion object {
-    fun newInstance() = DetailsFragment()
-
+override fun onActivityCreated(savedInstanceState: Bundle?) {
+    super.onActivityCreated(savedInstanceState)
+    // toggle button
+    orderBtnOne.setOnClickListener(){
+        toggleOrderButtonOne()
+    }
+    orderBtnTwo.setOnClickListener(){
+        toggleOrderButtonTwo()
+    }
 }
+    fun toggleOrderButtonOne (){
+        orderBtnTwo.isChecked = false
+    }
+    fun toggleOrderButtonTwo (){
+        orderBtnOne.isChecked = false
+    }
+    companion object {
+        fun newInstance() = DetailsFragment()
+
+    }
 }

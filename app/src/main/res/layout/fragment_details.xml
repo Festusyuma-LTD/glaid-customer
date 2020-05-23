@@ -8,10 +8,10 @@
     tools:context=".RootFragment">
 
     <ToggleButton
-        android:id="@+id/toggleButton"
+        android:id="@+id/orderBtnOne"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/fragmentbuttonchecked"
+        android:background="@drawable/orderbuttontoggle"
         android:drawableLeft="@drawable/pump"
         android:fontFamily="@font/sfpro"
         android:gravity="start|top|center_vertical"
@@ -27,10 +27,10 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ToggleButton
-        android:id="@+id/toggleButton2"
+        android:id="@+id/orderBtnTwo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/orderbuttondrawable"
+        android:background="@drawable/orderbuttontoggle"
         android:drawableLeft="@drawable/pump"
         android:fontFamily="@font/sfpro"
         android:gravity="start|top|center_vertical"
@@ -44,8 +44,8 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/toggleButton"
-        app:layout_constraintTop_toBottomOf="@+id/toggleButton" />
+        app:layout_constraintStart_toStartOf="@+id/orderBtnOne"
+        app:layout_constraintTop_toBottomOf="@+id/orderBtnOne" />
 
     <TextView
         android:id="@+id/textView41"
@@ -58,9 +58,9 @@
         android:elevation="@android:dimen/app_icon_size"
         android:textColor="#000000"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/toggleButton"
+        app:layout_constraintBottom_toBottomOf="@+id/orderBtnOne"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/toggleButton"
+        app:layout_constraintTop_toTopOf="@+id/orderBtnOne"
         app:layout_constraintVertical_bias="0.242" />
 
     <TextView
@@ -74,11 +74,11 @@
         android:elevation="@android:dimen/app_icon_size"
         android:textColor="@color/AppPrimaryPurple"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/toggleButton"
-        app:layout_constraintEnd_toEndOf="@+id/toggleButton"
+        app:layout_constraintBottom_toBottomOf="@+id/orderBtnOne"
+        app:layout_constraintEnd_toEndOf="@+id/orderBtnOne"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/textView41"
-        app:layout_constraintTop_toTopOf="@+id/toggleButton"
+        app:layout_constraintTop_toTopOf="@+id/orderBtnOne"
         app:layout_constraintVertical_bias="0.242" />
 
     <TextView
@@ -103,9 +103,9 @@
         android:elevation="@android:dimen/app_icon_size"
         android:textColor="#000000"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/toggleButton2"
-        app:layout_constraintStart_toStartOf="@+id/toggleButton2"
-        app:layout_constraintTop_toTopOf="@+id/toggleButton2"
+        app:layout_constraintBottom_toBottomOf="@+id/orderBtnTwo"
+        app:layout_constraintStart_toStartOf="@+id/orderBtnTwo"
+        app:layout_constraintTop_toTopOf="@+id/orderBtnTwo"
         app:layout_constraintVertical_bias="0.533" />
 
     <TextView
@@ -147,7 +147,7 @@
         android:textOn="Enter custom quantity"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toggleButton2" />
+        app:layout_constraintTop_toBottomOf="@+id/orderBtnTwo" />
 
     <Button
         android:id="@+id/button6"
