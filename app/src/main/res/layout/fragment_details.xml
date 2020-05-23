@@ -4,10 +4,193 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/viewdrawable"
     tools:context=".RootFragment">
 
-    <View
-        android:id="@+id/view3"
+    <ToggleButton
+        android:id="@+id/toggleButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/fragmentbuttonchecked"
+        android:drawableLeft="@drawable/pump"
+        android:fontFamily="@font/sfpro"
+        android:gravity="start|top|center_vertical"
+        android:paddingLeft="20dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="30dp"
+        android:textOff=" "
+        android:textOn=" "
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ToggleButton
+        android:id="@+id/toggleButton2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/orderbuttondrawable"
+        android:drawableLeft="@drawable/pump"
+        android:fontFamily="@font/sfpro"
+        android:gravity="start|top|center_vertical"
+        android:paddingLeft="20dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="30dp"
+        android:text="ToggleButton"
+        android:textOff=" "
+        android:textOn=" "
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/toggleButton"
+        app:layout_constraintTop_toBottomOf="@+id/toggleButton" />
+
+    <TextView
+        android:id="@+id/textView41"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginStart="76dp"
+        android:layout_marginLeft="76dp"
+        android:fontFamily="@font/sfpro"
+        android:text="50 liters"
+        android:elevation="@android:dimen/app_icon_size"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/toggleButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/toggleButton"
+        app:layout_constraintVertical_bias="0.242" />
+
+    <TextView
+        android:id="@+id/textView42"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:fontFamily="@font/sfpro"
+        android:text="₦4500"
+        android:elevation="@android:dimen/app_icon_size"
+        android:textColor="@color/AppPrimaryPurple"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/toggleButton"
+        app:layout_constraintEnd_toEndOf="@+id/toggleButton"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/textView41"
+        app:layout_constraintTop_toTopOf="@+id/toggleButton"
+        app:layout_constraintVertical_bias="0.242" />
+
+    <TextView
+        android:id="@+id/textView43"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:elevation="@android:dimen/app_icon_size"
+        android:text="Home Delivery • 3 min"
+        app:layout_constraintStart_toStartOf="@+id/textView41"
+        app:layout_constraintTop_toBottomOf="@+id/textView41" />
+
+    <TextView
+        android:id="@+id/textView45"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="76dp"
+        android:layout_marginLeft="76dp"
+        android:layout_marginBottom="36dp"
+        android:fontFamily="@font/sfpro"
+        android:text="100 liters"
+        android:elevation="@android:dimen/app_icon_size"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/toggleButton2"
+        app:layout_constraintStart_toStartOf="@+id/toggleButton2"
+        app:layout_constraintTop_toTopOf="@+id/toggleButton2"
+        app:layout_constraintVertical_bias="0.533" />
+
+    <TextView
+        android:id="@+id/textView46"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/sfpro"
+        android:text="₦8,500"
+        android:elevation="@android:dimen/app_icon_size"
+        android:textColor="@color/AppPrimaryPurple"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.927"
+        app:layout_constraintStart_toEndOf="@+id/textView45"
+        app:layout_constraintTop_toTopOf="@+id/textView45" />
+
+    <TextView
+        android:id="@+id/textView47"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Home Delivery • 3 min"
+        android:elevation="@android:dimen/app_icon_size"
+        app:layout_constraintStart_toStartOf="@+id/textView45"
+        app:layout_constraintTop_toBottomOf="@+id/textView45" />
+
+    <ToggleButton
+        android:id="@+id/toggleButton3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/orderbuttondrawable"
+        android:drawableRight="@drawable/chevronrightgrey"
+        android:gravity="start|center_vertical"
+        android:padding="20dp"
+        android:text="ToggleButton"
+        android:textAllCaps="false"
+        android:textColor="#BDB9C0"
+        android:textOff="Enter custom quantity"
+        android:textOn="Enter custom quantity"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toggleButton2" />
+
+    <Button
+        android:id="@+id/button6"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/mail_button_drawable"
+        android:drawableRight="@drawable/chevronright"
+        android:fontFamily="@font/sfpro"
+        android:gravity="start|center_vertical"
+        android:padding="20dp"
+        android:text="Order now"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toggleButton3" />
+
+    <Button
+        android:id="@+id/button10"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/transparentbuttondrawable"
+        android:drawableRight="@drawable/calender"
+        android:fontFamily="@font/sfpro"
+        android:gravity="start|center_vertical"
+        android:padding="20dp"
+        android:text="Schedule order for later"
+        android:textColor="@color/AppPrimaryPurple"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/button6"
+        app:layout_constraintStart_toStartOf="@+id/button6"
+        app:layout_constraintTop_toBottomOf="@+id/button6" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
