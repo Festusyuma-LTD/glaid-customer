@@ -21,4 +21,7 @@
     <string name="payment">Payment</string>
     <string name="order_history">Order History</string>
     <string name="invite_friends">Invite Friends</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

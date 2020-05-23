@@ -1,10 +1,10 @@
 package festusyuma.com.glaid
 
-import android.os.Build
-import android.os.Bundle
-import android.view.Window
-import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.widget.Button
+import androidx.fragment.app.FragmentManager
+
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -12,21 +12,13 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_maps.*
-
+import kotlinx.android.synthetic.main.fragment_root.*
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            val w: Window = window
-            w.setFlags(
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-            )
-        }
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
         nav_view.itemIconTintList = null;
@@ -34,6 +26,21 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        // fragment switching
+        val rootFragment = RootFragment()
+        val detailsFragment = DetailsFragment()
+        // fragment transaction to set root fragment on create
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.framelayoutFragment, rootFragment)
+            commit()
+        }
+//        var butAdd = findViewById<Button>(R.id.dieselBtn) as Button;
+//        if (butAdd) {
+//            butAdd.setOnClickListener() {
+//                print("::::::::ddjd::::::::")
+//            }
+//        }
     }
 
     /**
