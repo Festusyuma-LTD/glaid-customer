@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context=".RootFragment">
+
+    <ScrollView
+        android:id="@+id/scrollView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/button11"
+        android:layout_marginBottom="16dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@+id/button11"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textView44"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Quantity"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/editText17"
+                android:layout_width="282dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/orderbuttontoggle"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:padding="20dp"
+                android:text="1000"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView44" />
+
+            <EditText
+                android:id="@+id/editText18"
+                android:layout_width="118dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:background="@drawable/orderbuttondrawable"
+                android:editable="false"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:padding="20dp"
+                android:text="Liters"
+                app:layout_constraintBottom_toBottomOf="@+id/editText17"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/editText17"
+                app:layout_constraintTop_toTopOf="@+id/editText17"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/textView48"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Delivery type"
+                app:layout_constraintStart_toStartOf="@+id/textView44"
+                app:layout_constraintTop_toBottomOf="@+id/editText17" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="405dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/AppPrimaryColorSolid"
+                app:cardCornerRadius="15dp"
+                app:layout_constraintEnd_toEndOf="@+id/editText18"
+                app:layout_constraintStart_toStartOf="@+id/editText17"
+                app:layout_constraintTop_toBottomOf="@+id/textView48">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <ToggleButton
+                        android:id="@+id/toggleButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/orderbuttontoggle"
+                        android:fontFamily="@font/sfpro"
+                        android:gravity="start|center_vertical"
+                        android:padding="20dp"
+                        android:text="Home"
+                        android:textAllCaps="false"
+                        android:textOff="Home"
+                        android:textOn="Home"
+                        android:textSize="16sp"
+                        tools:text="Pay on Delivery" />
+
+                    <ToggleButton
+                        android:id="@+id/toggleButton5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/orderbuttontoggle"
+                        android:fontFamily="@font/sfpro"
+                        android:gravity="start|center_vertical"
+                        android:padding="20dp"
+                        android:text="Business"
+                        android:textOff="Business"
+                        android:textOn="Business" />
+
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!--            <TextView-->
+            <!--                android:id="@+id/textView49"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginTop="16dp"-->
+            <!--                android:fontFamily="@font/sfpro"-->
+            <!--                android:text="Payment Schedule (Business Only)"-->
+            <!--                android:textSize="14sp"-->
+            <!--                app:layout_constraintStart_toStartOf="@+id/textView44"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/toggleButton2" />-->
+
+            <!--            <ToggleButton-->
+            <!--                android:id="@+id/toggleButton3"-->
+            <!--                android:layout_width="0dp"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginTop="10dp"-->
+            <!--                android:background="@drawable/orderbuttontoggle"-->
+            <!--                android:gravity="start|center_vertical"-->
+            <!--                android:padding="20dp"-->
+            <!--                android:text="Pay on Delivery"-->
+            <!--                android:textOff="Pay on Delivery"-->
+            <!--                app:layout_constraintEnd_toEndOf="@+id/editText18"-->
+            <!--                app:layout_constraintStart_toStartOf="@+id/editText17"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/textView49" />-->
+
+            <!--            <ToggleButton-->
+            <!--                android:id="@+id/toggleButton4"-->
+            <!--                android:layout_width="0dp"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:background="@drawable/orderbuttontoggle"-->
+            <!--                android:gravity="start|center_vertical"-->
+            <!--                android:padding="20dp"-->
+            <!--                android:text="Schudule payment for later"-->
+            <!--                android:textOff="Schudule payment for later"-->
+            <!--                app:layout_constraintEnd_toEndOf="@+id/editText18"-->
+            <!--                app:layout_constraintStart_toStartOf="@+id/editText17"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/toggleButton3" />-->
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/button11"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/mail_button_drawable"
+        android:drawableRight="@drawable/check"
+        android:fontFamily="@font/sfpro"
+        android:gravity="start|center_vertical"
+        android:padding="20dp"
+        android:text="Button"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
