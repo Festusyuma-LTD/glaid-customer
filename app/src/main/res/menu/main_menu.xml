@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group
+        android:id="@+id/item1"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/invite_friends_btn"
+            android:icon="@mipmap/transfer"
+            android:title="@string/invite_friends"
+            app:showAsAction="always" />
+        <item
+            android:id="@+id/order_history_btn"
+            android:icon="@mipmap/clock"
+            android:title="@string/order_history"
+            android:padding="20dp"
+            app:showAsAction="ifRoom"/>
+        <item
+            android:id="@+id/payment_btn"
+            android:icon="@mipmap/wallet"
+            android:title="@string/payment"
+            app:showAsAction="ifRoom"/>
+        <item
+            android:id="@+id/help_support_btn"
+            android:icon="@mipmap/help"
+            android:title="@string/help_support"
+            app:showAsAction="ifRoom"/>
+    </group>
+
+</menu>
