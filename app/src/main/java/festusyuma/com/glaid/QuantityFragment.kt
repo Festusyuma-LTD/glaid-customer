@@ -22,23 +22,13 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity) {
 //    }
 override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
-    fragmentConstraint?.setPadding(0,0,0,0)
-    // toggle button
-//    orderBtnOne.setOnClickListener(){
-//        toggleOrderButtonOne()
-//    }
-//    orderBtnTwo.setOnClickListener(){
-//        toggleOrderButtonTwo()
-//    }
-}
-//    fun toggleOrderButtonOne (){
-//        orderBtnTwo.isChecked = false
-//    }
-//    fun toggleOrderButtonTwo (){
-//        orderBtnOne.isChecked = false
-//    }
+    onCustombtnclicked()
+    }
     companion object {
         fun quantityInstance() = QuantityFragment()
 
+    }
+    fun onCustombtnclicked() {
+        framelayoutFragment?.setPadding(0,0,0,0)
     }
 }
