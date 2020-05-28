@@ -22,8 +22,8 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
 //    }
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        R.id.framelayoutFragment
         quantityBtn.setOnClickListener {
-
             requireActivity().supportFragmentManager.beginTransaction()
 //            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)// set animation
                 .setCustomAnimations(
@@ -35,6 +35,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
                 .replace(R.id.framelayoutFragment, QuantityFragment.quantityInstance())
                 .addToBackStack(null)
                 .commit()
+            onCustombtnclicked()
         }
         // toggle button
         orderBtnOne.setOnClickListener() {
@@ -51,7 +52,9 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
     fun toggleOrderButtonTwo() {
         orderBtnOne.isChecked = false
     }
-
+    fun onCustombtnclicked() {
+        framelayoutFragment?.setPadding(0,0,0,0)
+    }
     companion object {
         fun newInstance() = DetailsFragment()
 
