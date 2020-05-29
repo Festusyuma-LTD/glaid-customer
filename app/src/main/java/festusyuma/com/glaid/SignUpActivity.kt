@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.text.isDigitsOnly
 import androidx.core.view.marginBottom
@@ -21,46 +23,79 @@ import java.util.*
 
 class SignUpActivity : AppCompatActivity() {
 
+    private var signUpRunning = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
     }
 
     fun signUp(view: View) {
-        val userRequest = UserRegistrationRequest(
-            findViewById<EditText>(R.id.fullNameInput).text.toString(),
-            findViewById<EditText>(R.id.emailInput).text.toString(),
-            findViewById<EditText>(R.id.telInput).text.toString(),
-            findViewById<EditText>(R.id.passwordInput).text.toString()
-        )
-
-        if (!hasError(userRequest)) {
-            val queue = Volley.newRequestQueue(this)
-            val url = "${API_BASE_URL}customer/register"
-            val userJsonObject = JSONObject(gson.toJson(userRequest))
-            Log.v("ApiLog", "Worked")
-
-            val request = JsonObjectRequest(
-                Request.Method.POST,
-                url,
-                userJsonObject,
-                Response.Listener {
-                    response ->
-                    if (response.getInt("status") == 200) {
-                        val signUpIntent = Intent(this, OneTimePasswordActivity::class.java)
-                        signUpIntent.putExtra("userRequest", userRequest)
-
-                        startActivity(signUpIntent)
-                    }else Log.v("ApiLog", response.getString("message"))
-                },
-                Response.ErrorListener {
-                    response ->
-                    response.printStackTrace()
-                    Log.v("ApiLog", "Please check your internet")
-                }
+        if (!signUpRunning) {
+            setLoading(true)
+            val userRequest = UserRegistrationRequest(
+                findViewById<EditText>(R.id.fullNameInput).text.toString(),
+                findViewById<EditText>(R.id.emailInput).text.toString(),
+                findViewById<EditText>(R.id.telInput).text.toString(),
+                findViewById<EditText>(R.id.passwordInput).text.toString()
             )
 
-            queue.add(request)
+            if (!hasError(userRequest)) {
+                val queue = Volley.newRequestQueue(this)
+                val url = "${API_BASE_URL}customer/register"
+                val userJsonObject = JSONObject(gson.toJson(userRequest))
+                Log.v("ApiLog", "Worked")
+
+                val request = JsonObjectRequest(
+                    Request.Method.POST,
+                    url,
+                    userJsonObject,
+                    Response.Listener {
+                        response ->
+                        if (response.getInt("status") == 200) {
+                            val signUpIntent = Intent(this, OneTimePasswordActivity::class.java)
+                            signUpIntent.putExtra("userRequest", userRequest)
+
+                            startActivity(signUpIntent)
+                        }else {
+                            showError(response.getString("message"))
+                            Log.v("ApiLog", response.getString("message"))
+                        }
+                        setLoading(false)
+                    },
+                    Response.ErrorListener {
+                        response ->
+                        response.printStackTrace()
+                        showError("Please check your internet")
+                        setLoading(false)
+                    }
+                )
+
+                queue.add(request)
+            }else setLoading(false)
+        }
+    }
+
+    private fun showError(errorMsg: String) {
+        val errorCover = findViewById<Button>(R.id.errorMsg)
+        errorCover.text = errorMsg
+        errorCover.visibility = View.VISIBLE
+    }
+
+    fun hideError(view: View) {
+        val errorCover = findViewById<Button>(R.id.errorMsg)
+        errorCover.visibility = View.INVISIBLE
+    }
+
+    private fun setLoading(loading: Boolean) {
+        val loadingCover = findViewById<LinearLayout>(R.id.loadingCover)
+
+        if (loading) {
+            loadingCover.visibility = View.VISIBLE
+            signUpRunning = true
+        }else {
+            loadingCover.visibility = View.INVISIBLE
+            signUpRunning = false
         }
     }
 
