@@ -46,223 +46,283 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+                <!-- Intro -->
                 <ImageView
                     android:id="@+id/imageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.449"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintDimensionRatio="W, 1"
+                    android:layout_marginVertical="50dp"
+                    app:srcCompat="@drawable/signupimage"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/signupimage" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/signUpTitle"
+                    android:contentDescription="@string/sign_up_image" />
 
                 <TextView
-                    android:id="@+id/textView10"
+                    android:id="@+id/signUpTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="50dp"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginBottom="20dp"
                     android:fontFamily="@font/sfpro"
-                    android:text="Hi There!"
-                    android:textSize="18dp"
+                    android:text="@string/sign_up_intro_title"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/imageView" />
+                    app:layout_constraintBottom_toTopOf="@+id/signUpText"/>
 
                 <TextView
-                    android:id="@+id/textView11"
-                    android:layout_width="254dp"
-                    android:layout_height="61dp"
-                    android:layout_marginTop="10dp"
+                    android:id="@+id/signUpText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginBottom="50dp"
                     android:fontFamily="@font/sfpro"
                     android:gravity="center_horizontal"
                     android:singleLine="false"
-                    android:text="Let’s get you signed up so you can begin ordering your diesel"
-                    android:textSize="16dp"
+                    android:text="@string/sign_up_intro_text"
+                    android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView10" />
+                    app:layout_constraintBottom_toTopOf="@+id/firstNameInputCover" />
+                <!-- Intro End -->
 
-                <TextView
-                    android:id="@+id/textView12"
-                    android:layout_width="wrap_content"
+                <!-- First name input -->
+                <LinearLayout
+                    android:id="@+id/firstNameInputCover"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:fontFamily="@font/sfpro"
-                    android:text="Full name"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.06"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="vertical"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView11" />
-
-                <EditText
-                    android:id="@+id/editText4"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginRight="20dp"
-                    android:background="@drawable/input_drawable"
-                    android:ems="10"
-                    android:fontFamily="@font/sfpro"
-                    android:hint="Full Name"
-                    android:inputType="textPersonName"
-                    android:padding="20dp"
-                    android:textColor="#3A3A3A"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintBottom_toTopOf="@+id/emailInputCover" >
+
+                    <TextView
+                        android:id="@+id/fullNameInputLbl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:fontFamily="@font/sfpro"
+                        android:text="@string/full_name_input_label" />
+
+                    <EditText
+                        android:id="@+id/fullNameInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
+                        android:background="@drawable/input_drawable"
+                        android:ems="10"
+                        android:fontFamily="@font/sfpro"
+                        android:hint="@string/full_name_input_label"
+                        android:autofillHints="@string/full_name_input_label"
+                        android:padding="20dp" />
+
+                    <TextView
+                        android:id="@+id/fullNameInputError"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textColor="#F62626" />
+                </LinearLayout>
+
+                <!-- Email input -->
+                <LinearLayout
+                    android:id="@+id/emailInputCover"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="vertical"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView12" />
-
-                <TextView
-                    android:id="@+id/textView14"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:fontFamily="@font/sfpro"
-                    android:text="Email"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/textView12"
-                    app:layout_constraintTop_toBottomOf="@+id/editText4" />
+                    app:layout_constraintBottom_toTopOf="@+id/telInputCover" >
 
-                <EditText
-                    android:id="@+id/editText7"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/input_drawable"
-                    android:ems="10"
-                    android:fontFamily="@font/sfpro"
-                    android:hint="Email"
-                    android:inputType="textEmailAddress"
-                    android:padding="20dp"
-                    android:textAllCaps="true"
-                    android:textColor="#3A3A3A"
-                    app:layout_constraintEnd_toEndOf="@+id/editText4"
-                    app:layout_constraintStart_toStartOf="@+id/editText4"
-                    app:layout_constraintTop_toBottomOf="@+id/textView14" />
+                    <TextView
+                        android:id="@+id/emailInputLbl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:fontFamily="@font/sfpro"
+                        android:text="@string/email_input_label" />
 
-                <TextView
-                    android:id="@+id/textView15"
-                    android:layout_width="wrap_content"
+                    <EditText
+                        android:id="@+id/emailInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/input_drawable"
+                        android:ems="10"
+                        android:fontFamily="@font/sfpro"
+                        android:hint="@string/email_input_label"
+                        android:autofillHints="@string/email_input_label"
+                        android:inputType="textEmailAddress"
+                        android:padding="20dp" />
+
+                    <TextView
+                        android:id="@+id/emailInputError"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textColor="#F62626"/>
+                </LinearLayout>
+
+                <!-- Phone number input -->
+                <LinearLayout
+                    android:id="@+id/telInputCover"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:fontFamily="@font/sfpro"
-                    android:text="Phone Number"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="vertical"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/textView12"
-                    app:layout_constraintTop_toBottomOf="@+id/editText7" />
+                    app:layout_constraintBottom_toTopOf="@+id/passwordInputCover" >
 
-                <EditText
-                    android:id="@+id/editText8"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/input_drawable"
-                    android:ems="10"
-                    android:fontFamily="@font/sfpro"
-                    android:hint="Phone Number"
-                    android:inputType="phone"
-                    android:padding="20dp"
-                    app:layout_constraintEnd_toEndOf="@+id/editText4"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/editText4"
-                    app:layout_constraintTop_toBottomOf="@+id/textView15" />
+                    <TextView
+                        android:id="@+id/telInputLbl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:fontFamily="@font/sfpro"
+                        android:text="@string/phone_number_input_label" />
 
-                <TextView
-                    android:id="@+id/textView17"
-                    android:layout_width="wrap_content"
+                    <EditText
+                        android:id="@+id/telInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/input_drawable"
+                        android:ems="10"
+                        android:fontFamily="@font/sfpro"
+                        android:hint="@string/phone_number_input_label"
+                        android:autofillHints="@string/phone_number_input_label"
+                        android:inputType="phone"
+                        android:padding="20dp" />
+
+                    <TextView
+                        android:id="@+id/telInputError"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textColor="#F62626"/>
+                </LinearLayout>
+
+                <!-- Password input -->
+                <LinearLayout
+                    android:id="@+id/passwordInputCover"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:fontFamily="@font/sfpro"
-                    android:text="Password"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="vertical"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/textView12"
-                    app:layout_constraintTop_toBottomOf="@+id/editText8" />
+                    app:layout_constraintBottom_toTopOf="@+id/verifyPasswordInputCover" >
 
-                <EditText
-                    android:id="@+id/editText10"
-                    android:layout_width="0dp"
+                    <TextView
+                        android:id="@+id/passwordInputLbl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:fontFamily="@font/sfpro"
+                        android:text="@string/password_input_label"
+                        android:autofillHints="@string/password_input_label" />
+
+                    <EditText
+                        android:id="@+id/passwordInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/input_drawable"
+                        android:ems="10"
+                        android:fontFamily="@font/sfpro"
+                        android:hint="@string/password_input_label"
+                        android:autofillHints="@string/password_input_label"
+                        android:inputType="textPassword"
+                        android:padding="20dp" />
+
+                    <TextView
+                        android:id="@+id/passwordInputError"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textColor="#F62626"/>
+                </LinearLayout>
+
+                <!-- Verify Password input end -->
+                <LinearLayout
+                    android:id="@+id/verifyPasswordInputCover"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/input_drawable"
-                    android:ems="10"
-                    android:fontFamily="@font/sfpro"
-                    android:hint="Password"
-                    android:inputType="textPassword"
-                    android:padding="20dp"
-                    app:layout_constraintEnd_toEndOf="@+id/editText4"
-                    app:layout_constraintStart_toStartOf="@+id/editText4"
-                    app:layout_constraintTop_toBottomOf="@+id/textView17" />
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="vertical"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/view" >
 
-                <TextView
-                    android:id="@+id/textView18"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:fontFamily="@font/sfpro"
-                    android:text="Re-enter Password"
-                    app:layout_constraintStart_toStartOf="@+id/textView12"
-                    app:layout_constraintTop_toBottomOf="@+id/editText10" />
+                    <TextView
+                        android:id="@+id/verifyPasswordInputLbl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:fontFamily="@font/sfpro"
+                        android:text="@string/verify_password_input_label" />
 
-                <EditText
-                    android:id="@+id/editText11"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/input_drawable"
-                    android:ems="10"
-                    android:fontFamily="@font/sfpro"
-                    android:hint="Re-enter Password"
-                    android:inputType="textPassword"
-                    android:padding="20dp"
-                    app:layout_constraintEnd_toEndOf="@+id/editText4"
-                    app:layout_constraintStart_toStartOf="@+id/editText4"
-                    app:layout_constraintTop_toBottomOf="@+id/textView18" />
+                    <EditText
+                        android:id="@+id/verifyPasswordInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/input_drawable"
+                        android:ems="10"
+                        android:fontFamily="@font/sfpro"
+                        android:hint="@string/verify_password_input_label"
+                        android:autofillHints="@string/verify_password_input_label"
+                        android:inputType="textPassword"
+                        android:padding="20dp" />
 
+                    <TextView
+                        android:id="@+id/verifyPasswordInputError"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textColor="#F62626" />
+                </LinearLayout>
+
+                <!-- Divider -->
                 <View
                     android:id="@+id/view"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="4dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginRight="16dp"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_gravity="center_vertical"
                     android:background="#f2f2f2"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editText11" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/continueSignUpBtn"/>
 
+                <!-- Register button -->
                 <Button
                     android:id="@+id/continueSignUpBtn"
                     android:layout_width="0dp"
                     android:layout_height="59dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginBottom="50dp"
                     android:background="@drawable/mail_button_drawable"
                     android:drawableRight="@mipmap/chevron_right"
-                    android:gravity="left|center_vertical"
-                    android:onClick="signUpMethod"
+                    android:drawableEnd="@mipmap/chevron_right"
+                    android:gravity="start|center_vertical"
+                    android:onClick="signUp"
                     android:padding="16dp"
-                    android:text="Continue"
+                    android:text="@string/register_button_label"
                     android:textColor="#FFFFFF"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/view"
-                    app:layout_constraintVertical_bias="0.0" />
+                    app:layout_constraintStart_toStartOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
