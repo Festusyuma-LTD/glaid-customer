@@ -3,12 +3,20 @@ package festusyuma.com.glaid
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import androidx.core.text.isDigitsOnly
 import androidx.core.view.marginBottom
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
+import com.google.gson.JsonObject
 import festusyuma.com.glaid.requestdto.UserRegistrationRequest
+import org.json.JSONObject
 import java.util.*
 
 class SignUpActivity : AppCompatActivity() {
@@ -27,8 +35,32 @@ class SignUpActivity : AppCompatActivity() {
         )
 
         if (!hasError(userRequest)) {
-            val signUpIntent = Intent(this, OneTimePasswordActivity::class.java)
-            startActivity(signUpIntent)
+            val queue = Volley.newRequestQueue(this)
+            val url = "${API_BASE_URL}customer/register"
+            val userJsonObject = JSONObject(gson.toJson(userRequest))
+            Log.v("ApiLog", "Worked")
+
+            val request = JsonObjectRequest(
+                Request.Method.POST,
+                url,
+                userJsonObject,
+                Response.Listener {
+                    response ->
+                    if (response.getInt("status") == 200) {
+                        val signUpIntent = Intent(this, OneTimePasswordActivity::class.java)
+                        signUpIntent.putExtra("userRequest", userRequest)
+
+                        startActivity(signUpIntent)
+                    }else Log.v("ApiLog", response.getString("message"))
+                },
+                Response.ErrorListener {
+                    response ->
+                    response.printStackTrace()
+                    Log.v("ApiLog", "Please check your internet")
+                }
+            )
+
+            queue.add(request)
         }
     }
 
