@@ -9,14 +9,11 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.text.isDigitsOnly
-import androidx.core.view.marginBottom
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import com.google.gson.JsonObject
+import festusyuma.com.glaid.helpers.Api
 import festusyuma.com.glaid.requestdto.UserRegistrationRequest
 import org.json.JSONObject
 import java.util.*
@@ -24,31 +21,29 @@ import java.util.*
 class SignUpActivity : AppCompatActivity() {
 
     private var signUpRunning = false
+    private lateinit var loadingCover: LinearLayout
+    private lateinit var errorCover: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
+
+        loadingCover = findViewById(R.id.loadingCover)
+        errorCover = findViewById(R.id.errorMsg)
     }
 
     fun signUp(view: View) {
         if (!signUpRunning) {
             setLoading(true)
-            val userRequest = UserRegistrationRequest(
-                findViewById<EditText>(R.id.fullNameInput).text.toString(),
-                findViewById<EditText>(R.id.emailInput).text.toString(),
-                findViewById<EditText>(R.id.telInput).text.toString(),
-                findViewById<EditText>(R.id.passwordInput).text.toString()
-            )
+            val userRequest = getUserRequest()
 
             if (!hasError(userRequest)) {
                 val queue = Volley.newRequestQueue(this)
-                val url = "${API_BASE_URL}customer/register"
                 val userJsonObject = JSONObject(gson.toJson(userRequest))
-                Log.v("ApiLog", "Worked")
 
                 val request = JsonObjectRequest(
                     Request.Method.POST,
-                    url,
+                    Api.REGISTER,
                     userJsonObject,
                     Response.Listener {
                         response ->
@@ -57,16 +52,14 @@ class SignUpActivity : AppCompatActivity() {
                             signUpIntent.putExtra("userRequest", userRequest)
 
                             startActivity(signUpIntent)
-                        }else {
-                            showError(response.getString("message"))
-                            Log.v("ApiLog", response.getString("message"))
-                        }
+                        }else showError(response.getString("message"))
+
                         setLoading(false)
                     },
                     Response.ErrorListener {
                         response ->
                         response.printStackTrace()
-                        showError("Please check your internet")
+                        showError("An error occurred")
                         setLoading(false)
                     }
                 )
@@ -76,20 +69,7 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
-    private fun showError(errorMsg: String) {
-        val errorCover = findViewById<Button>(R.id.errorMsg)
-        errorCover.text = errorMsg
-        errorCover.visibility = View.VISIBLE
-    }
-
-    fun hideError(view: View) {
-        val errorCover = findViewById<Button>(R.id.errorMsg)
-        errorCover.visibility = View.INVISIBLE
-    }
-
     private fun setLoading(loading: Boolean) {
-        val loadingCover = findViewById<LinearLayout>(R.id.loadingCover)
-
         if (loading) {
             loadingCover.visibility = View.VISIBLE
             signUpRunning = true
@@ -97,6 +77,15 @@ class SignUpActivity : AppCompatActivity() {
             loadingCover.visibility = View.INVISIBLE
             signUpRunning = false
         }
+    }
+
+    private fun getUserRequest(): UserRegistrationRequest {
+        return UserRegistrationRequest(
+            findViewById<EditText>(R.id.fullNameInput).text.toString(),
+            findViewById<EditText>(R.id.emailInput).text.toString(),
+            findViewById<EditText>(R.id.telInput).text.toString(),
+            findViewById<EditText>(R.id.passwordInput).text.toString()
+        )
     }
 
     private fun hasError(userRequest: UserRegistrationRequest): Boolean {
@@ -162,5 +151,14 @@ class SignUpActivity : AppCompatActivity() {
         }else verifyPasswordError.text = ""
 
         return error
+    }
+
+    private fun showError(errorMsg: String) {
+        errorCover.text = errorMsg
+        errorCover.visibility = View.VISIBLE
+    }
+
+    fun hideError(view: View) {
+        errorCover.visibility = View.INVISIBLE
     }
 }

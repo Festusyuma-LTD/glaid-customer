@@ -13,17 +13,17 @@ class ForgotPasswordActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forgot_password)
 
-        radioGroupForgotPassword.setOnCheckedChangeListener { group, checkedId ->
-            if (checkedId === R.id.emailId){
+        radioGroupForgotPassword.setOnCheckedChangeListener { _, checkedId ->
+            if (checkedId == R.id.emailRadio){
                 otpChoice = "email"
-            } else if (checkedId === R.id.phoneId){
+            } else if (checkedId == R.id.telRadio){
                 otpChoice = "phone"
             }
         }
     }
     fun getOtpTypeMethod(view: View){
-        if (otpChoice !== "") {
-            var getOtpIntent = Intent(this, ForgotPasswordOtpOptionsActivity::class.java)
+        if (otpChoice != "") {
+            val getOtpIntent = Intent(this, ForgotPasswordOtpOptionsActivity::class.java)
             getOtpIntent.putExtra(EXTRA_FORGOT_PASSWORD_CHOICE, otpChoice)
             startActivity(getOtpIntent)
         } else {

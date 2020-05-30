@@ -45,4 +45,15 @@
     <string name="complete_registration_intro_text">A one-time pin has been sent to your phone number. Please enter it below</string>
     <string name="complete_registration_intro_title">One Last Step</string>
     <string name="complete_registration_intro_image">intro image</string>
+    <string name="continue_text">Continue</string>
+    <string name="forgot_password_intro_text">If you cannot remember your password, we can help. To get started, choose an option below</string>
+    <string name="forgot_password_intro_title">Forgot password</string>
+    <string name="reset_password_intro_text">Please enter the %1$s associated with your account below</string>
+    <string name="get_otp_button_label">Send otp</string>
+    <string name="complete_reset_password_btn_label">Continue</string>
+    <string name="otp_reset_intro_title">Forgot Password</string>
+    <string name="otp_reset_intro_text">Please enter the %1$s associated with your account below</string>
+    <string name="reset_password_btn_label">Reset</string>
+    <string name="set_reset_password_intro_text">Enter your new password below</string>
+    <string name="set_reset_password_intro_title">Reset Password</string>
 </resources>

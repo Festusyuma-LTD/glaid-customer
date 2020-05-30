@@ -7,5 +7,5 @@ data class UserRegistrationRequest (
     val email: String,
     val tel: String,
     val password: String,
-    val otp: String? = null
+    var otp: String? = null
 ): Serializable
