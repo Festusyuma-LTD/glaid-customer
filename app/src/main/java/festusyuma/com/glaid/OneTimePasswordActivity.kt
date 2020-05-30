@@ -1,13 +1,14 @@
 package festusyuma.com.glaid
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
@@ -21,7 +22,7 @@ class OneTimePasswordActivity : AppCompatActivity() {
     private lateinit var userRequest: UserRegistrationRequest
     private var signUpRunning: Boolean = false
     private lateinit var loadingCover: LinearLayout
-    private lateinit var errorCover: Button
+    private lateinit var errorCover: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,8 +51,9 @@ class OneTimePasswordActivity : AppCompatActivity() {
                 Response.Listener {
                     response ->
                     if (response.getInt("status") == 200) {
-                        val signUpIntent = Intent(this, LogInActivity::class.java)
-                        startActivity(signUpIntent)
+                        val intent = Intent(this, LogInActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intent)
                     }else showError(response.getString("message"))
                     setLoading(false)
                 },
