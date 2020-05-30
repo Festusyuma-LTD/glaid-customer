@@ -11,6 +11,7 @@ import android.graphics.Color
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
@@ -33,6 +34,8 @@ import com.google.android.gms.maps.model.*
 import kotlinx.android.synthetic.main.activity_maps.*
 import kotlinx.android.synthetic.main.drawer_header.*
 import android.provider.Settings;
+import android.view.Window
+import android.view.WindowManager
 import kotlin.properties.Delegates
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -43,6 +46,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     var longitude by Delegates.notNull<Double>()
     var latitude by Delegates.notNull<Double>()
     override fun onCreate(savedInstanceState: Bundle?) {
+        val w: Window = window
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            w.setFlags(
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+
+            )
+        }
+        w.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+        w.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
         // tint removal for drawer items
@@ -91,7 +105,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
         getLastLocation()
     }
-    fun setUserLocationOnMap(latitude: Double, longitude: Double){
+
+    fun setUserLocationOnMap(latitude: Double, longitude: Double) {
         var userLocation = LatLng(latitude, longitude)
         val circleOptions = CircleOptions()
             .center(userLocation)
@@ -112,7 +127,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     // This will check if the user has turned on location from the setting
     private fun isLocationEnabled(): Boolean {
-        var locationManager: LocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        var locationManager: LocationManager =
+            getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
             LocationManager.NETWORK_PROVIDER
         )
@@ -120,23 +136,38 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     // check if user has given permission
     private fun checkPermissions(): Boolean {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
             return true
         }
         return false
     }
+
     // request permission from user if they've no granted the permission
     private fun requestPermissions() {
         ActivityCompat.requestPermissions(
             this,
-            arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION),
+            arrayOf(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ),
             PERMISSION_ID
         )
     }
 
     // This method is called when a user Allow or Deny our requested permissions. So it will help us to move forward if the permissions are granted
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         if (requestCode == PERMISSION_ID) {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                 // Granted. Start getting the location information
@@ -173,6 +204,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             requestPermissions()
         }
     }
+
     // record the location information in runtime to prevent location from being null
     @SuppressLint("MissingPermission")
     private fun requestNewLocationData() {
@@ -197,8 +229,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             longitude = mLastLocation.longitude
         }
     }
+
     // edit profile intent
-    fun editProfileIntent(view: View){
+    fun editProfileIntent(view: View) {
         val editIntent = Intent(this, EditProfileActivity::class.java)
         startActivity(editIntent)
     }
@@ -213,8 +246,38 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             rating.setRating(4.5f)
         }
     }
-    fun goToUserLocation(view: View){
+
+    fun goToUserLocation(view: View) {
         var userLocation = LatLng(this.latitude, this.longitude)
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 17.0f))
     }
+
+    private fun henryCloseDrawer() {
+        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
+
+    }
+
+    fun inviteFriendsClick(view: View) {
+        henryCloseDrawer()
+        val intent = Intent(this, InviteFriendsActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun helpClick(view: View) {
+        henryCloseDrawer()
+        val intent = Intent(this, HelpSupportActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun orderHistoryClick(view: View) {
+        henryCloseDrawer()
+        val intent = Intent(this, OrderHistoryActivity::class.java)
+        startActivity(intent)
+
+    }
+
+    fun paymentClick(view: View) {}
 }

@@ -8,82 +8,145 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
+    <include
+        android:id="@+id/map_view"
+        layout="@layout/map_view" />
+
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="300dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="#fff"
-        app:headerLayout="@layout/drawer_header"
         app:itemBackground="@drawable/drawer_item_bg"
-        app:itemIconTint="@android:color/black"
-        app:menu="@menu/main_menu" >
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        app:itemIconTint="@android:color/black">
+        <!--        start-->
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/imageView14"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:srcCompat="@drawable/drawerimage" />
+            <include
+                android:id="@+id/drawer_header"
+                layout="@layout/drawer_header" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/drawer_header"
+                android:background="#FFFFFF">
+
+                <Button
+                    android:id="@+id/inviteFriends"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:drawableStart="@drawable/ic_invite_friends"
+                    android:drawableLeft="@drawable/ic_invite_friends"
+                    android:drawablePadding="20dp"
+                    android:gravity="start"
+                    android:onClick="inviteFriendsClick"
+                    android:text="@string/invite_friends"
+                    android:textAllCaps="false"
+                    android:textColor="#333333"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/orderHistory"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:drawableStart="@drawable/ic_order_history"
+                    android:drawableLeft="@drawable/ic_order_history"
+                    android:drawablePadding="20dp"
+                    android:gravity="start"
+                    android:onClick="orderHistoryClick"
+                    android:text="@string/order_history"
+                    android:textAllCaps="false"
+                    android:textColor="#333333"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/inviteFriends" />
+
+                <Button
+                    android:id="@+id/payment"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:drawableStart="@drawable/ic_help"
+                    android:drawableLeft="@drawable/ic_help"
+                    android:drawablePadding="20dp"
+                    android:gravity="start"
+                    android:onClick="paymentClick"
+                    android:text="@string/payment"
+                    android:textAllCaps="false"
+                    android:textColor="#333333"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/orderHistory" />
+
+                <Button
+                    android:id="@+id/help_support"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:drawableStart="@drawable/ic_help"
+                    android:drawableLeft="@drawable/ic_help"
+                    android:drawablePadding="20dp"
+                    android:gravity="start"
+                    android:onClick="helpClick"
+                    android:text="@string/help_support"
+                    android:textAllCaps="false"
+                    android:textColor="#333333"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/payment" />
+
+                <ImageView
+                    android:id="@+id/imageView17"
+                    android:layout_width="270dp"
+                    android:layout_height="340dp"
+                    android:layout_marginEnd="65dp"
+                    android:layout_marginRight="65dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/guideline3"
+                    app:srcCompat="@drawable/ic_fuelstation"
+                    tools:ignore="VectorDrawableCompat"
+                    android:contentDescription="@string/todo" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_end="305dp" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </RelativeLayout>
+        <!--end-->
     </com.google.android.material.navigation.NavigationView>
-
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:map="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".MapsActivity" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/fragmentConstraint"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
-
-        <FrameLayout
-            android:id="@+id/framelayoutFragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:padding="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <ImageView
-            android:id="@+id/imageView13"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:onClick="toggleDrawerClick"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/menubar" />
-
-        <ImageView
-            android:id="@+id/userlocation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginBottom="8dp"
-            android:onClick="goToUserLocation"
-            app:layout_constraintBottom_toTopOf="@+id/framelayoutFragment"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/userlocation" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.drawerlayout.widget.DrawerLayout>

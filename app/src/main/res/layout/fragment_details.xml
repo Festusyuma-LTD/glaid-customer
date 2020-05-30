@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/viewdrawable"
+    android:background="@color/colorPrimary"
     tools:context=".RootFragment">
 
     <ToggleButton
@@ -179,7 +179,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:background="@drawable/transparentbuttondrawable"
+        android:background="@color/colorPrimary"
         android:drawableRight="@drawable/calender"
         android:fontFamily="@font/sfpro"
         android:gravity="start|center_vertical"
