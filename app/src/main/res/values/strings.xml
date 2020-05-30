@@ -45,4 +45,7 @@
     <string name="complete_registration_intro_text">A one-time pin has been sent to your phone number. Please enter it below</string>
     <string name="complete_registration_intro_title">One Last Step</string>
     <string name="complete_registration_intro_image">intro image</string>
+    <string name="continue_text">Continue</string>
+    <string name="forgot_password_intro_text">If you cannot remember your password, we can help. To get started, choose an option below</string>
+    <string name="forgot_password_intro_title">Forgot password</string>
 </resources>
