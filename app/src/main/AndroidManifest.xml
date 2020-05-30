@@ -86,6 +86,11 @@
             android:name=".MainActivity"
             android:screenOrientation="sensorPortrait"
             tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".CarouselActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="sensorPortrait"
+            tools:ignore="LockedOrientationActivity" />
 
         <meta-data
             android:name="preloaded_fonts"
