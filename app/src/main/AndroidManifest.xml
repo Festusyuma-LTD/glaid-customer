@@ -91,6 +91,31 @@
             android:configChanges="orientation"
             android:screenOrientation="sensorPortrait"
             tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".InviteFriendsActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="sensorPortrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".OrderHistoryActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="sensorPortrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".OrderDetailsActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="sensorPortrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".HelpSupportActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="sensorPortrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".SupportFullPageActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="sensorPortrait"
+            tools:ignore="LockedOrientationActivity" />
 
         <meta-data
             android:name="preloaded_fonts"
