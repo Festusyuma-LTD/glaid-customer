@@ -52,8 +52,8 @@ class OneTimePasswordActivity : AppCompatActivity() {
                     response ->
                     if (response.getInt("status") == 200) {
                         val intent = Intent(this, LogInActivity::class.java)
-                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         startActivity(intent)
+                        finishAffinity()
                     }else showError(response.getString("message"))
                     setLoading(false)
                 },
