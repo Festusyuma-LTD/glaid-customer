@@ -48,4 +48,6 @@
     <string name="continue_text">Continue</string>
     <string name="forgot_password_intro_text">If you cannot remember your password, we can help. To get started, choose an option below</string>
     <string name="forgot_password_intro_title">Forgot password</string>
+    <string name="reset_password_intro_text">Please enter the %1$s associated with your account below</string>
+    <string name="get_otp_button_label">Send otp</string>
 </resources>

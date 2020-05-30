@@ -1,50 +1,49 @@
 package festusyuma.com.glaid
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.text.InputType
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
-import kotlinx.android.synthetic.main.activity_forgot_password.*
 import kotlinx.android.synthetic.main.activity_forgot_password_otp.*
 
 
 class ForgotPasswordOtpOptionsActivity : AppCompatActivity() {
+
     lateinit var otpChoice : String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forgot_password_otp)
 
-        otpChoice = intent.getStringExtra(EXTRA_FORGOT_PASSWORD_CHOICE)
-        var otpText = if (otpChoice == "email") "Email" else "Phone number"
-//        println(":::::: $otpText :::::::")
-        forgotPasswordText.text = "Please enter the $otpText associated with your account below"
-        inputLabeId.text = otpText
-        this.toggleInputFields()
-        this.setConstrantOnButton()
+        val choice = intent.getStringExtra(EXTRA_FORGOT_PASSWORD_CHOICE)
+        if (choice == null) finish() else otpChoice = choice
+        formatInput()
     }
 
-    private fun toggleInputFields(){
+    private fun formatInput() {
+        val inputLabel = if (otpChoice == "email") "Email" else "Phone number"
+        forgotPasswordIntroText.text = getString(R.string.reset_password_intro_text).format(inputLabel)
+        getOtpInputLabel.text = inputLabel
+
         if (otpChoice == "email") {
-            emailInputId.visibility = View.VISIBLE
-            numberInputId.visibility = View.GONE
-        } else if (otpChoice == "phone") {
-            emailInputId.visibility = View.GONE
-            numberInputId.visibility = View.VISIBLE
+            getOtpInput.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+            getOtpInput.inputType
+            getOtpInput.setHint(R.string.email_input_label)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                getOtpInput.setAutofillHints(getString(R.string.email_input_label))
+            }
+        }else {
+            getOtpInput.inputType = InputType.TYPE_CLASS_PHONE
+            getOtpInput.inputType
+            getOtpInput.setHint(R.string.phone_number_input_label)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                getOtpInput.setAutofillHints(getString(R.string.phone_number_input_label))
+            }
         }
     }
 
-    fun setConstrantOnButton(){
-        val params = dividerLine.layoutParams as ConstraintLayout.LayoutParams
-        if (otpChoice == "email") {
-            params.topToBottom = emailInputId.id
-            forgotOtpButton.text = "Send Email"
-        } else if (otpChoice == "phone") {
-            params.topToBottom = numberInputId.id
-            forgotOtpButton.text = "Send Otp"
-        }
-    }
     fun getOtpMethod(view: View) {
         if (otpChoice != "") {
             val getOtpIntent = Intent(this, ForgotPassOtpFinalScreenActivity::class.java)
