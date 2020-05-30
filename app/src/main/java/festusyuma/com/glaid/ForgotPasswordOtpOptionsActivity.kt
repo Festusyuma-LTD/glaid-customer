@@ -4,14 +4,23 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.InputType
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
+import festusyuma.com.glaid.helpers.Api
+import festusyuma.com.glaid.requestdto.PasswordResetRequest
 import kotlinx.android.synthetic.main.activity_forgot_password_otp.*
+import org.json.JSONObject
 
 
 class ForgotPasswordOtpOptionsActivity : AppCompatActivity() {
 
     lateinit var otpChoice : String
+    private var operationRunning = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,10 +54,59 @@ class ForgotPasswordOtpOptionsActivity : AppCompatActivity() {
     }
 
     fun getOtpMethod(view: View) {
-        if (otpChoice != "") {
-            val getOtpIntent = Intent(this, ForgotPassOtpFinalScreenActivity::class.java)
-            getOtpIntent.putExtra(EXTRA_FORGOT_PASSWORD_CHOICE, otpChoice)
-            startActivity(getOtpIntent)
+        if (!operationRunning) {
+            setLoading(true)
+
+            val inp = getOtpInput.text.toString()
+            val passwordRestRequest = PasswordResetRequest()
+            if (otpChoice == "email") passwordRestRequest.email = inp else passwordRestRequest.tel = inp
+
+            val queue = Volley.newRequestQueue(this)
+            val resetJsonObject = JSONObject(gson.toJson(passwordRestRequest))
+
+            val request = JsonObjectRequest(
+                Request.Method.POST,
+                Api.RESET_PASSWORD,
+                resetJsonObject,
+                Response.Listener {
+                        response ->
+                    if (response.getInt("status") == 200) {
+                        val signUpIntent = Intent(this, OneTimePasswordActivity::class.java)
+                        signUpIntent.putExtra("resetRequest", passwordRestRequest)
+
+                        startActivity(signUpIntent)
+                    }else showError(response.getString("message"))
+
+                    setLoading(false)
+                },
+                Response.ErrorListener {
+                        response ->
+                    response.printStackTrace()
+                    showError("An error occurred")
+                    setLoading(false)
+                }
+            )
+
+            queue.add(request)
         }
+    }
+
+    private fun setLoading(loading: Boolean) {
+        if (loading) {
+            loadingCover.visibility = View.VISIBLE
+            operationRunning = true
+        }else {
+            loadingCover.visibility = View.INVISIBLE
+            operationRunning = false
+        }
+    }
+
+    private fun showError(msg: String) {
+        errorMsg.text = msg
+        errorMsg.visibility = View.VISIBLE
+    }
+
+    fun hideError(view: View) {
+        errorMsg.visibility = View.INVISIBLE
     }
 }

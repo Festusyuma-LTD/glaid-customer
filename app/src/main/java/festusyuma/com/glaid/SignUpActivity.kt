@@ -40,7 +40,6 @@ class SignUpActivity : AppCompatActivity() {
             if (!hasError(userRequest)) {
                 val queue = Volley.newRequestQueue(this)
                 val userJsonObject = JSONObject(gson.toJson(userRequest))
-                Log.v("ApiLog", "Worked")
 
                 val request = JsonObjectRequest(
                     Request.Method.POST,
@@ -60,7 +59,7 @@ class SignUpActivity : AppCompatActivity() {
                     Response.ErrorListener {
                         response ->
                         response.printStackTrace()
-                        showError("Please check your internet")
+                        showError("An error occurred")
                         setLoading(false)
                     }
                 )
