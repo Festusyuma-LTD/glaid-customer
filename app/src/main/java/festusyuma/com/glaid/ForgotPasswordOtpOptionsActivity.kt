@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.InputType
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
@@ -58,11 +57,11 @@ class ForgotPasswordOtpOptionsActivity : AppCompatActivity() {
             setLoading(true)
 
             val inp = getOtpInput.text.toString()
-            val passwordRestRequest = PasswordResetRequest()
-            if (otpChoice == "email") passwordRestRequest.email = inp else passwordRestRequest.tel = inp
+            val passwordResetRequest = PasswordResetRequest()
+            if (otpChoice == "email") passwordResetRequest.email = inp else passwordResetRequest.tel = inp
 
             val queue = Volley.newRequestQueue(this)
-            val resetJsonObject = JSONObject(gson.toJson(passwordRestRequest))
+            val resetJsonObject = JSONObject(gson.toJson(passwordResetRequest))
 
             val request = JsonObjectRequest(
                 Request.Method.POST,
@@ -71,8 +70,8 @@ class ForgotPasswordOtpOptionsActivity : AppCompatActivity() {
                 Response.Listener {
                         response ->
                     if (response.getInt("status") == 200) {
-                        val signUpIntent = Intent(this, OneTimePasswordActivity::class.java)
-                        signUpIntent.putExtra("resetRequest", passwordRestRequest)
+                        val signUpIntent = Intent(this, ForgotPassOtpFinalScreenActivity::class.java)
+                        signUpIntent.putExtra("resetRequest", passwordResetRequest)
 
                         startActivity(signUpIntent)
                     }else showError(response.getString("message"))

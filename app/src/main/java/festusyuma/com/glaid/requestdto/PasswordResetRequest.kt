@@ -5,6 +5,6 @@ import java.io.Serializable
 data class PasswordResetRequest (
     var email: String? = null,
     var tel: String?= null,
-    val otp: String?= null,
-    val newPassword: String? = null
+    var otp: String?= null,
+    var newPassword: String? = null
 ): Serializable
