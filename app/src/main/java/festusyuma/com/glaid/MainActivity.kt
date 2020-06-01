@@ -13,12 +13,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun signUpWithMail(view: View){
-        var signUpMailIntent = Intent(this, SignUpActivity::class.java)
+        val signUpMailIntent = Intent(this, SignUpActivity::class.java)
         startActivity(signUpMailIntent)
     }
 
     fun signInMethod(view: View){
-        var signInIntent = Intent(this, LogInActivity::class.java)
+        val signInIntent = Intent(this, LogInActivity::class.java)
         startActivity(signInIntent)
     }
 }
