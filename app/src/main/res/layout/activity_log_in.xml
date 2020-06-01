@@ -12,7 +12,7 @@
         android:layout_height="0dp"
         android:alpha="0.6"
         android:contentDescription="@string/background"
-        android:scaleType="center"
+        android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -69,67 +69,76 @@
             android:singleLine="false"
             android:text="@string/let_s_get_you_signed_in_your_diesel_awaits_you"
             android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/textView19"
+            app:layout_constraintBottom_toTopOf="@+id/emailInputCover"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <TextView
-            android:id="@+id/textView19"
+        <!-- Email input -->
+        <LinearLayout
+            android:id="@+id/emailInputCover"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="24dp"
-            android:layout_marginBottom="10dp"
-            android:fontFamily="@font/sfpro"
-            android:text="@string/email_or_phone_number"
-            app:layout_constraintBottom_toTopOf="@+id/editText2"
+            android:layout_marginBottom="15dp"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintBottom_toTopOf="@+id/passwordInputCover" >
 
-        <EditText
-            android:id="@+id/editText2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="24dp"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/input_drawable"
-            android:ems="10"
-            android:fontFamily="@font/sfpro"
-            android:hint="@string/email_address"
-            android:inputType="textPersonName"
-            android:padding="20dp"
-            android:textColor="#737272"
-            app:layout_constraintBottom_toTopOf="@+id/textView20"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            <TextView
+                android:id="@+id/emailInputLbl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/sfpro"
+                android:text="@string/email_input_label" />
 
-        <TextView
-            android:id="@+id/textView20"
+            <EditText
+                android:id="@+id/emailInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/input_drawable"
+                android:ems="10"
+                android:fontFamily="@font/sfpro"
+                android:hint="@string/email_input_label"
+                android:autofillHints="@string/email_input_label"
+                android:inputType="textEmailAddress"
+                android:padding="20dp" />
+        </LinearLayout>
+
+        <!-- Password input -->
+        <LinearLayout
+            android:id="@+id/passwordInputCover"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="24dp"
-            android:layout_marginBottom="10dp"
-            android:fontFamily="@font/sfpro"
-            android:text="@string/password"
-            app:layout_constraintBottom_toTopOf="@+id/editText3"
+            android:layout_marginBottom="15dp"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintBottom_toTopOf="@+id/view" >
 
-        <EditText
-            android:id="@+id/editText3"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="24dp"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/input_drawable"
-            android:ems="10"
-            android:fontFamily="@font/sfpro"
-            android:hint="@string/password"
-            android:inputType="textPassword"
-            android:padding="20dp"
-            android:textColor="#737272"
-            app:layout_constraintBottom_toTopOf="@+id/view"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            <TextView
+                android:id="@+id/passwordInputLbl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:fontFamily="@font/sfpro"
+                android:text="@string/password_input_label"
+                android:autofillHints="@string/password_input_label" />
+
+            <EditText
+                android:id="@+id/passwordInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/input_drawable"
+                android:ems="10"
+                android:fontFamily="@font/sfpro"
+                android:hint="@string/password_input_label"
+                android:autofillHints="@string/password_input_label"
+                android:inputType="textPassword"
+                android:padding="20dp" />
+        </LinearLayout>
 
         <View
             android:id="@+id/view"
@@ -153,7 +162,7 @@
             android:drawableRight="@mipmap/chevron_right"
             android:fontFamily="@font/sfpro"
             android:gravity="center|start"
-            android:onClick="homeIntentMethod"
+            android:onClick="signInMethod"
             android:padding="20dp"
             android:text="@string/sign_in"
             android:textColor="#FFFFFF"
@@ -178,4 +187,33 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <LinearLayout
+        android:id="@+id/loadingCover"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#4EFFFFFF"
+        android:visibility="invisible"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/errorMsg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="35dp"
+        android:background="@drawable/error_msg_background"
+        android:textColor="#FFFFFF"
+        android:text=""
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible"
+        android:gravity="start|center_vertical"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="20dp"
+        android:onClick="hideError"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

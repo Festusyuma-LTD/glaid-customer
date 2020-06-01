@@ -1,5 +1,6 @@
 package festusyuma.com.glaid
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -15,8 +16,13 @@ class SplashActivity : AppCompatActivity() {
 
     private val runnable = Runnable {
         if (!isFinishing) {
-            startActivity(Intent(applicationContext, CarouselActivity::class.java))
-            finish()
+            val sharedPref = getSharedPreferences("auth_token", Context.MODE_PRIVATE)
+            if (sharedPref.contains(getString(R.string.auth_key_name))) {
+                val intent = Intent(this, MapsActivity::class.java)
+                startActivity(intent)
+            }else startActivity(Intent(applicationContext, CarouselActivity::class.java))
+
+            finishAffinity()
         }
     }
     override fun onResume() {
