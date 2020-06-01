@@ -51,6 +51,7 @@
             app:layout_constraintBottom_toTopOf="@+id/framelayoutFragment"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/userlocation" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
