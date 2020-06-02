@@ -68,8 +68,12 @@
     <string name="auth_key_name" >authorization</string>
     <string name="gas_button_label">Gas</string>
     <string name="diesel_button_label">Diesel</string>
+    <string name="custom_quantity_button_label">Enter custom quantity</string>
     <string name="home_greeting_intro_text">Hello Dafom</string>
     <string name="home_intro_text">What diesel type would you like to order?</string>
     <string name="home_intro_image">home_intro_image</string>
-    <string name="gas_type_btn_img">gas_type_button_img</string>
+    <string name="chevron_right">gas_type_button_img</string>
+    <string name="pump_img">pump_image</string>
+    <string name="order_now_btn_label">Order now</string>
+    <string name="schedule_order_btn_label">Schedule order for later</string>
 </resources>
