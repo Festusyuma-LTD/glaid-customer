@@ -4,8 +4,257 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimary"
     tools:context=".RootFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="20dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/fragment_btn_drawable">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="17dp">
+
+            <ImageView
+                android:id="@+id/pumpImg1"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintDimensionRatio="W, 1"
+                android:src="@drawable/pump"
+                android:contentDescription="@string/pump_img"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginHorizontal="10dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/pumpImg1"
+                app:layout_constraintEnd_toStartOf="@+id/price1"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:text="50 Liters"
+                    android:textColor="#252525"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Home Delivery . 3 mins"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/price1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:text="N4,500"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#B7673AB7"
+                android:gravity="top|center_vertical"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#80FFFFFF"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="17dp">
+
+            <ImageView
+                android:id="@+id/pumpImg2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintDimensionRatio="W, 1"
+                android:src="@drawable/pump"
+                android:contentDescription="@string/pump_img"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginHorizontal="10dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/pumpImg2"
+                app:layout_constraintEnd_toStartOf="@+id/price2"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:text="50 Liters"
+                    android:textColor="#252525"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Home Delivery . 3 mins"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/price2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:text="N4,500"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#B7673AB7"
+                android:gravity="top|center_vertical"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#80FFFFFF"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/quantityBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="10dp"
+            android:paddingVertical="17dp" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:text="@string/custom_quantity_button_label"
+                android:textSize="18sp"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/gasBtnImg"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/gasBtnImg"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintDimensionRatio="W, 1"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:src="@drawable/chevronrightgrey"
+                android:contentDescription="@string/chevron_right" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#80FFFFFF"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/orderNowBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/mail_button_drawable"
+            android:paddingVertical="17dp"
+            android:paddingHorizontal="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:id="@+id/orderBtnLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/orderBtnImg"
+                android:text="@string/order_now_btn_label"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:id="@+id/orderBtnImg"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintDimensionRatio="W, 1"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:src="@drawable/chevronright"
+                android:contentDescription="@string/chevron_right" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/scheduleForLaterBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/transparentbuttondrawable"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            android:paddingVertical="17dp"
+            android:paddingHorizontal="20dp">
+
+            <TextView
+                android:id="@+id/scheduleForLaterBtnLbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/scheduleForLaterBtnImg"
+                android:text="@string/schedule_order_btn_label"
+                android:textColor="@color/AppPrimaryPurple"
+                android:textStyle="bold"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:id="@+id/scheduleForLaterBtnImg"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintDimensionRatio="W, 1"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:src="@drawable/calender"
+                android:contentDescription="@string/chevron_right" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+    <!--
 
     <ToggleButton
         android:id="@+id/orderBtnOne"
@@ -192,5 +441,7 @@
         app:layout_constraintEnd_toEndOf="@+id/button6"
         app:layout_constraintStart_toStartOf="@+id/button6"
         app:layout_constraintTop_toBottomOf="@+id/button6" />
+
+    -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

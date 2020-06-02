@@ -71,10 +71,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val rootFragment = RootFragment()
 //        val detailsFragment = DetailsFragment()
         // fragment transaction to set root fragment on create
-        supportFragmentManager.beginTransaction().apply {
-            replace(R.id.framelayoutFragment, rootFragment)
-            commit()
-        }
+        supportFragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.slide_up, R.anim.slide_down, R.anim.slide_up, R.anim.slide_down)
+            .replace(R.id.framelayoutFragment, rootFragment)
+            .commit()
 
     }
 
