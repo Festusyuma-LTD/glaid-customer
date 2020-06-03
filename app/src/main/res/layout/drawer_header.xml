@@ -18,14 +18,14 @@
         app:srcCompat="@drawable/drawerlogo" />
 
     <TextView
-        android:id="@+id/textView40"
+        android:id="@+id/fullName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="50dp"
         android:fontFamily="@font/sfpro"
-        android:text="Chollom Dafom Gyang"
+        android:text=""
         android:textColor="@color/AppPrimaryPurple"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -33,16 +33,16 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView49"
+        android:id="@+id/email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:alpha="0.5"
-        android:text="ayomidechollom@gmail.com"
+        android:text=""
         android:textColor="@color/AppPrimaryPurple"
         android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@+id/textView40"
-        app:layout_constraintTop_toBottomOf="@+id/textView40" />
+        app:layout_constraintStart_toStartOf="@+id/fullName"
+        app:layout_constraintTop_toBottomOf="@+id/fullName" />
 
     <RatingBar
         android:id="@+id/rating"
@@ -53,8 +53,8 @@
         android:isIndicator="true"
         android:numStars="5"
         android:stepSize="0.1"
-        app:layout_constraintStart_toStartOf="@+id/textView40"
-        app:layout_constraintTop_toBottomOf="@+id/textView49" />
+        app:layout_constraintStart_toStartOf="@+id/fullName"
+        app:layout_constraintTop_toBottomOf="@+id/email" />
 
     <TextView
         android:id="@+id/editProfileBtn"
@@ -65,11 +65,11 @@
         android:focusable="true"
         android:fontFamily="@font/sfpro"
         android:onClick="editProfileIntent"
-        android:text="Edit Profile"
+        android:text="@string/edit_profile_btn_label"
         android:textAllCaps="true"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/textView40"
+        app:layout_constraintStart_toStartOf="@+id/fullName"
         app:layout_constraintTop_toBottomOf="@+id/rating"
         app:layout_constraintVertical_bias="0.6" />
 </androidx.constraintlayout.widget.ConstraintLayout>

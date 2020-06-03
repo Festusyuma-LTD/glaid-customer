@@ -7,5 +7,6 @@ class Api {
         const val REGISTER: String = "${API_BASE_URL}customer/register"
         const val RESET_PASSWORD: String = "${API_BASE_URL}reset_password"
         const val VALIDATE_OTP: String = "${API_BASE_URL}validate_otp"
+        const val DASHBOARD: String = "${API_BASE_URL}customer/dashboard"
     }
 }

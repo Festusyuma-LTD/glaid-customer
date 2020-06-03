@@ -23,7 +23,6 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
                 .replace(R.id.framelayoutFragment, QuantityFragment.quantityInstance())
                 .addToBackStack(null)
                 .commit()
-            onCustombtnclicked()
         }
 
         /*
