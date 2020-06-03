@@ -76,4 +76,5 @@
     <string name="pump_img">pump_image</string>
     <string name="order_now_btn_label">Order now</string>
     <string name="schedule_order_btn_label">Schedule order for later</string>
+    <string name="edit_profile_btn_label">Edit Profile</string>
 </resources>

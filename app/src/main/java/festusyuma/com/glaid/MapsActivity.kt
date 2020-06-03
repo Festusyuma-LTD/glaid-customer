@@ -36,6 +36,8 @@ import kotlinx.android.synthetic.main.drawer_header.*
 import android.provider.Settings;
 import android.view.Window
 import android.view.WindowManager
+import festusyuma.com.glaid.model.User
+import java.util.*
 import kotlin.properties.Delegates
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -59,6 +61,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
+
+        val sharedPref = getSharedPreferences("cached_data", Context.MODE_PRIVATE)
+        val userJson = sharedPref.getString("userDetails", "null")
+
+        if (userJson != null) {
+            val fullNameTV: TextView = drawer_header.findViewById(R.id.fullName)
+            val emailTV: TextView = drawer_header.findViewById(R.id.email)
+            val user = gson.fromJson(userJson, User::class.java)
+
+            fullNameTV.text = user.fullName
+            emailTV.text = user.email
+        }
+
         // tint removal for drawer items
         nav_view.itemIconTintList = null;
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
