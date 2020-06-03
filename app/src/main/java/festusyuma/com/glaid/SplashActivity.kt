@@ -13,6 +13,7 @@ import com.android.volley.toolbox.Volley
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
 import festusyuma.com.glaid.helpers.Api
+import festusyuma.com.glaid.helpers.Dashboard
 import festusyuma.com.glaid.model.CustomResponse
 
 
@@ -50,24 +51,14 @@ class SplashActivity : AppCompatActivity() {
             null,
             Response.Listener {
                 response ->
-                val res = gson.fromJson(response.toString(), CustomResponse::class.java)
-                Log.v("ApiLog", "Response lass: $res")
+                Dashboard.store(this, response.getJSONObject("data"))
 
                 startActivity(Intent(this, MapsActivity::class.java))
                 finishAffinity()
             },
-            Response.ErrorListener {
-                response ->
-
-                val sharedPref = getSharedPreferences("auth_token", Context.MODE_PRIVATE)
-                with(sharedPref.edit()) {
-                    remove(getString(R.string.auth_key_name))
-                    commit()
-                }
-
-                startActivity(Intent(this, MainActivity::class.java))
+            Response.ErrorListener { response->
                 Log.v("ApiLog", response.networkResponse.statusCode.toString())
-                finishAffinity()
+                logout()
             }
         ) {
             override fun getHeaders(): MutableMap<String, String> {
@@ -86,5 +77,16 @@ class SplashActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         handler.removeCallbacks(runnable)
+    }
+
+    fun logout() {
+        val sharedPref = getSharedPreferences("auth_token", Context.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            remove(getString(R.string.auth_key_name))
+            commit()
+        }
+
+        startActivity(Intent(this, MainActivity::class.java))
+        finishAffinity()
     }
 }
