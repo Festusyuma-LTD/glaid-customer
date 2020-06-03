@@ -77,6 +77,11 @@
     <string name="order_now_btn_label">Order now</string>
     <string name="schedule_order_btn_label">Schedule order for later</string>
     <string name="edit_profile_btn_label">Edit Profile</string>
+    <string name="done">Done</string>
+    <string name="payment_schedule_business_only">Payment Schedule (Business Only)</string>
+    <string name="pay_on_delivery">Pay on Delivery</string>
+    <string name="schudule_payment_for_later">Schudule payment for later</string>
+    <string name="set_payment_date_and_time">Set Payment date and time</string>
     <string name="sign_out_btn_label">Sign Out</string>
     <string name="sidebar_background_icon">sidebar_background_icon</string>
     <string name="predefined_quantity">%1$.1f %2$s</string>
