@@ -5,12 +5,14 @@ import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import festusyuma.com.glaid.helpers.Api
+import festusyuma.com.glaid.helpers.Dashboard
 import festusyuma.com.glaid.requestdto.LoginRequest
 import kotlinx.android.synthetic.main.activity_forgot_pass_otp_final.*
 import kotlinx.android.synthetic.main.activity_forgot_pass_otp_final.errorMsg
@@ -51,18 +53,16 @@ class LogInActivity : AppCompatActivity() {
                 Response.Listener {
                     response ->
                     if (response.getInt("status") == 200) {
-                        val homePageIntent = Intent(this, MapsActivity::class.java)
                         val sharedPref = getSharedPreferences("auth_token", Context.MODE_PRIVATE)
-                        with (sharedPref.edit()) {
-                            val data = response.getJSONObject("data")
-                            val token = data.getString("token")
+                        val data = response.getJSONObject("data")
+                        val token = data.getString("token")
 
+                        with (sharedPref.edit()) {
                             putString(getString(R.string.auth_key_name), token)
                             commit()
                         }
 
-                        startActivity(homePageIntent)
-                        finishAffinity()
+                        queue.add(dashboard(token))
                     }else showError(response.getString("message"))
 
                     setLoading(false)
@@ -96,5 +96,42 @@ class LogInActivity : AppCompatActivity() {
 
     fun hideError(view: View) {
         errorMsg.visibility = View.INVISIBLE
+    }
+
+    private fun dashboard(token: String): JsonObjectRequest {
+
+        return object : JsonObjectRequest(
+            Method.GET,
+            Api.DASHBOARD,
+            null,
+            Response.Listener {
+                response ->
+                Dashboard.store(this, response.getJSONObject("data"))
+
+                startActivity(Intent(this, MapsActivity::class.java))
+                finishAffinity()
+            },
+            Response.ErrorListener { response->
+                Log.v("ApiLog", response.networkResponse.statusCode.toString())
+                logout()
+            }
+        ) {
+            override fun getHeaders(): MutableMap<String, String> {
+                return mutableMapOf(
+                    "Authorization" to "Bearer $token"
+                )
+            }
+        }
+    }
+
+    fun logout() {
+        val sharedPref = getSharedPreferences("auth_token", Context.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            remove(getString(R.string.auth_key_name))
+            commit()
+        }
+
+        startActivity(Intent(this, MainActivity::class.java))
+        finishAffinity()
     }
 }

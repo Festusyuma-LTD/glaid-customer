@@ -77,4 +77,6 @@
     <string name="order_now_btn_label">Order now</string>
     <string name="schedule_order_btn_label">Schedule order for later</string>
     <string name="edit_profile_btn_label">Edit Profile</string>
+    <string name="sign_out_btn_label">Sign Out</string>
+    <string name="sidebar_background_icon">sidebar_background_icon</string>
 </resources>
