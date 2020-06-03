@@ -330,15 +330,17 @@
                 android:layout_marginBottom="24dp"
                 android:background="@drawable/mail_button_drawable"
                 android:drawableRight="@android:drawable/ic_menu_set_as"
+                android:drawableEnd="@android:drawable/ic_menu_set_as"
                 android:gravity="start|center_vertical"
                 android:padding="20dp"
-                android:text="Sign Out"
+                android:text="@string/sign_out_btn_label"
                 android:textColor="#FFFFFF"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/button8" />
+                app:layout_constraintTop_toBottomOf="@+id/button8"
+                android:onClick="logout"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

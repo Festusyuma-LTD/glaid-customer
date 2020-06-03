@@ -2,7 +2,6 @@ package festusyuma.com.glaid.helpers
 
 import android.content.Context
 import android.util.Log
-import com.google.gson.JsonObject
 import festusyuma.com.glaid.gson
 import festusyuma.com.glaid.model.*
 import org.json.JSONObject

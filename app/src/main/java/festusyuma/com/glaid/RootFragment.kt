@@ -1,14 +1,22 @@
 package festusyuma.com.glaid
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.android.volley.Response
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
+import festusyuma.com.glaid.helpers.Api
+import festusyuma.com.glaid.helpers.Dashboard
 import festusyuma.com.glaid.helpers.getFirst
 import festusyuma.com.glaid.model.User
+import kotlinx.android.synthetic.main.activity_forgot_pass_otp_final.*
 import kotlinx.android.synthetic.main.activity_maps.*
 import kotlinx.android.synthetic.main.fragment_root.*
 
@@ -29,23 +37,29 @@ class RootFragment : Fragment(R.layout.fragment_root) {
         }
 
         dieselBtn.setOnClickListener{
-            //todo get diesel details
-            openGasDetails()
+            openGasDetails("diesel")
         }
 
         gasBtn.setOnClickListener{
-            //todo get gas details
-            openGasDetails()
+            openGasDetails("gas")
         }
 
     }
 
-    private fun openGasDetails() {
+    private fun openGasDetails(type: String) {
+        val detailsFragment = DetailsFragment.newInstance()
+        val args = Bundle()
+        args.putString("type", type)
+        detailsFragment.arguments = args
 
         requireActivity().supportFragmentManager.beginTransaction()
             .setCustomAnimations(R.anim.slide_up, R.anim.slide_down, R.anim.slide_up, R.anim.slide_down)
-            .replace(R.id.framelayoutFragment, DetailsFragment.newInstance())
+            .replace(R.id.framelayoutFragment, detailsFragment)
             .addToBackStack(null)
             .commit()
+    }
+
+    fun hideError(view: View) {
+        errorMsg.visibility = View.INVISIBLE
     }
 }

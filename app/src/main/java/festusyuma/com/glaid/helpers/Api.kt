@@ -8,5 +8,7 @@ class Api {
         const val RESET_PASSWORD: String = "${API_BASE_URL}reset_password"
         const val VALIDATE_OTP: String = "${API_BASE_URL}validate_otp"
         const val DASHBOARD: String = "${API_BASE_URL}customer/dashboard"
+        const val GET_DIESEL_LIST: String = "${API_BASE_URL}customer/gas/diesel/list"
+        const val GET_GAS_LIST: String = "${API_BASE_URL}customer/gas/gas/list"
     }
 }

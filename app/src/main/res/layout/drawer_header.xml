@@ -3,33 +3,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
-    android:background="#e8ddee">
+    android:layout_height="wrap_content"
+    android:background="#e8ddee"
+    android:paddingHorizontal="24dp"
+    android:paddingVertical="20dp">
 
     <ImageView
-        android:id="@+id/imageView12"
+        android:id="@+id/sidebarIcon"
         android:layout_width="50dp"
-        android:layout_height="52dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="W, 1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/drawerlogo" />
+        app:srcCompat="@drawable/drawerlogo"
+        android:contentDescription="@string/sidebar_background_icon" />
 
     <TextView
         android:id="@+id/fullName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="50dp"
         android:fontFamily="@font/sfpro"
         android:text=""
         android:textColor="@color/AppPrimaryPurple"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -41,7 +41,9 @@
         android:text=""
         android:textColor="@color/AppPrimaryPurple"
         android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@+id/fullName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintTop_toBottomOf="@+id/fullName" />
 
     <RatingBar
@@ -53,14 +55,16 @@
         android:isIndicator="true"
         android:numStars="5"
         android:stepSize="0.1"
-        app:layout_constraintStart_toStartOf="@+id/fullName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintTop_toBottomOf="@+id/email" />
 
     <TextView
         android:id="@+id/editProfileBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:clickable="true"
         android:focusable="true"
         android:fontFamily="@font/sfpro"
@@ -69,7 +73,9 @@
         android:textAllCaps="true"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/fullName"
-        app:layout_constraintTop_toBottomOf="@+id/rating"
-        app:layout_constraintVertical_bias="0.6" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintTop_toBottomOf="@+id/rating" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
