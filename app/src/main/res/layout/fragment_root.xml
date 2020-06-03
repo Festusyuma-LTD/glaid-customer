@@ -28,12 +28,11 @@
             app:layout_constraintRight_toRightOf="parent">
 
             <TextView
-                android:id="@+id/textView38"
+                android:id="@+id/greeting"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:fontFamily="@font/sfpro"
-                android:text="@string/home_greeting_intro_text"
                 android:textColor="#9B72B3"
                 android:textSize="16sp"
                 android:textStyle="bold"

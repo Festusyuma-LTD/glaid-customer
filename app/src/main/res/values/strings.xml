@@ -69,7 +69,7 @@
     <string name="gas_button_label">Gas</string>
     <string name="diesel_button_label">Diesel</string>
     <string name="custom_quantity_button_label">Enter custom quantity</string>
-    <string name="home_greeting_intro_text">Hello Dafom</string>
+    <string name="home_greeting_intro_text">Hello %1$s</string>
     <string name="home_intro_text">What diesel type would you like to order?</string>
     <string name="home_intro_image">home_intro_image</string>
     <string name="chevron_right">gas_type_button_img</string>
