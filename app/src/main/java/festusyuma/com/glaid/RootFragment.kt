@@ -16,13 +16,23 @@ class RootFragment : Fragment(R.layout.fragment_root) {
         super.onActivityCreated(savedInstanceState)
 
         dieselBtn.setOnClickListener{
-
-            requireActivity().supportFragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.slide_up, R.anim.slide_down, R.anim.slide_up, R.anim.slide_down)
-                .replace(R.id.framelayoutFragment, DetailsFragment.newInstance())
-                .addToBackStack(null)
-                .commit()
+            //todo get diesel details
+            openGasDetails()
         }
 
+        gasBtn.setOnClickListener{
+            //todo get gas details
+            openGasDetails()
+        }
+
+    }
+
+    private fun openGasDetails() {
+
+        requireActivity().supportFragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.slide_up, R.anim.slide_down, R.anim.slide_up, R.anim.slide_down)
+            .replace(R.id.framelayoutFragment, DetailsFragment.newInstance())
+            .addToBackStack(null)
+            .commit()
     }
 }
