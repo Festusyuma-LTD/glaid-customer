@@ -35,9 +35,12 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
     private lateinit var gasType: String
     private lateinit var authToken: String
     private lateinit var gasTypeObj: GasType
+    private lateinit var errorMsg: TextView
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        errorMsg = requireActivity().findViewById(R.id.errorMsg)
 
         val authSharedPref = this.activity?.getSharedPreferences("auth_token", Context.MODE_PRIVATE)
         authToken = authSharedPref?.getString(getString(R.string.auth_key_name), "")?: ""
@@ -73,10 +76,15 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
                 setDetails(response.getJSONObject("data"))
             },
             Response.ErrorListener { response->
-                if (response.networkResponse.statusCode == 403) {
-                    logout()
+                if (response.networkResponse == null) {
+                    showError("Please check your internet")
                 }else {
-                    Log.v("ApiLog", response.networkResponse.statusCode.toString())
+                    if (response.networkResponse.statusCode == 403) {
+                        logout()
+                    }else {
+                        Log.v("ApiLog", response.networkResponse.statusCode.toString())
+                        showError("An error occurred")
+                    }
                 }
             }
         ) {
@@ -141,14 +149,9 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         act.finishAffinity()
     }
 
-    private fun setLoading(loading: Boolean) {
-        if (loading) {
-            loadingCover.visibility = View.VISIBLE
-            operationRunning = true
-        }else {
-            loadingCover.visibility = View.INVISIBLE
-            operationRunning = false
-        }
+    private fun showError(msg: String) {
+        errorMsg.text = msg
+        errorMsg.visibility = View.VISIBLE
     }
 
     companion object {

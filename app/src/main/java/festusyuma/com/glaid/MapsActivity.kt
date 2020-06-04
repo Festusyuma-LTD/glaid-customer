@@ -295,4 +295,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     fun paymentClick(view: View) {}
+
+    fun hideError(view: View) {
+        val errorMsg: TextView = findViewById(R.id.errorMsg)
+        errorMsg.visibility = View.INVISIBLE
+    }
 }
