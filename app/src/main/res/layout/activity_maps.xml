@@ -18,7 +18,9 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="#fff"
+        android:fitsSystemWindows="true"
         app:itemBackground="@drawable/drawer_item_bg"
+        app:layout_constraintStart_toStartOf="parent"
         app:itemIconTint="@android:color/black">
         <!--        start-->
         <RelativeLayout
@@ -27,7 +29,14 @@
 
             <include
                 android:id="@+id/drawer_header"
-                layout="@layout/drawer_header" />
+                layout="@layout/drawer_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="-2dp"
+                android:layout_marginLeft="-2dp" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
