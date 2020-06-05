@@ -59,6 +59,13 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
                 .addToBackStack(null)
                 .commit()
         }
+        orderNowBtn.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .setCustomAnimations(R.anim.slide_up, R.anim.slide_down, R.anim.slide_up, R.anim.slide_down)
+                .replace(R.id.framelayoutFragment, PaymentFragment.PaymentFragmentInstance())
+                .addToBackStack(null)
+                .commit()
+        }
     }
 
     private fun continueOrder(view: View) {
