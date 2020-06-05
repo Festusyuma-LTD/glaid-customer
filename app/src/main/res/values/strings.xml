@@ -65,7 +65,7 @@
     <string name="order_details">Order Details</string>
     <string name="top_questions">Top Questions</string>
     <string name="contact_us">Contact Us</string>
-    <string name="auth_key_name" >authorization</string>
+    <string name="auth_key_name">authorization</string>
     <string name="gas_button_label">Gas</string>
     <string name="diesel_button_label">Diesel</string>
     <string name="custom_quantity_button_label">Enter custom quantity</string>

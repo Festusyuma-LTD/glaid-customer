@@ -102,6 +102,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
+
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         try {
@@ -294,7 +295,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
-    fun paymentClick(view: View) {}
+    fun paymentClick(view: View) {
+        var addCardIntent = Intent(this, AddCardActivity::class.java)
+        startActivity(addCardIntent)
+    }
 
     fun hideError(view: View) {
         val errorMsg: TextView = findViewById(R.id.errorMsg)
