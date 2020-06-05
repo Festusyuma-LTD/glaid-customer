@@ -94,4 +94,11 @@
     <string name="payment_type">Payment type</string>
     <string name="sh_user_details">userDetails</string>
     <string name="sh_wallet">wallet</string>
+<!--    <string name="payment">Payment</string>-->
+    <string name="glaid_wallet">Glaid Wallet</string>
+    <string name="preffered_payment_method">Preffered payment Method</string>
+    <string name="wallet_balance">Wallet Balance</string>
+    <string name="add_funds">ADD Funds</string>
+    <string name="n00_00">N00.00</string>
+    <string name="cash">Cash</string>
 </resources>

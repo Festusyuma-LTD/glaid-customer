@@ -3,27 +3,10 @@ package festusyuma.com.glaid
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.TextureView
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
-import com.android.volley.Response
-import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.Volley
-import festusyuma.com.glaid.helpers.Api
 import festusyuma.com.glaid.model.GasType
-import kotlinx.android.synthetic.main.activity_forgot_pass_otp_final.*
-import kotlinx.android.synthetic.main.fragment_details.*
-import kotlinx.android.synthetic.main.map_view.*
-import kotlinx.android.synthetic.main.predefined_quantity.*
-import org.json.JSONArray
-import org.json.JSONObject
-import java.text.NumberFormat
-import java.util.*
+import kotlinx.android.synthetic.main.fragment_payment.*
 
 
 /**
@@ -41,20 +24,27 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
 
         val authSharedPref = this.activity?.getSharedPreferences("auth_token", Context.MODE_PRIVATE)
         authToken = authSharedPref?.getString(getString(R.string.auth_key_name), "")?: ""
+        chooseAnotherPayment.setOnClickListener {
+
+        }
+
 //        gasType = requireArguments().getString("type", "diesel")
 
 //        val queue = Volley.newRequestQueue(requireContext())
 //        queue.add(getGasType())
 
-//        quantityBtn.setOnClickListener {
-//            requireActivity().supportFragmentManager.beginTransaction()
-//                .setCustomAnimations(R.anim.slide_up, R.anim.slide_down, R.anim.slide_up, R.anim.slide_down)
-//                .replace(R.id.framelayoutFragment, QuantityFragment.quantityInstance())
-//                .addToBackStack(null)
-//                .commit()
-//        }
+        chooseAnotherPayment.setOnClickListener {
+            goToAddCard()
+        }
     }
-
+    fun goToAddCard() {
+        val intent = Intent(activity, AddCardActivity::class.java)
+        startActivity(intent)
+    }
+//    fun addPayment (view: View) {
+//        var addCardIntent = Intent(this, AddCardActivity::class.java)
+//        startActivity(addCardIntent)
+//    }
 //    private fun continueOrder(view: View) {
 //        Log.v("ApiLog", "clicked")
 //    }
