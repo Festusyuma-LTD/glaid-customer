@@ -34,11 +34,11 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
 //        queue.add(getGasType())
 
         chooseAnotherPayment.setOnClickListener {
-            goToAddCard()
+            goToPaymentActivity()
         }
     }
-    fun goToAddCard() {
-        val intent = Intent(activity, AddCardActivity::class.java)
+    fun goToPaymentActivity() {
+        val intent = Intent(activity, PaymentActivity::class.java)
         startActivity(intent)
     }
 //    fun addPayment (view: View) {

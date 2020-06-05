@@ -91,14 +91,17 @@
     <string name="_8_ogidi_cresent_lekki_phase_1">8, Ogidi cresent, Lekki Phase 1</string>
     <string name="add_home">Add Home</string>
     <string name="choose_another_payment_option">Choose another payment option</string>
-    <string name="payment_type">Payment type</string>
+<!--    <string name="payment_type">Payment type</string>-->
     <string name="sh_user_details">userDetails</string>
     <string name="sh_wallet">wallet</string>
-<!--    <string name="payment">Payment</string>-->
+    <!--    <string name="payment">Payment</string>-->
     <string name="glaid_wallet">Glaid Wallet</string>
     <string name="preffered_payment_method">Preffered payment Method</string>
     <string name="wallet_balance">Wallet Balance</string>
     <string name="add_funds">ADD Funds</string>
     <string name="n00_00">N00.00</string>
     <string name="cash">Cash</string>
+    <string name="amount">Amount</string>
+    <string name="no_card_added">No card added</string>
+    <string name="payment_type">Payment type</string>
 </resources>

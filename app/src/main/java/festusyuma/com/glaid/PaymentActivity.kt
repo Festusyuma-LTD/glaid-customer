@@ -15,4 +15,8 @@ class PaymentActivity : AppCompatActivity() {
         var addCardIntent = Intent(this, AddCardActivity::class.java)
         startActivity(addCardIntent)
     }
+    fun addFundsBtnOnClick(view: View) {
+        var addCardIntent = Intent(this, AddFundsActivity::class.java)
+        startActivity(addCardIntent)
+    }
 }
