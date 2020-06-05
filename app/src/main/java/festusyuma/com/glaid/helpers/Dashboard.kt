@@ -2,6 +2,7 @@ package festusyuma.com.glaid.helpers
 
 import android.content.Context
 import android.util.Log
+import festusyuma.com.glaid.R
 import festusyuma.com.glaid.gson
 import festusyuma.com.glaid.model.*
 import org.json.JSONObject
@@ -19,8 +20,8 @@ class Dashboard {
 
             with(sharedPref.edit()) {
                 clear()
-                putString("userDetails", user)
-                putString("wallet", wallet)
+                putString(context.getString(R.string.sh_user_details), user)
+                putString(context.getString(R.string.sh_wallet), wallet)
                 commit()
             }
         }
