@@ -43,4 +43,7 @@ dependencies {
 
     // google locations
     implementation 'com.google.android.gms:play-services-location:17.0.0'
+
+    // animation
+    implementation 'com.wang.avi:library:2.1.3'
 }

@@ -296,8 +296,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     fun paymentClick(view: View) {
-        var addCardIntent = Intent(this, AddCardActivity::class.java)
-        startActivity(addCardIntent)
+        var paymentIntent = Intent(this, PaymentActivity::class.java)
+        startActivity(paymentIntent)
     }
 
     fun hideError(view: View) {
