@@ -109,7 +109,7 @@
         app:layout_constraintTop_toBottomOf="@+id/chooseanotherPayment" />
 
     <Button
-        android:id="@+id/button6"
+        android:id="@+id/addFundsBtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -126,4 +126,60 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view10" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/loadingCoverConstraint"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#D6FFFFFF"
+        android:elevation="30dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+        <com.wang.avi.AVLoadingIndicatorView
+            android:id="@+id/avi"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="104dp"
+            app:indicatorColor="@color/AppPrimaryPurple"
+            app:indicatorName="LineScaleIndicator"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView40"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Processing"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/ss"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/avi" />
+
+        <com.wang.avi.AVLoadingIndicatorView
+            android:id="@+id/ss"
+            android:layout_width="40dp"
+            android:layout_height="39dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            app:indicatorColor="#000000"
+            app:indicatorName="BallBeatIndicator"
+            app:layout_constraintBottom_toBottomOf="@+id/textView40"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/textView40"
+            app:layout_constraintTop_toTopOf="@+id/textView40" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
