@@ -47,9 +47,12 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         gasType = requireArguments().getString("type", "diesel")
 
         val queue = Volley.newRequestQueue(requireContext())
-        queue.add(getGasType())
+        val req = getGasType()
+        req.tag = "getGasTypeDetails"
+        queue.add(req)
 
         quantityBtn.setOnClickListener {
+            queue.cancelAll("getGasTypeDetails")
             requireActivity().supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.slide_up, R.anim.slide_down, R.anim.slide_up, R.anim.slide_down)
                 .replace(R.id.framelayoutFragment, QuantityFragment.quantityInstance())
@@ -115,24 +118,25 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
             R.drawable.gas
         }else R.drawable.pump
 
-        for (i in 0 until data.length()) {
-            val preView: View = LayoutInflater.from(requireContext()).inflate(R.layout.predefined_quantity, ConstraintLayout(requireContext()))
-            val quantity = data[i] as Double
-            val totalPrice = quantity * gasType.price
-            val imgV = preView.findViewById<ImageView>(R.id.predefinedImg)
-            val quantityTV = preView.findViewById<TextView>(R.id.quantity)
-            val addressTypeTV = preView.findViewById<TextView>(R.id.addressType)
-            val priceTV = preView.findViewById<TextView>(R.id.price)
+        if (context != null) {
+            for (i in 0 until data.length()) {
+                val preView: View = LayoutInflater.from(requireContext()).inflate(R.layout.predefined_quantity, ConstraintLayout(requireContext()))
+                val quantity = data[i] as Double
+                val totalPrice = quantity * gasType.price
+                val imgV = preView.findViewById<ImageView>(R.id.predefinedImg)
+                val quantityTV = preView.findViewById<TextView>(R.id.quantity)
+                val addressTypeTV = preView.findViewById<TextView>(R.id.addressType)
+                val priceTV = preView.findViewById<TextView>(R.id.price)
 
-            preView.setOnClickListener{ continueOrder(it) }
-            imgV.setImageResource(imgDrawable)
-            quantityTV.text = getString(R.string.predefined_quantity).format(quantity, gasType.unit)
-            priceTV.text = getString(R.string.predefined_price).format(currency.getSymbol(Locale.getDefault()), numberFormatter.format(totalPrice))
-            addressTypeTV.text = getString(R.string.predefined_address_type).format("Home Delivery . 3 Min")
+                preView.setOnClickListener{ continueOrder(it) }
+                imgV.setImageResource(imgDrawable)
+                quantityTV.text = getString(R.string.predefined_quantity).format(quantity, gasType.unit)
+                priceTV.text = getString(R.string.predefined_price).format(currency.getSymbol(Locale.getDefault()), numberFormatter.format(totalPrice))
+                addressTypeTV.text = getString(R.string.predefined_address_type).format("Home Delivery . 3 Min")
 
-            predefinedQuantities.addView(preView)
+                predefinedQuantities.addView(preView)
+            }
         }
-
         Log.v("ApiLog", data.toString())
     }
 
