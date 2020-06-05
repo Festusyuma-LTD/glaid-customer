@@ -35,18 +35,24 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
     private lateinit var gasType: String
     private lateinit var authToken: String
     private lateinit var gasTypeObj: GasType
+    private lateinit var errorMsg: TextView
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        errorMsg = requireActivity().findViewById(R.id.errorMsg)
 
         val authSharedPref = this.activity?.getSharedPreferences("auth_token", Context.MODE_PRIVATE)
         authToken = authSharedPref?.getString(getString(R.string.auth_key_name), "")?: ""
         gasType = requireArguments().getString("type", "diesel")
 
         val queue = Volley.newRequestQueue(requireContext())
-        queue.add(getGasType())
+        val req = getGasType()
+        req.tag = "getGasTypeDetails"
+        queue.add(req)
 
         quantityBtn.setOnClickListener {
+            queue.cancelAll("getGasTypeDetails")
             requireActivity().supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.slide_up, R.anim.slide_down, R.anim.slide_up, R.anim.slide_down)
                 .replace(R.id.framelayoutFragment, QuantityFragment.quantityInstance())
@@ -80,10 +86,15 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
                 setDetails(response.getJSONObject("data"))
             },
             Response.ErrorListener { response->
-                if (response.networkResponse.statusCode == 403) {
-                    logout()
+                if (response.networkResponse == null) {
+                    showError("Please check your internet")
                 }else {
-                    Log.v("ApiLog", response.networkResponse.statusCode.toString())
+                    if (response.networkResponse.statusCode == 403) {
+                        logout()
+                    }else {
+                        Log.v("ApiLog", response.networkResponse.statusCode.toString())
+                        showError("An error occurred")
+                    }
                 }
             }
         ) {
@@ -114,24 +125,25 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
             R.drawable.gas
         }else R.drawable.pump
 
-        for (i in 0 until data.length()) {
-            val preView: View = LayoutInflater.from(requireContext()).inflate(R.layout.predefined_quantity, ConstraintLayout(requireContext()))
-            val quantity = data[i] as Double
-            val totalPrice = quantity * gasType.price
-            val imgV = preView.findViewById<ImageView>(R.id.predefinedImg)
-            val quantityTV = preView.findViewById<TextView>(R.id.quantity)
-            val addressTypeTV = preView.findViewById<TextView>(R.id.addressType)
-            val priceTV = preView.findViewById<TextView>(R.id.price)
+        if (context != null) {
+            for (i in 0 until data.length()) {
+                val preView: View = LayoutInflater.from(requireContext()).inflate(R.layout.predefined_quantity, ConstraintLayout(requireContext()))
+                val quantity = data[i] as Double
+                val totalPrice = quantity * gasType.price
+                val imgV = preView.findViewById<ImageView>(R.id.predefinedImg)
+                val quantityTV = preView.findViewById<TextView>(R.id.quantity)
+                val addressTypeTV = preView.findViewById<TextView>(R.id.addressType)
+                val priceTV = preView.findViewById<TextView>(R.id.price)
 
-            preView.setOnClickListener{ continueOrder(it) }
-            imgV.setImageResource(imgDrawable)
-            quantityTV.text = getString(R.string.predefined_quantity).format(quantity, gasType.unit)
-            priceTV.text = getString(R.string.predefined_price).format(currency.getSymbol(Locale.getDefault()), numberFormatter.format(totalPrice))
-            addressTypeTV.text = getString(R.string.predefined_address_type).format("Home Delivery . 3 Min")
+                preView.setOnClickListener{ continueOrder(it) }
+                imgV.setImageResource(imgDrawable)
+                quantityTV.text = getString(R.string.predefined_quantity).format(quantity, gasType.unit)
+                priceTV.text = getString(R.string.predefined_price).format(currency.getSymbol(Locale.getDefault()), numberFormatter.format(totalPrice))
+                addressTypeTV.text = getString(R.string.predefined_address_type).format("Home Delivery . 3 Min")
 
-            predefinedQuantities.addView(preView)
+                predefinedQuantities.addView(preView)
+            }
         }
-
         Log.v("ApiLog", data.toString())
     }
 
@@ -148,14 +160,9 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         act.finishAffinity()
     }
 
-    private fun setLoading(loading: Boolean) {
-        if (loading) {
-            loadingCover.visibility = View.VISIBLE
-            operationRunning = true
-        }else {
-            loadingCover.visibility = View.INVISIBLE
-            operationRunning = false
-        }
+    private fun showError(msg: String) {
+        errorMsg.text = msg
+        errorMsg.visibility = View.VISIBLE
     }
 
     companion object {

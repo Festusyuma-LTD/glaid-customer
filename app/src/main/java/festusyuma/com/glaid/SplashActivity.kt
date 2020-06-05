@@ -57,8 +57,13 @@ class SplashActivity : AppCompatActivity() {
                 finishAffinity()
             },
             Response.ErrorListener { response->
-                Log.v("ApiLog", response.networkResponse.statusCode.toString())
-                logout()
+                if (response.networkResponse == null) {
+                    startActivity(Intent(this, MapsActivity::class.java))
+                    finishAffinity()
+                }else {
+                    Log.v("ApiLog", response.networkResponse.statusCode.toString())
+                    logout()
+                }
             }
         ) {
             override fun getHeaders(): MutableMap<String, String> {

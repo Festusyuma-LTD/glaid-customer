@@ -92,4 +92,6 @@
     <string name="add_home">Add Home</string>
     <string name="choose_another_payment_option">Choose another payment option</string>
     <string name="payment_type">Payment type</string>
+    <string name="sh_user_details">userDetails</string>
+    <string name="sh_wallet">wallet</string>
 </resources>

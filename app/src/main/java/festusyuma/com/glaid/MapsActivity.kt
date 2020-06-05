@@ -299,4 +299,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         var addCardIntent = Intent(this, AddCardActivity::class.java)
         startActivity(addCardIntent)
     }
+
+    fun hideError(view: View) {
+        val errorMsg: TextView = findViewById(R.id.errorMsg)
+        errorMsg.visibility = View.INVISIBLE
+    }
 }
