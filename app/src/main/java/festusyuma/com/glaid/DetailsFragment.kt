@@ -87,7 +87,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
             },
             Response.ErrorListener { response->
                 if (response.networkResponse == null) {
-                    showError("Please check your internet")
+                    showError(getString(R.string.internet_error_msg))
                 }else {
                     if (response.networkResponse.statusCode == 403) {
                         logout()

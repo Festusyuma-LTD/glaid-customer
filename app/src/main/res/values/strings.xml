@@ -105,4 +105,13 @@
     <string name="no_card_added">No card added</string>
     <string name="payment_type">Payment type</string>
     <string name="get_1000_when_you_invite_your_friends_to_use_glaid_using_your_special_invite_code_below">Get ₦1000 when you invite your friends to use Glaid using your special invite code below</string>
+    <string name="back_btn">back_btn</string>
+    <string name="add_card_title">Add Card</string>
+    <string name="card_exp_date_hint">mm/yy</string>
+    <string name="card_exp_date_input_label">Expiry date</string>
+    <string name="card_number_input_label">Card Number</string>
+    <string name="payment_type_img">payment_type_img</string>
+    <string name="cvv_input_label">CVV</string>
+    <string name="add_card_btn_label">Add Card</string>
+    <string name="internet_error_msg">Please check your internet</string>
 </resources>
