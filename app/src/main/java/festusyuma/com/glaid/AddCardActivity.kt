@@ -127,7 +127,6 @@ class AddCardActivity : AppCompatActivity() {
 
                     saveCardInit()
                 }
-                setLoading(false)
             },
             Response.ErrorListener { response->
                 if (response.networkResponse == null) showError(getString(R.string.internet_error_msg)) else {
@@ -135,6 +134,8 @@ class AddCardActivity : AppCompatActivity() {
                         logout()
                     }else showError(getString(R.string.api_error_msg))
                 }
+
+                setLoading(false)
             }
         ) {
             override fun getHeaders(): MutableMap<String, String> {
@@ -159,8 +160,6 @@ class AddCardActivity : AppCompatActivity() {
                     val accessCode = response.getString("data")
                     paystackChargeCard(accessCode)
                 }else showError(response.getString("message"))
-
-                setLoading(false)
             },
             Response.ErrorListener { response->
                 if (response.networkResponse == null) showError(getString(R.string.internet_error_msg)) else {
@@ -168,6 +167,8 @@ class AddCardActivity : AppCompatActivity() {
                         logout()
                     }else showError(getString(R.string.api_error_msg))
                 }
+
+                setLoading(false)
             }
         ) {
             override fun getHeaders(): MutableMap<String, String> {
@@ -205,6 +206,8 @@ class AddCardActivity : AppCompatActivity() {
                         logout()
                     }else showError(getString(R.string.api_error_msg))
                 }
+
+                setLoading(false)
             }
         ) {
             override fun getHeaders(): MutableMap<String, String> {
@@ -236,7 +239,8 @@ class AddCardActivity : AppCompatActivity() {
             }
 
             override fun onError(error: Throwable?, transaction: Transaction?) {
-                showError(getString(R.string.internet_error_msg))
+                showError(getString(R.string.api_error_msg))
+                setLoading(false)
                 if (transaction != null) Log.v("ApiLog", transaction.reference)
             }
         })
