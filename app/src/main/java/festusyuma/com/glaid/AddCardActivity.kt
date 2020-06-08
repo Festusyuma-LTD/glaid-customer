@@ -130,8 +130,11 @@ class AddCardActivity : AppCompatActivity() {
                 setLoading(false)
             },
             Response.ErrorListener { response->
-                if (response.networkResponse == null) showError(getString(R.string.internet_error_msg))
-                logout()
+                if (response.networkResponse == null) showError(getString(R.string.internet_error_msg)) else {
+                    if (response.networkResponse.statusCode == 403) {
+                        logout()
+                    }else showError(getString(R.string.api_error_msg))
+                }
             }
         ) {
             override fun getHeaders(): MutableMap<String, String> {
@@ -160,12 +163,10 @@ class AddCardActivity : AppCompatActivity() {
                 setLoading(false)
             },
             Response.ErrorListener { response->
-                if (response.networkResponse == null) {
-                    showError(getString(R.string.internet_error_msg))
-                }else {
+                if (response.networkResponse == null) showError(getString(R.string.internet_error_msg)) else {
                     if (response.networkResponse.statusCode == 403) {
                         logout()
-                    }else showError(getString(R.string.internet_error_msg))
+                    }else showError(getString(R.string.api_error_msg))
                 }
             }
         ) {
@@ -199,12 +200,10 @@ class AddCardActivity : AppCompatActivity() {
                 setLoading(false)
             },
             Response.ErrorListener { response->
-                if (response.networkResponse == null) {
-                    showError(getString(R.string.internet_error_msg))
-                }else {
+                if (response.networkResponse == null) showError(getString(R.string.internet_error_msg)) else {
                     if (response.networkResponse.statusCode == 403) {
                         logout()
-                    }else showError(getString(R.string.internet_error_msg))
+                    }else showError(getString(R.string.api_error_msg))
                 }
             }
         ) {
