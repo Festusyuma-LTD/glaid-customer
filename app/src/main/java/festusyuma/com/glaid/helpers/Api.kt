@@ -11,5 +11,7 @@ class Api {
         const val VALIDATE_TOKEN: String = "${API_BASE_URL}customer/dashboard"
         const val GET_DIESEL_LIST: String = "${API_BASE_URL}customer/gas/diesel/list"
         const val GET_GAS_LIST: String = "${API_BASE_URL}customer/gas/gas/list"
+        const val ADD_CARD: String = "${API_BASE_URL}customer/payment/card/save"
+        const val ADD_CARD_INIT: String = "${API_BASE_URL}customer/payment/card/save/init"
     }
 }
