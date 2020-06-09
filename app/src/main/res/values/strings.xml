@@ -85,7 +85,7 @@
     <string name="sign_out_btn_label">Sign Out</string>
     <string name="sidebar_background_icon">sidebar_background_icon</string>
     <string name="predefined_quantity">%1$.1f %2$s</string>
-    <string name="predefined_price">&#8358;%2$s</string>
+    <string name="predefined_price">&#8358;%1$s</string>
     <string name="predefined_address_type">%1$s</string>
     <string name="location">Location</string>
     <string name="_8_ogidi_cresent_lekki_phase_1">8, Ogidi cresent, Lekki Phase 1</string>

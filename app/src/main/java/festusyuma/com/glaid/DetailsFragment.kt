@@ -138,7 +138,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
                 preView.setOnClickListener{ continueOrder(it) }
                 imgV.setImageResource(imgDrawable)
                 quantityTV.text = getString(R.string.predefined_quantity).format(quantity, gasType.unit)
-                priceTV.text = getString(R.string.predefined_price).format(currency.getSymbol(Locale.getDefault()), numberFormatter.format(totalPrice))
+                priceTV.text = getString(R.string.predefined_price).format(numberFormatter.format(totalPrice))
                 addressTypeTV.text = getString(R.string.predefined_address_type).format("Home Delivery . 3 Min")
 
                 predefinedQuantities.addView(preView)
