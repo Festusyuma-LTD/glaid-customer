@@ -118,4 +118,6 @@
     <string name="wallet_icon">wallet icon</string>
     <string name="wallet_background">wallet_background</string>
     <string name="credit_card_icon">Credit card icon</string>
+    <string name="amount_input_label" >Amount (&#8358;)</string>
+    <string name="processing">Processing</string>
 </resources>
