@@ -13,7 +13,6 @@ class AddFundsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_add_funds)
         addFundsBtn.setOnClickListener {
             startAnim()
-            loadingCoverConstraint.visibility = View.VISIBLE
         }
 //        startAnim()
     }
@@ -21,8 +20,9 @@ class AddFundsActivity : AppCompatActivity() {
         var paymentIntent = Intent(this, PaymentActivity::class.java)
         startActivity(paymentIntent)
     }
-    fun startAnim() {
+
+    private fun startAnim() {
+        loadingCoverConstraint.visibility = View.VISIBLE
         avi.show()
-        // or avi.smoothToShow();
     }
 }
