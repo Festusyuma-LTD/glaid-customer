@@ -57,6 +57,7 @@ class AddCardActivity : AppCompatActivity() {
         }
 
         loadingCover = findViewById(R.id.loadingCoverConstraint)
+        loadingAvi = loadingCover.findViewById(R.id.avi)
         errorMsg = findViewById(R.id.errorMsg)
 
         expDateInput = findViewById(R.id.expDateInput)
