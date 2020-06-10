@@ -2,6 +2,7 @@ package festusyuma.com.glaid
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -23,10 +24,12 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.wang.avi.AVLoadingIndicatorView
 import festusyuma.com.glaid.helpers.Api
+import festusyuma.com.glaid.helpers.Dashboard
 import org.json.JSONObject
 
 class AddCardActivity : AppCompatActivity() {
 
+    private lateinit var sharedPref: SharedPreferences
     var token: String? = "" // Auth token
     private var operationRunning = false
 
@@ -51,7 +54,7 @@ class AddCardActivity : AppCompatActivity() {
         setContentView(R.layout.activity_add_card)
 
         PaystackSdk.initialize(this)
-        val sharedPref = getSharedPreferences("auth_token", Context.MODE_PRIVATE)
+        sharedPref = getSharedPreferences("auth_token", Context.MODE_PRIVATE)
         if (sharedPref.contains(getString(R.string.auth_key_name))) {
             token = sharedPref.getString(getString(R.string.auth_key_name), token)
         }
@@ -187,6 +190,31 @@ class AddCardActivity : AppCompatActivity() {
         queue.add(req)
     }
 
+    private fun paystackChargeCard(accessCode: String) {
+        val charge = Charge()
+        charge.card = card
+        charge.accessCode = accessCode
+
+        PaystackSdk.chargeCard(this, charge, object : Paystack.TransactionCallback {
+            override fun onSuccess(transaction: Transaction?) {
+                if (transaction != null) {
+                    saveCard(transaction.reference)
+                    Log.v("ApiLog", "success")
+                }
+            }
+
+            override fun beforeValidate(transaction: Transaction?) {
+                if (transaction != null) Log.v("ApiLog", "validate")
+            }
+
+            override fun onError(error: Throwable?, transaction: Transaction?) {
+                showError(getString(R.string.api_error_msg))
+                setLoading(false)
+                if (transaction != null) Log.v("ApiLog", transaction.toString())
+            }
+        })
+    }
+
     private fun saveCard(reference: String) {
         val data = mapOf<String, String>(
             "cardNo" to card.number,
@@ -200,6 +228,46 @@ class AddCardActivity : AppCompatActivity() {
             reqData,
             Response.Listener { response ->
                 if (response.getInt("status") == 200) {
+                    updateCardsList()
+                }else showError(response.getString("message"))
+
+                setLoading(false)
+            },
+            Response.ErrorListener { response->
+                if (response.networkResponse == null) showError(getString(R.string.internet_error_msg)) else {
+                    if (response.networkResponse.statusCode == 403) {
+                        logout()
+                    }else showError(getString(R.string.api_error_msg))
+                }
+
+                setLoading(false)
+            }
+        ) {
+            override fun getHeaders(): MutableMap<String, String> {
+                return mutableMapOf(
+                    "Authorization" to "Bearer $token"
+                )
+            }
+        }
+
+        req.tag = "add_card"
+        queue.add(req)
+    }
+
+    private fun updateCardsList() {
+        val req = object : JsonObjectRequest(
+            Method.GET,
+            Api.GET_CARDS_LIST,
+            null,
+            Response.Listener { response ->
+                if (response.getInt("status") == 200) {
+                    val dashboard = Dashboard()
+                    val paymentCards = dashboard.getPaymentCards(response.getJSONArray("data"))
+
+                    with (sharedPref.edit()) {
+                        putStringSet(getString(R.string.sh_payment_cards), paymentCards)
+                        apply()
+                    }
                     finish()
                 }else showError(response.getString("message"))
 
@@ -226,31 +294,6 @@ class AddCardActivity : AppCompatActivity() {
         queue.add(req)
     }
 
-    private fun paystackChargeCard(accessCode: String) {
-        val charge = Charge()
-        charge.card = card
-        charge.accessCode = accessCode
-
-        PaystackSdk.chargeCard(this, charge, object : Paystack.TransactionCallback {
-            override fun onSuccess(transaction: Transaction?) {
-                if (transaction != null) {
-                    saveCard(transaction.reference)
-                    Log.v("ApiLog", "success")
-                }
-            }
-
-            override fun beforeValidate(transaction: Transaction?) {
-                if (transaction != null) Log.v("ApiLog", "validate")
-            }
-
-            override fun onError(error: Throwable?, transaction: Transaction?) {
-                showError(getString(R.string.api_error_msg))
-                setLoading(false)
-                if (transaction != null) Log.v("ApiLog", transaction.reference)
-            }
-        })
-    }
-
     private fun setLoading(loading: Boolean) {
         if (loading) {
             loadingCover.visibility = View.VISIBLE
@@ -258,7 +301,6 @@ class AddCardActivity : AppCompatActivity() {
             operationRunning = true
         }else {
             loadingCover.visibility = View.GONE
-            loadingAvi.hide()
             operationRunning = false
         }
     }

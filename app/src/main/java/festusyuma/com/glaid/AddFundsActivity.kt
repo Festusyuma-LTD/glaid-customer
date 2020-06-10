@@ -1,7 +1,6 @@
 package festusyuma.com.glaid
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -51,6 +50,7 @@ class AddFundsActivity : AppCompatActivity() {
                     for (c in cardsJSons) {
                         cards.add(gson.fromJson(c, PaymentCards::class.java))
                     }
+                    populateCards()
                     Log.v("ApiLog", cards.size.toString())
                 }
             }
@@ -80,11 +80,25 @@ class AddFundsActivity : AppCompatActivity() {
 
     private fun populateCards() {
         if (cards.size > 0) {
+            val cardsList: LinearLayout = findViewById(R.id.cardsList)
             noCardText.visibility = View.GONE
             clickToClose.visibility = View.GONE
 
             for (card in cards) {
-                val preView: View = LayoutInflater.from(this).inflate(R.layout.predefined_quantity, ConstraintLayout(this))
+                val preView: View = LayoutInflater.from(this).inflate(R.layout.card_list_item, ConstraintLayout(this))
+                val cardNoTV: TextView = preView.findViewById(R.id.cardNo)
+                val expDateTV: TextView = preView.findViewById(R.id.expDate)
+
+                cardNoTV.text = getString(R.string.card_no).format(card.carNo)
+                expDateTV.text = getString(R.string.exp_date).format(card.expMonth, card.expYear)
+                preView.setOnClickListener {
+                    cardId = card.id
+                    cardsListCover.visibility = View.GONE
+                    cardInput.text = getString(R.string.card_no_input).format(card.carNo)
+                    Log.v("ApiLog", cardId.toString())
+                }
+
+                cardsList.addView(preView)
             }
         }
     }

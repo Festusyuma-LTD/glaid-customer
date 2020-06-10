@@ -123,4 +123,7 @@
     <string name="processing">Processing</string>
     <string name="click_to_close">Click here to close</string>
     <string name="add_funds_title">Add Funds</string>
+    <string name="card_no">***** %1$s</string>
+    <string name="card_no_input">Card (***** %1$s)</string>
+    <string name="exp_date">%1$s/%2$s</string>
 </resources>
