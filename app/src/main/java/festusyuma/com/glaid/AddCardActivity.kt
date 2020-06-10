@@ -21,6 +21,7 @@ import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.wang.avi.AVLoadingIndicatorView
 import festusyuma.com.glaid.helpers.Api
 import org.json.JSONObject
 
@@ -34,7 +35,9 @@ class AddCardActivity : AppCompatActivity() {
     private lateinit var cardNoInput: EditText
     private lateinit var cvvInput: EditText
     private lateinit var addCardBtn: ConstraintLayout
-    private lateinit var loadingCover: LinearLayout
+
+    private lateinit var loadingCover: ConstraintLayout
+    private lateinit var loadingAvi: AVLoadingIndicatorView
     private lateinit var errorMsg: TextView
 
     //paystack
@@ -53,7 +56,7 @@ class AddCardActivity : AppCompatActivity() {
             token = sharedPref.getString(getString(R.string.auth_key_name), token)
         }
 
-        loadingCover = findViewById(R.id.loadingCover)
+        loadingCover = findViewById(R.id.loadingCoverConstraint)
         errorMsg = findViewById(R.id.errorMsg)
 
         expDateInput = findViewById(R.id.expDateInput)
@@ -250,9 +253,11 @@ class AddCardActivity : AppCompatActivity() {
     private fun setLoading(loading: Boolean) {
         if (loading) {
             loadingCover.visibility = View.VISIBLE
+            loadingAvi.show()
             operationRunning = true
         }else {
-            loadingCover.visibility = View.INVISIBLE
+            loadingCover.visibility = View.GONE
+            loadingAvi.hide()
             operationRunning = false
         }
     }

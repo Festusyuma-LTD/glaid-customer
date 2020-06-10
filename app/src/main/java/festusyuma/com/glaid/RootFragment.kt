@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
@@ -16,19 +17,28 @@ import festusyuma.com.glaid.helpers.Api
 import festusyuma.com.glaid.helpers.Dashboard
 import festusyuma.com.glaid.helpers.getFirst
 import festusyuma.com.glaid.model.User
-import kotlinx.android.synthetic.main.activity_forgot_pass_otp_final.*
-import kotlinx.android.synthetic.main.activity_maps.*
-import kotlinx.android.synthetic.main.fragment_root.*
 
 /**
  * A simple [Fragment] subclass.
  */
 class RootFragment : Fragment(R.layout.fragment_root) {
 
+    private lateinit var greeting: TextView
+    private lateinit var dieselBtn: ConstraintLayout
+    private lateinit var gasBtn: ConstraintLayout
+
+    private lateinit var errorMsg: TextView
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val sharedPref = this.activity?.getSharedPreferences("cached_data", Context.MODE_PRIVATE)
+        greeting = requireActivity().findViewById(R.id.greeting)
+        dieselBtn = requireActivity().findViewById(R.id.dieselBtn)
+        gasBtn = requireActivity().findViewById(R.id.gasBtn)
+
+        errorMsg = requireActivity().findViewById(R.id.errorMsg)
+
+        val sharedPref = requireActivity().getSharedPreferences("cached_data", Context.MODE_PRIVATE)
         val userJson = sharedPref?.getString("userDetails", "null")
 
         if (userJson != null) {
