@@ -1,6 +1,7 @@
 package festusyuma.com.glaid
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,6 +18,8 @@ import kotlinx.android.synthetic.main.activity_add_funds.*
 
 class AddFundsActivity : AppCompatActivity() {
 
+    private lateinit var authPref: SharedPreferences
+    private lateinit var dataPref: SharedPreferences
     private var operationRunning = false
 
     private lateinit var loadingCover: ConstraintLayout
@@ -42,17 +45,15 @@ class AddFundsActivity : AppCompatActivity() {
         selectCardButton.setOnClickListener { cardsListCover.visibility = View.VISIBLE }
         clickToClose.setOnClickListener { cardsListCover.visibility = View.GONE }
 
-        val sharedPref = getSharedPreferences("cached_data", Context.MODE_PRIVATE)
-        if (sharedPref.contains(getString(R.string.sh_wallet))) {
-            val cardsJSons = sharedPref.getStringSet(getString(R.string.sh_payment_cards), mutableSetOf())
-            if (cardsJSons != null) {
-                if (cardsJSons.size > 0) {
-                    for (c in cardsJSons) {
-                        cards.add(gson.fromJson(c, PaymentCards::class.java))
-                    }
-                    populateCards()
-                    Log.v("ApiLog", cards.size.toString())
+        authPref = getSharedPreferences("auth_token", Context.MODE_PRIVATE)
+        dataPref = getSharedPreferences("cached_data", Context.MODE_PRIVATE)
+        if (dataPref.contains(getString(R.string.sh_wallet))) {
+            val cardsJSons = dataPref.getStringSet(getString(R.string.sh_payment_cards), mutableSetOf())
+            if (cardsJSons != null && cardsJSons.size > 0) {
+                for (c in cardsJSons) {
+                    cards.add(gson.fromJson(c, PaymentCards::class.java))
                 }
+                populateCards()
             }
         }
 
@@ -61,7 +62,6 @@ class AddFundsActivity : AppCompatActivity() {
                 setLoading(true)
             }else showError("Card not selected")
         }
-
     }
 
     private fun initViews() {
@@ -80,7 +80,6 @@ class AddFundsActivity : AppCompatActivity() {
 
     private fun populateCards() {
         if (cards.size > 0) {
-            val cardsList: LinearLayout = findViewById(R.id.cardsList)
             noCardText.visibility = View.GONE
             clickToClose.visibility = View.GONE
 

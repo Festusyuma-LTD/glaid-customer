@@ -30,6 +30,7 @@ import org.json.JSONObject
 class AddCardActivity : AppCompatActivity() {
 
     private lateinit var sharedPref: SharedPreferences
+    private lateinit var dataSharedPref: SharedPreferences
     var token: String? = "" // Auth token
     private var operationRunning = false
 
@@ -55,6 +56,7 @@ class AddCardActivity : AppCompatActivity() {
 
         PaystackSdk.initialize(this)
         sharedPref = getSharedPreferences("auth_token", Context.MODE_PRIVATE)
+        dataSharedPref = getSharedPreferences("cached_data", Context.MODE_PRIVATE)
         if (sharedPref.contains(getString(R.string.auth_key_name))) {
             token = sharedPref.getString(getString(R.string.auth_key_name), token)
         }
@@ -264,9 +266,9 @@ class AddCardActivity : AppCompatActivity() {
                     val dashboard = Dashboard()
                     val paymentCards = dashboard.getPaymentCards(response.getJSONArray("data"))
 
-                    with (sharedPref.edit()) {
+                    with (dataSharedPref.edit()) {
                         putStringSet(getString(R.string.sh_payment_cards), paymentCards)
-                        apply()
+                        commit()
                     }
                     finish()
                 }else showError(response.getString("message"))
