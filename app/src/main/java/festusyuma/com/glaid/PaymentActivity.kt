@@ -32,7 +32,7 @@ class PaymentActivity : AppCompatActivity() {
 
             if (walletJson != null) {
                 val wallet = gson.fromJson(walletJson, Wallet::class.java)
-                walletAmountTV.text = getString(R.string.predefined_price).format(numberFormatter.format(wallet.wallet))
+                walletAmountTV.text = getString(R.string.formatted_amount).format(numberFormatter.format(wallet.wallet))
             }else logout()
         }else logout()
     }

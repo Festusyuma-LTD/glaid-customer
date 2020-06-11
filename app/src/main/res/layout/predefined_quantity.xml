@@ -60,7 +60,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:text="@string/predefined_price"
+            android:text="@string/formatted_amount"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="#B7673AB7"
