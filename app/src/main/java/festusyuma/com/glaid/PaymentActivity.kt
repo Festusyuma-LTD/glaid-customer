@@ -2,28 +2,33 @@ package festusyuma.com.glaid
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import festusyuma.com.glaid.model.Wallet
 import java.text.NumberFormat
-import java.util.*
 
 class PaymentActivity : AppCompatActivity() {
+
+    private lateinit var dataPref: SharedPreferences
 
     private lateinit var walletAmountTV: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_payment)
-
         walletAmountTV = findViewById(R.id.walletAmount)
+    }
 
-        val sharedPref = getSharedPreferences("cached_data", Context.MODE_PRIVATE)
-        if (sharedPref.contains(getString(R.string.sh_wallet))) {
+    override fun onResume() {
+        super.onResume()
+
+        dataPref = getSharedPreferences("cached_data", Context.MODE_PRIVATE)
+        if (dataPref.contains(getString(R.string.sh_wallet))) {
             val numberFormatter = NumberFormat.getInstance()
-            val walletJson = sharedPref.getString(getString(R.string.sh_wallet), null)
+            val walletJson = dataPref.getString(getString(R.string.sh_wallet), null)
 
             if (walletJson != null) {
                 val wallet = gson.fromJson(walletJson, Wallet::class.java)
