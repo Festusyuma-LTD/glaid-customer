@@ -89,7 +89,7 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
         savedHour = hourOfDay
         savedMinute = minute
 
-        dateTimeField.text = "$savedDay - $savedMonth - $savedYear : $savedHour $savedMinute"
+        dateTimeField.text = "$savedDay - $savedMonth - $savedYear : $savedHour-$savedMinute"
     }
 
 //    fun onCustombtnclicked() {
