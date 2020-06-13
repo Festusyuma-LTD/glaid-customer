@@ -23,28 +23,23 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity) {
             // load address fragment
             requireActivity().supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.slide_up, R.anim.slide_down,R.anim.slide_up, R.anim.slide_down)
-                .replace(R.id.framelayoutFragment, AddressFragment.addressInstance())
-                .addToBackStack(null)
-                .commit()
-            // load search address fragment
-            requireActivity().supportFragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.slide_down, R.anim.slide_up)
-                .replace(R.id.addressFramelayoutFragment, SearchAddressFragment.searchAddressInstance())
+                .replace(R.id.addressFramelayoutFragment, AddressFragment.addressInstance())
                 .addToBackStack(null)
                 .commit()
 
+
         }
     }
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return super.onCreateView(inflater, container, savedInstanceState)
-        val lp: FrameLayout.LayoutParams = FrameLayout.LayoutParams(0, 0)
-        framelayoutFragment.layoutParams = lp
-        print("::::::${framelayoutFragment.height}:::::")
-    }
+//    override fun onCreateView(
+//        inflater: LayoutInflater,
+//        container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View? {
+//        return super.onCreateView(inflater, container, savedInstanceState)
+//        val lp: FrameLayout.LayoutParams = FrameLayout.LayoutParams(0, 0)
+//        framelayoutFragment.layoutParams = lp
+//        print("::::::${framelayoutFragment.height}:::::")
+//    }
 
     companion object {
         fun quantityInstance() = QuantityFragment()

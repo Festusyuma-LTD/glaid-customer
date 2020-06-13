@@ -7,9 +7,8 @@
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality.
     -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
@@ -19,9 +18,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AddFundsActivity"></activity>
-        <activity android:name=".PaymentActivity" />
-        <activity android:name=".AddCardActivity" />
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -33,6 +30,10 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+
+        <meta-data
+            android:name="co.paystack.android.PublicKey"
+            android:value="@string/paystack_public_key"/>
 
         <activity
             android:name=".MapsActivity"
@@ -113,6 +114,15 @@
             android:configChanges="orientation"
             android:screenOrientation="sensorPortrait"
             tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".AddFundsActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".PaymentActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".AddCardActivity"
+            android:screenOrientation="sensorPortrait" />
 
         <meta-data
             android:name="preloaded_fonts"
