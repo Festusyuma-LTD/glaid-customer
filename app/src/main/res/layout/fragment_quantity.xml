@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/white"
+    android:background="@drawable/carddrawable"
     android:paddingLeft="20dp"
     android:paddingRight="20dp"
     tools:context=".RootFragment">
@@ -176,16 +176,14 @@
                 app:layout_constraintStart_toStartOf="@+id/textView6"
                 app:layout_constraintTop_toBottomOf="@+id/paymentSchLayout" />
 
-            <EditText
-                android:id="@+id/editText"
+            <View
+                android:id="@+id/dateTimeContainer"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/input_drawable"
-                android:ems="10"
-                android:inputType="date"
-                android:padding="20dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/fragment_btn_drawable"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
@@ -193,10 +191,10 @@
                 android:id="@+id/textView8"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="16dp"
                 android:text="@string/location"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editText" />
+                app:layout_constraintTop_toBottomOf="@+id/dateTimeContainer" />
 
             <View
                 android:id="@+id/view3"
@@ -248,21 +246,36 @@
                 app:layout_constraintStart_toStartOf="@+id/LocationField"
                 app:layout_constraintTop_toTopOf="@+id/LocationField" />
 
+            <TextView
+                android:id="@+id/dateTimeField"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginRight="20dp"
+                app:layout_constraintBottom_toBottomOf="@+id/dateTimeContainer"
+                app:layout_constraintEnd_toEndOf="@+id/dateTimeContainer"
+                app:layout_constraintHorizontal_bias="0.066"
+                app:layout_constraintStart_toStartOf="@+id/dateTimeContainer"
+                app:layout_constraintTop_toTopOf="@+id/dateTimeContainer"
+                app:layout_constraintVertical_bias="0.512" />
+
             <!--            <EditText-->
-<!--                android:id="@+id/LocationField"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginStart="16dp"-->
-<!--                android:layout_marginLeft="16dp"-->
-<!--                android:background="@drawable/fragment_btn_drawable"-->
-<!--                android:ems="10"-->
-<!--                android:inputType="textPersonName"-->
-<!--                android:padding="20dp"-->
-<!--                android:text="@string/_8_ogidi_cresent_lekki_phase_1"-->
-<!--                app:layout_constraintBottom_toBottomOf="@+id/view3"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toEndOf="@+id/view3"-->
-<!--                app:layout_constraintTop_toTopOf="@+id/view3" />-->
+            <!--                android:id="@+id/LocationField"-->
+            <!--                android:layout_width="0dp"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginStart="16dp"-->
+            <!--                android:layout_marginLeft="16dp"-->
+            <!--                android:background="@drawable/fragment_btn_drawable"-->
+            <!--                android:ems="10"-->
+            <!--                android:inputType="textPersonName"-->
+            <!--                android:padding="20dp"-->
+            <!--                android:text="@string/_8_ogidi_cresent_lekki_phase_1"-->
+            <!--                app:layout_constraintBottom_toBottomOf="@+id/view3"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toEndOf="@+id/view3"-->
+            <!--                app:layout_constraintTop_toTopOf="@+id/view3" />-->
 
             <!--            <androidx.cardview.widget.CardView-->
             <!--                android:layout_width="405dp"-->
