@@ -54,7 +54,7 @@
         android:background="@drawable/whatappbtndrawable"
         android:gravity="start|center_vertical"
         android:padding="20dp"
-        android:text="Share to WhatsApp"
+        android:text="@string/share_to_whatsapp"
         android:textAllCaps="false"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
