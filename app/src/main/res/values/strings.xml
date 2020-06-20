@@ -120,4 +120,6 @@
     <string name="credit_card_icon">Credit card icon</string>
     <string name="amount_input_label" >Amount (&#8358;)</string>
     <string name="processing">Processing</string>
+    <string name="share_to_whatsapp">Share to Whatsapp</string>
+    <string name="lekki_phase_1_lagos">Lekki Phase 1, Lagos</string>
 </resources>

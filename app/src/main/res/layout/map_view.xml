@@ -22,7 +22,9 @@
         <FrameLayout
             android:id="@+id/addressFramelayoutFragment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:elevation="300dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -31,13 +33,12 @@
             android:id="@+id/framelayoutFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
             android:elevation="30dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addressFramelayoutFragment"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0" />
 
         <ImageView
