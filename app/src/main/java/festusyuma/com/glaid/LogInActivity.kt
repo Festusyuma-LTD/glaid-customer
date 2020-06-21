@@ -2,31 +2,44 @@ package festusyuma.com.glaid
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.EditText
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.wang.avi.AVLoadingIndicatorView
 import festusyuma.com.glaid.helpers.Api
 import festusyuma.com.glaid.helpers.Dashboard
 import festusyuma.com.glaid.requestdto.LoginRequest
-import kotlinx.android.synthetic.main.activity_forgot_pass_otp_final.*
-import kotlinx.android.synthetic.main.activity_forgot_pass_otp_final.errorMsg
-import kotlinx.android.synthetic.main.activity_forgot_pass_otp_final.loadingCover
-import kotlinx.android.synthetic.main.activity_log_in.*
 import org.json.JSONObject
 
 class LogInActivity : AppCompatActivity() {
 
     private var operationRunning = false
 
+    private lateinit var loadingCover: ConstraintLayout
+    private lateinit var loadingAvi: AVLoadingIndicatorView
+    private lateinit var errorMsg: TextView
+
+    private lateinit var emailInput: EditText
+    private lateinit var passwordInput: EditText
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_log_in)
+
+        loadingCover = findViewById(R.id.loadingCoverConstraint)
+        loadingAvi = loadingCover.findViewById(R.id.avi)
+        errorMsg = findViewById(R.id.errorMsg)
+
+        emailInput = findViewById(R.id.emailInput)
+        passwordInput = findViewById(R.id.passwordInput)
     }
 
     fun forgotPasswordMethod(view: View) {
@@ -84,7 +97,7 @@ class LogInActivity : AppCompatActivity() {
             loadingCover.visibility = View.VISIBLE
             operationRunning = true
         }else {
-            loadingCover.visibility = View.INVISIBLE
+            loadingCover.visibility = View.GONE
             operationRunning = false
         }
     }

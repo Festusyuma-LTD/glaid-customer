@@ -5,14 +5,17 @@ import android.os.Build
 import android.os.Bundle
 import android.text.InputType
 import android.view.View
+import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.wang.avi.AVLoadingIndicatorView
 import festusyuma.com.glaid.helpers.Api
 import festusyuma.com.glaid.requestdto.PasswordResetRequest
-import kotlinx.android.synthetic.main.activity_forgot_password_otp.*
 import org.json.JSONObject
 
 
@@ -21,9 +24,25 @@ class ForgotPasswordOtpOptionsActivity : AppCompatActivity() {
     lateinit var otpChoice : String
     private var operationRunning = false
 
+    private lateinit var loadingCover: ConstraintLayout
+    private lateinit var loadingAvi: AVLoadingIndicatorView
+    private lateinit var errorMsg: TextView
+
+    private lateinit var forgotPasswordIntroText: TextView
+    private lateinit var getOtpInputLabel: TextView
+    private lateinit var getOtpInput: EditText
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forgot_password_otp)
+
+        loadingCover = findViewById(R.id.loadingCoverConstraint)
+        loadingAvi = loadingCover.findViewById(R.id.avi)
+        errorMsg = findViewById(R.id.errorMsg)
+
+        forgotPasswordIntroText = findViewById(R.id.forgotPasswordIntroText)
+        getOtpInputLabel = findViewById(R.id.getOtpInputLabel)
+        getOtpInput = findViewById(R.id.getOtpInput)
 
         val choice = intent.getStringExtra(EXTRA_FORGOT_PASSWORD_CHOICE)
         if (choice == null) finish() else otpChoice = choice
@@ -93,9 +112,11 @@ class ForgotPasswordOtpOptionsActivity : AppCompatActivity() {
     private fun setLoading(loading: Boolean) {
         if (loading) {
             loadingCover.visibility = View.VISIBLE
+            loadingAvi.show()
             operationRunning = true
         }else {
-            loadingCover.visibility = View.INVISIBLE
+            loadingCover.visibility = View.GONE
+            loadingAvi.hide()
             operationRunning = false
         }
     }

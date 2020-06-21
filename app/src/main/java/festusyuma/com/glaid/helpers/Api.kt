@@ -13,5 +13,10 @@ class Api {
         const val GET_GAS_LIST: String = "${API_BASE_URL}customer/gas/gas/list"
         const val ADD_CARD: String = "${API_BASE_URL}customer/payment/card/save"
         const val ADD_CARD_INIT: String = "${API_BASE_URL}customer/payment/card/save/init"
+        const val GET_CARDS_LIST: String = "${API_BASE_URL}customer/payment/cards/list"
+        const val FUND_WALLET: String = "${API_BASE_URL}customer/wallet/credit"
+        fun removeCardUrl(cardId: Long): String {
+            return "${API_BASE_URL}customer/payment/card/$cardId/remove"
+        }
     }
 }

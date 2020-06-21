@@ -85,7 +85,7 @@
     <string name="sign_out_btn_label">Sign Out</string>
     <string name="sidebar_background_icon">sidebar_background_icon</string>
     <string name="predefined_quantity">%1$.1f %2$s</string>
-    <string name="predefined_price">&#8358;%1$s</string>
+    <string name="formatted_amount">&#8358;%1$s</string>
     <string name="predefined_address_type">%1$s</string>
     <string name="location">Location</string>
     <string name="_8_ogidi_cresent_lekki_phase_1">8, Ogidi cresent, Lekki Phase 1</string>
@@ -93,6 +93,8 @@
     <string name="choose_another_payment_option">Choose another payment option</string>
     <string name="sh_user_details">userDetails</string>
     <string name="sh_wallet">wallet</string>
+    <string name="sh_payment_cards">cards</string>
+    <string name="sh_preferred_payment">preferred_payment</string>
     <string name="glaid_wallet">Glaid Wallet</string>
     <string name="preferred_payment_method">Preferred payment Method</string>
     <string name="wallet_balance">Wallet Balance</string>
@@ -122,4 +124,10 @@
     <string name="processing">Processing</string>
     <string name="share_to_whatsapp">Share to Whatsapp</string>
     <string name="lekki_phase_1_lagos">Lekki Phase 1, Lagos</string>
+    <string name="click_to_close">Click here to close</string>
+    <string name="add_funds_title">Add Funds</string>
+    <string name="card_no">***** %1$s</string>
+    <string name="card_no_input">Card (***** %1$s)</string>
+    <string name="exp_date">%1$s/%2$s</string>
+    <string name="delete">Delete</string>
 </resources>
