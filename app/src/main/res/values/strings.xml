@@ -122,6 +122,8 @@
     <string name="credit_card_icon">Credit card icon</string>
     <string name="amount_input_label" >Amount (&#8358;)</string>
     <string name="processing">Processing</string>
+    <string name="share_to_whatsapp">Share to Whatsapp</string>
+    <string name="lekki_phase_1_lagos">Lekki Phase 1, Lagos</string>
     <string name="click_to_close">Click here to close</string>
     <string name="add_funds_title">Add Funds</string>
     <string name="card_no">***** %1$s</string>
