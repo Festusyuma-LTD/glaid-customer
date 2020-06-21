@@ -31,6 +31,7 @@ class PaymentActivity : AppCompatActivity() {
     private lateinit var walletAmountTV: TextView
     private val radios: MutableList<RadioButton> = mutableListOf()
     private lateinit var preferredPayment: String
+    private lateinit var walletRadio: View
 
     private lateinit var loadingCover: ConstraintLayout
     private lateinit var loadingAvi: AVLoadingIndicatorView
@@ -113,7 +114,8 @@ class PaymentActivity : AppCompatActivity() {
             cardRadioGroup.addView(cardRadioItem)
         }
 
-        cardRadioGroup.addView(getDefaultRadio("wallet", "Glaid Wallet"))
+        walletRadio = getDefaultRadio("wallet", "Glaid Wallet")
+        cardRadioGroup.addView(walletRadio)
         cardRadioGroup.addView(getDefaultRadio("cash", "Cash"))
     }
 
@@ -148,6 +150,10 @@ class PaymentActivity : AppCompatActivity() {
                 null,
                 Response.Listener { response ->
                     if (response.getInt("status") == 200) {
+                        if (id.toString() == preferredPayment) {
+                            selectWallet()
+                        }
+
                         cardRadioGroup.removeView(cardRadioItem)
                         updateCardsList()
                     }else showError(response.getString("message"))
@@ -207,6 +213,15 @@ class PaymentActivity : AppCompatActivity() {
 
         req.tag = "add_card"
         queue.add(req)
+    }
+
+    private fun selectWallet() {
+        for (rad in radios) {
+            rad.isChecked = false
+        }
+
+        val walletRadioButton: RadioButton = walletRadio.findViewById(R.id.cardRadioBtn)
+        walletRadioButton.isChecked = true
     }
 
     private fun radioSelect(selectedRadio: RadioButton) {
