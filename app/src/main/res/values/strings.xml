@@ -94,6 +94,7 @@
     <string name="sh_user_details">userDetails</string>
     <string name="sh_wallet">wallet</string>
     <string name="sh_payment_cards">cards</string>
+    <string name="sh_preferred_payment">preferred_payment</string>
     <string name="glaid_wallet">Glaid Wallet</string>
     <string name="preferred_payment_method">Preferred payment Method</string>
     <string name="wallet_balance">Wallet Balance</string>
@@ -126,4 +127,5 @@
     <string name="card_no">***** %1$s</string>
     <string name="card_no_input">Card (***** %1$s)</string>
     <string name="exp_date">%1$s/%2$s</string>
+    <string name="delete">Delete</string>
 </resources>

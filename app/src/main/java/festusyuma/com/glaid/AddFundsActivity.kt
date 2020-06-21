@@ -17,6 +17,7 @@ import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.google.gson.reflect.TypeToken
 import com.wang.avi.AVLoadingIndicatorView
 import festusyuma.com.glaid.helpers.Api
 import festusyuma.com.glaid.model.PaymentCards
@@ -25,7 +26,6 @@ import festusyuma.com.glaid.requestdto.FundWallet
 import kotlinx.android.synthetic.main.activity_add_funds.*
 import org.json.JSONObject
 import java.lang.Exception
-import java.text.NumberFormat
 
 class AddFundsActivity : AppCompatActivity() {
 
@@ -67,11 +67,13 @@ class AddFundsActivity : AppCompatActivity() {
 
         dataPref = getSharedPreferences("cached_data", Context.MODE_PRIVATE)
         if (dataPref.contains(getString(R.string.sh_wallet))) {
-            val cardsJSons = dataPref.getStringSet(getString(R.string.sh_payment_cards), mutableSetOf())
-            if (cardsJSons != null && cardsJSons.size > 0) {
-                for (c in cardsJSons) {
-                    cards.add(gson.fromJson(c, PaymentCards::class.java))
-                }
+            val cardsJSons = dataPref.getString(getString(R.string.sh_payment_cards), null)
+            val typeToken = object: TypeToken<MutableList<PaymentCards>>(){}.type
+
+            if (cardsJSons != null) {
+                val cardsObj: MutableList<PaymentCards> = gson.fromJson(cardsJSons, typeToken)
+                for (c in cardsObj) cards.add(c)
+
                 populateCards()
             }
         }
@@ -192,12 +194,12 @@ class AddFundsActivity : AppCompatActivity() {
                 val cardNoTV: TextView = preView.findViewById(R.id.cardNo)
                 val expDateTV: TextView = preView.findViewById(R.id.expDate)
 
-                cardNoTV.text = getString(R.string.card_no).format(card.carNo)
+                cardNoTV.text = getString(R.string.card_no).format(card.cardNo)
                 expDateTV.text = getString(R.string.exp_date).format(card.expMonth, card.expYear)
                 preView.setOnClickListener {
                     cardId = card.id
                     cardsListCover.visibility = View.GONE
-                    cardInput.text = getString(R.string.card_no_input).format(card.carNo)
+                    cardInput.text = getString(R.string.card_no_input).format(card.cardNo)
                     Log.v("ApiLog", cardId.toString())
                 }
 

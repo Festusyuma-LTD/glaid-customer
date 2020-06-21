@@ -264,10 +264,10 @@ class AddCardActivity : AppCompatActivity() {
             Response.Listener { response ->
                 if (response.getInt("status") == 200) {
                     val dashboard = Dashboard()
-                    val paymentCards = dashboard.getPaymentCards(response.getJSONArray("data"))
+                    val paymentCards = gson.toJson(dashboard.getPaymentCards(response.getJSONArray("data")))
 
                     with (dataSharedPref.edit()) {
-                        putStringSet(getString(R.string.sh_payment_cards), paymentCards)
+                        putString(getString(R.string.sh_payment_cards), paymentCards)
                         commit()
                     }
                     finish()

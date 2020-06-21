@@ -17,14 +17,18 @@ class Dashboard {
 
             val sharedPref = context.getSharedPreferences("cached_data", Context.MODE_PRIVATE)
             val user = gson.toJson(dashboard.getUser(data.getJSONObject("user")))
+            val prefPayment = if (data.isNull("preferredPaymentMethod")) {
+                "wallet"
+            }else dashboard.getPreferredPayment(data.getJSONObject("preferredPaymentMethod"))
             val wallet = gson.toJson(dashboard.getWallet(data.getJSONObject("wallet")))
-            val paymentCards = dashboard.getPaymentCards(data.getJSONArray("paymentCards"))
+            val paymentCards = gson.toJson(dashboard.getPaymentCards(data.getJSONArray("paymentCards")))
 
             with(sharedPref.edit()) {
                 clear()
                 putString(context.getString(R.string.sh_user_details), user)
                 putString(context.getString(R.string.sh_wallet), wallet)
-                putStringSet(context.getString(R.string.sh_payment_cards), paymentCards)
+                putString(context.getString(R.string.sh_payment_cards), paymentCards)
+                putString(context.getString(R.string.sh_preferred_payment), prefPayment)
                 commit()
             }
         }
@@ -49,9 +53,9 @@ class Dashboard {
         )
     }
 
-    fun getPaymentCards(data: JSONArray): MutableSet<String> {
+    fun getPaymentCards(data: JSONArray): MutableList<PaymentCards> {
 
-        val cards = mutableSetOf<String>()
+        val cards = mutableListOf<PaymentCards>()
 
         for (i in 0 until data.length()) {
             val cardJson = data[i] as JSONObject
@@ -62,10 +66,19 @@ class Dashboard {
                 cardJson.getString("expYear")
             )
 
-            cards.add(gson.toJson(wallet))
+            cards.add(wallet)
         }
 
         return cards
+    }
+
+    fun getPreferredPayment(data: JSONObject): String {
+        Log.v("ApiLog", "pref_payment: $data")
+        val type = data.getString("type")
+
+        return if (type in listOf("wallet", "cash")) {
+            type
+        }else data.getString("cardId")
     }
 
     /*fun getAddress(data: JSONObject): Address {
