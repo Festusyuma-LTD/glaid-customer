@@ -22,6 +22,8 @@ import festusyuma.com.glaid.helpers.Api
 import festusyuma.com.glaid.helpers.Dashboard
 import festusyuma.com.glaid.model.PaymentCards
 import festusyuma.com.glaid.model.Wallet
+import festusyuma.com.glaid.request.PreferredPayment
+import org.json.JSONObject
 import java.text.NumberFormat
 
 class PaymentActivity : AppCompatActivity() {
@@ -104,8 +106,7 @@ class PaymentActivity : AppCompatActivity() {
 
 
             cardRadioBtn.setOnClickListener {
-                radioSelect(cardRadioBtn)
-                preferredPayment = card.id.toString()
+                updatePreferredPayment(cardRadioBtn, card.id.toString())
             }
 
             deleteBtn.setOnClickListener { deleteCard(card.id, cardRadioItem) }
@@ -130,8 +131,7 @@ class PaymentActivity : AppCompatActivity() {
         if (preferredPayment == value) radioBtn.isChecked = true
 
         radioBtn.setOnClickListener {
-            radioSelect(radioBtn)
-            preferredPayment = value
+            updatePreferredPayment(radioBtn, value)
         }
 
         radios.add(radioBtn)
@@ -183,8 +183,6 @@ class PaymentActivity : AppCompatActivity() {
     }
 
     private fun updateCardsList() {
-        dataPref = getSharedPreferences("cached_data", Context.MODE_PRIVATE)
-
         val req = object : JsonObjectRequest(
             Method.GET,
             Api.GET_CARDS_LIST,
@@ -216,12 +214,69 @@ class PaymentActivity : AppCompatActivity() {
     }
 
     private fun selectWallet() {
+        with(dataPref.edit()) {
+            putString(getString(R.string.sh_preferred_payment), "wallet")
+            commit()
+        }
+
         for (rad in radios) {
             rad.isChecked = false
         }
 
         val walletRadioButton: RadioButton = walletRadio.findViewById(R.id.cardRadioBtn)
         walletRadioButton.isChecked = true
+        preferredPayment = "wallet"
+    }
+
+    private fun updatePreferredPayment(radioBtn: RadioButton, value: String) {
+        if (!operationRunning) {
+            setLoading(true)
+            val prefPayment = if (value in listOf("wallet", "cash")) {
+                PreferredPayment(value)
+            }else PreferredPayment("card", value.toLong())
+
+            val req = object : JsonObjectRequest(
+                Method.POST,
+                Api.SET_PREFERRED,
+                JSONObject(gson.toJson(prefPayment)),
+                Response.Listener { response ->
+                    if (response.getInt("status") == 200) {
+                        radioSelect(radioBtn)
+                        preferredPayment = value
+
+                        with(dataPref.edit()) {
+                            putString(getString(R.string.sh_preferred_payment), value)
+                            commit()
+                        }
+
+                    }else {
+                        radioBtn.isChecked = false
+                        showError(response.getString("message"))
+                    }
+
+                    setLoading(false)
+                },
+                Response.ErrorListener { response->
+                    radioBtn.isChecked = false
+                    if (response.networkResponse == null) showError(getString(R.string.internet_error_msg)) else {
+                        if (response.networkResponse.statusCode == 403) {
+                            logout()
+                        }else showError(getString(R.string.api_error_msg))
+                    }
+
+                    setLoading(false)
+                }
+            ) {
+                override fun getHeaders(): MutableMap<String, String> {
+                    return mutableMapOf(
+                        "Authorization" to "Bearer $token"
+                    )
+                }
+            }
+
+            req.tag = "remove_card"
+            queue.add(req)
+        }
     }
 
     private fun radioSelect(selectedRadio: RadioButton) {
