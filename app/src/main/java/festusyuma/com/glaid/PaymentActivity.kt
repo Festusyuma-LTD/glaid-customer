@@ -19,6 +19,7 @@ import com.android.volley.toolbox.Volley
 import com.google.gson.reflect.TypeToken
 import com.wang.avi.AVLoadingIndicatorView
 import festusyuma.com.glaid.helpers.Api
+import festusyuma.com.glaid.helpers.Dashboard
 import festusyuma.com.glaid.model.PaymentCards
 import festusyuma.com.glaid.model.Wallet
 import java.text.NumberFormat
@@ -148,6 +149,7 @@ class PaymentActivity : AppCompatActivity() {
                 Response.Listener { response ->
                     if (response.getInt("status") == 200) {
                         cardRadioGroup.removeView(cardRadioItem)
+                        updateCardsList()
                     }else showError(response.getString("message"))
 
                     setLoading(false)
@@ -172,6 +174,39 @@ class PaymentActivity : AppCompatActivity() {
             req.tag = "remove_card"
             queue.add(req)
         }
+    }
+
+    private fun updateCardsList() {
+        dataPref = getSharedPreferences("cached_data", Context.MODE_PRIVATE)
+
+        val req = object : JsonObjectRequest(
+            Method.GET,
+            Api.GET_CARDS_LIST,
+            null,
+            Response.Listener { response ->
+                if (response.getInt("status") == 200) {
+                    val dashboard = Dashboard()
+                    val paymentCards = gson.toJson(dashboard.getPaymentCards(response.getJSONArray("data")))
+
+                    with (dataPref.edit()) {
+                        putString(getString(R.string.sh_payment_cards), paymentCards)
+                        commit()
+                    }
+                }
+
+                setLoading(false)
+            },
+            Response.ErrorListener { setLoading(false) }
+        ) {
+            override fun getHeaders(): MutableMap<String, String> {
+                return mutableMapOf(
+                    "Authorization" to "Bearer $token"
+                )
+            }
+        }
+
+        req.tag = "add_card"
+        queue.add(req)
     }
 
     private fun radioSelect(selectedRadio: RadioButton) {

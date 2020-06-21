@@ -75,7 +75,6 @@ class AddCardActivity : AppCompatActivity() {
             if (!operationRunning) {
                 setLoading(true)
                 queue = Volley.newRequestQueue(this)
-                //todo validate card is entered
                 validateLogin()
             }
         }
