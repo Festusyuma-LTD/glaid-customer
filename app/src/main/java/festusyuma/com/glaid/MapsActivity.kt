@@ -37,6 +37,7 @@ import android.provider.Settings;
 import android.view.Window
 import android.view.WindowManager
 import festusyuma.com.glaid.model.User
+import kotlinx.android.synthetic.main.map_view.*
 import java.util.*
 import kotlin.properties.Delegates
 
@@ -74,6 +75,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             emailTV.text = user.email
         }
 
+        //set date picker max date to one year and min date todAY
+//        val year_plus_one: Calendar = Calendar.getInstance()
+//        datePicker.minDate = year_plus_one.timeInMillis
+//        year_plus_one.add(Calendar.YEAR, 1)
+//        datePicker.maxDate = year_plus_one.timeInMillis
         // tint removal for drawer items
         nav_view.itemIconTintList = null;
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -87,7 +93,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 //        val detailsFragment = DetailsFragment()
         // fragment transaction to set root fragment on create
         supportFragmentManager.beginTransaction()
-            .setCustomAnimations(R.anim.slide_up, R.anim.slide_down, R.anim.slide_up, R.anim.slide_down)
+            .setCustomAnimations(
+                R.anim.slide_up,
+                R.anim.slide_down,
+                R.anim.slide_up,
+                R.anim.slide_down
+            )
             .replace(R.id.framelayoutFragment, rootFragment)
             .commit()
 
@@ -264,8 +275,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     fun goToUserLocation(view: View) {
-        var userLocation = LatLng(this.latitude, this.longitude)
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 17.0f))
+        if (this.latitude != null || this.longitude != null) {
+            var userLocation = LatLng(this.latitude, this.longitude)
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 17.0f))
+        } else {
+            getLastLocation()
+        }
     }
 
     private fun henryCloseDrawer() {

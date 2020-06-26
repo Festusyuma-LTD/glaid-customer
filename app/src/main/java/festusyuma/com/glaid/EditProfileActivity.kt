@@ -59,4 +59,19 @@ class EditProfileActivity : AppCompatActivity() {
         startActivity(Intent(this, MainActivity::class.java))
         finishAffinity()
     }
+
+    // edit address fragment method
+    fun loadEditAddressFragment(view: View){
+        println("::::: hi nigga ::::::")
+        val addressFragment = AddressFragment()
+        supportFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                R.anim.slide_up,
+                R.anim.slide_down,
+                R.anim.slide_up,
+                R.anim.slide_down
+            )
+            .replace(R.id.addressFragmentLayout, addressFragment)
+            .commit()
+    }
 }

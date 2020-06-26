@@ -130,4 +130,5 @@
     <string name="card_no_input">Card (***** %1$s)</string>
     <string name="exp_date">%1$s/%2$s</string>
     <string name="delete">Delete</string>
+    <string name="work_address">Work Address</string>
 </resources>
