@@ -4,16 +4,9 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.DatePicker
-import android.widget.FrameLayout
 import android.widget.TimePicker
-import kotlinx.android.synthetic.main.activity_maps.*
-import kotlinx.android.synthetic.main.fragment_details.*
 import kotlinx.android.synthetic.main.fragment_quantity.*
-import kotlinx.android.synthetic.main.map_view.*
 import java.util.*
 
 /**
@@ -38,7 +31,7 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
             // load address fragment
             requireActivity().supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.slide_up, R.anim.slide_down,R.anim.slide_up, R.anim.slide_down)
-                .replace(R.id.addressFramelayoutFragment, AddressFragment.addressInstance())
+                .replace(R.id.addressFrameLayoutFragment, AddressFragment.addressInstance())
                 .addToBackStack(null)
                 .commit()
         }

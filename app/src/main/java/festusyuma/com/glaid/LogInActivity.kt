@@ -76,9 +76,10 @@ class LogInActivity : AppCompatActivity() {
                         }
 
                         queue.add(dashboard(token))
-                    }else showError(response.getString("message"))
-
-                    setLoading(false)
+                    }else {
+                        setLoading(false)
+                        showError(response.getString("message"))
+                    }
                 },
                 Response.ErrorListener {
                     response ->

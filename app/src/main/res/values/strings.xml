@@ -131,4 +131,6 @@
     <string name="exp_date">%1$s/%2$s</string>
     <string name="delete">Delete</string>
     <string name="work_address">Work Address</string>
+    <string name="menu_btn_icon">menu button icon</string>
+    <string name="user_location_btn_icon">userLocationBtnIcon</string>
 </resources>

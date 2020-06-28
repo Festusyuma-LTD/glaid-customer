@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.TextureView
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -16,10 +15,7 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import festusyuma.com.glaid.helpers.Api
 import festusyuma.com.glaid.model.GasType
-import kotlinx.android.synthetic.main.activity_forgot_pass_otp_final.*
 import kotlinx.android.synthetic.main.fragment_details.*
-import kotlinx.android.synthetic.main.map_view.*
-import kotlinx.android.synthetic.main.predefined_quantity.*
 import org.json.JSONArray
 import org.json.JSONObject
 import java.text.NumberFormat
@@ -55,14 +51,14 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
             queue.cancelAll("getGasTypeDetails")
             requireActivity().supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.slide_up, R.anim.slide_down, R.anim.slide_up, R.anim.slide_down)
-                .replace(R.id.framelayoutFragment, QuantityFragment.quantityInstance())
+                .replace(R.id.frameLayoutFragment, QuantityFragment.quantityInstance())
                 .addToBackStack(null)
                 .commit()
         }
         orderNowBtn.setOnClickListener {
             requireActivity().supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.slide_up, R.anim.slide_down, R.anim.slide_up, R.anim.slide_down)
-                .replace(R.id.framelayoutFragment, PaymentFragment.PaymentFragmentInstance())
+                .replace(R.id.frameLayoutFragment, PaymentFragment.PaymentFragmentInstance())
                 .addToBackStack(null)
                 .commit()
         }
