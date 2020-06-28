@@ -136,6 +136,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }else {
             locationPermissionsGranted = true
             initUserLocationBtn()
+            goToUserLocation()
         }
     }
 
@@ -154,6 +155,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 locationPermissionsGranted = granted
                 if (locationPermissionsGranted) {
                     initUserLocationBtn()
+                    goToUserLocation()
                 }
             }
         }
@@ -164,8 +166,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap = googleMap
 
         if (locationPermissionsGranted) {
-            goToUserLocation()
-//            mMap.isMyLocationEnabled = true
+            mMap.isMyLocationEnabled = true
         }
 
         try {
