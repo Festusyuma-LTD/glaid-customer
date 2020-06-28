@@ -1,18 +1,11 @@
 package festusyuma.com.glaid
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.android.volley.Response
-import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.Volley
 import festusyuma.com.glaid.helpers.Api
 import festusyuma.com.glaid.helpers.Dashboard
 import festusyuma.com.glaid.helpers.getFirst
@@ -64,7 +57,7 @@ class RootFragment : Fragment(R.layout.fragment_root) {
 
         requireActivity().supportFragmentManager.beginTransaction()
             .setCustomAnimations(R.anim.slide_up, R.anim.slide_down, R.anim.slide_up, R.anim.slide_down)
-            .replace(R.id.framelayoutFragment, detailsFragment)
+            .replace(R.id.frameLayoutFragment, detailsFragment)
             .addToBackStack(null)
             .commit()
     }

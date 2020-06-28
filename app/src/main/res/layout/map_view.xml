@@ -21,10 +21,10 @@
         android:layout_height="match_parent">
 
         <FrameLayout
-            android:id="@+id/addressFramelayoutFragment"
+            android:id="@+id/addressFrameLayoutFragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:elevation="300dp"
+            android:elevation="30dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
@@ -33,7 +33,7 @@
             app:layout_constraintVertical_bias="1.0" />
 
         <FrameLayout
-            android:id="@+id/framelayoutFragment"
+            android:id="@+id/frameLayoutFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:elevation="30dp"
@@ -45,7 +45,7 @@
             app:layout_constraintVertical_bias="1.0" />
 
         <ImageView
-            android:id="@+id/imageView13"
+            android:id="@+id/menuButton"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginStart="20dp"
@@ -54,29 +54,20 @@
             android:onClick="toggleDrawerClick"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/menubar" />
+            app:srcCompat="@drawable/menubar"
+            android:contentDescription="@string/menu_btn_icon" />
 
-<!--        <DatePicker-->
-<!--            android:id="@+id/datePicker"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:datePickerMode="spinner"-->
-<!--            android:calendarViewShown="false"-->
-<!--            app:layout_constraintBottom_toTopOf="@+id/userlocation"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            tools:targetApi="lollipop" />-->
         <ImageView
-            android:id="@+id/userlocation"
+            android:id="@+id/userLocationBtn"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="8dp"
-            android:onClick="goToUserLocation"
-            app:layout_constraintBottom_toTopOf="@+id/framelayoutFragment"
+            app:layout_constraintBottom_toTopOf="@+id/frameLayoutFragment"
             app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/userlocation" />
+            app:srcCompat="@drawable/userlocation"
+            android:contentDescription="@string/user_location_btn_icon" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
