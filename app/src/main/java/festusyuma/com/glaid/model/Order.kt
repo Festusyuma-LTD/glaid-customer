@@ -6,7 +6,7 @@ data class Order (
     var quantity: Double? = null,
     var addressType: String? = null,
     val gasTypeId: Long,
-    val deliveryAddress: Address,
+    val deliveryAddress: Address? = null,
     var paymentType: String? = "cash",
     val paymentCardId: Long? = null,
     var scheduledDate: LocalDateTime? = null

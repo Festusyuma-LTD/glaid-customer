@@ -26,7 +26,7 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
     var savedHour = 0
     var savedMinute = 0
 
-    private val order = Order(addressType = "home")
+    private val order = Order(addressType = "home", gasTypeId = 1)
     private lateinit var homeAddressToggle: ToggleButton
     private lateinit var businessAddressToggle: ToggleButton
     private lateinit var payOnDeliveryToggle: ToggleButton
