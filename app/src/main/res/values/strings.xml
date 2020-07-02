@@ -30,6 +30,7 @@
     <string name="sign_up_agreement">By signing up you agree to our</string>
     <string name="terms_of_use">Terms of Use</string>
     <string name="phone_number_input_label">Phone Number</string>
+    <string name="home_address_input_label">Home Address</string>
     <string name="full_name_input_label">Full Name</string>
     <string name="sign_up_intro_text">Let’s get you signed up so you can begin ordering your diesel</string>
     <string name="sign_up_intro_title">Hi There!</string>
@@ -131,6 +132,10 @@
     <string name="exp_date">%1$s/%2$s</string>
     <string name="delete">Delete</string>
     <string name="work_address">Work Address</string>
+    <string name="work_address_input_label">Work Address</string>
     <string name="menu_btn_icon">menu button icon</string>
     <string name="user_location_btn_icon">userLocationBtnIcon</string>
+    <string name="location_icon">location_icon</string>
+    <string name="home">Home</string>
+    <string name="business">Business</string>
 </resources>

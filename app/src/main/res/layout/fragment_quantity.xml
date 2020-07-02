@@ -5,8 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/carddrawable"
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp"
     tools:context=".RootFragment">
 
     <ScrollView
@@ -14,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/DoneBtn"
+        android:paddingHorizontal="24dp"
         android:layout_marginBottom="8dp"
         android:fillViewport="true"
         app:layout_constraintBottom_toTopOf="@+id/DoneBtn"
@@ -86,41 +85,41 @@
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView48">
+                app:layout_constraintTop_toBottomOf="@+id/textView48"
+                android:background="@drawable/orderbuttondrawable">
 
                 <ToggleButton
-                    android:id="@+id/toggleButton"
+                    android:id="@+id/homeAddressBtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:padding="20dp"
                     android:background="@drawable/orderbuttontoggle"
                     android:fontFamily="@font/sfpro"
                     android:gravity="start|center_vertical"
-                    android:padding="20dp"
-                    android:text="Home"
-                    android:textAllCaps="false"
-                    android:textOff="Home"
-                    android:textOn="Home"
                     android:textSize="16sp"
-                    tools:text="Pay on Delivery" />
+                    android:textAllCaps="false"
+                    android:textOff="@string/home"
+                    android:textOn="@string/home" />
 
                 <ToggleButton
-                    android:id="@+id/toggleButton5"
+                    android:id="@+id/businessAddressBtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="20dp"
                     android:background="@drawable/orderbuttontoggle"
                     android:fontFamily="@font/sfpro"
                     android:gravity="start|center_vertical"
-                    android:padding="20dp"
-                    android:text="Business"
-                    android:textOff="Business"
-                    android:textOn="Business" />
+                    android:textSize="16sp"
+                    android:textAllCaps="false"
+                    android:textOff="@string/business"
+                    android:textOn="@string/business" />
 
 
             </LinearLayout>
 
             <TextView
-                android:id="@+id/textView6"
+                android:visibility="gone"
+                android:id="@+id/paymentTimeLbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -129,42 +128,40 @@
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/paymentSchLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
                 android:orientation="vertical"
-                app:layout_constraintTop_toBottomOf="@+id/textView6">
+                app:layout_constraintTop_toBottomOf="@+id/paymentTimeLbl"
+                android:background="@drawable/orderbuttondrawable">
 
                 <ToggleButton
                     android:id="@+id/payOnDeliveryBtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:padding="20dp"
                     android:background="@drawable/orderbuttontoggle"
                     android:fontFamily="@font/sfpro"
                     android:gravity="start|center_vertical"
-                    android:padding="20dp"
-                    android:text="Home"
+                    android:textSize="16sp"
                     android:textAllCaps="false"
                     android:textOff="@string/pay_on_delivery"
-                    android:textOn="@string/pay_on_delivery"
-                    android:textSize="16sp"
-                    tools:text="@string/pay_on_delivery" />
+                    android:textOn="@string/pay_on_delivery" />
 
                 <ToggleButton
                     android:id="@+id/scheduleLaterBtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="20dp"
                     android:background="@drawable/orderbuttontoggle"
                     android:fontFamily="@font/sfpro"
                     android:gravity="start|center_vertical"
-                    android:padding="20dp"
-                    android:text="@string/schudule_payment_for_later"
+                    android:textSize="16sp"
+                    android:textAllCaps="false"
                     android:textOff="@string/schudule_payment_for_later"
                     android:textOn="@string/schudule_payment_for_later" />
-
-
             </LinearLayout>
 
             <TextView
@@ -173,7 +170,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="@string/set_payment_date_and_time"
-                app:layout_constraintStart_toStartOf="@+id/textView6"
+                app:layout_constraintStart_toStartOf="@+id/paymentTimeLbl"
                 app:layout_constraintTop_toBottomOf="@+id/paymentSchLayout" />
 
             <View
@@ -185,6 +182,21 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+            <TextView
+                android:id="@+id/dateTimeField"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginRight="20dp"
+                app:layout_constraintBottom_toBottomOf="@+id/dateTimeContainer"
+                app:layout_constraintEnd_toEndOf="@+id/dateTimeContainer"
+                app:layout_constraintHorizontal_bias="0.066"
+                app:layout_constraintStart_toStartOf="@+id/dateTimeContainer"
+                app:layout_constraintTop_toTopOf="@+id/dateTimeContainer"
+                app:layout_constraintVertical_bias="0.512" />
 
             <TextView
                 android:id="@+id/textView8"
@@ -245,87 +257,6 @@
                 app:layout_constraintStart_toStartOf="@+id/LocationField"
                 app:layout_constraintTop_toTopOf="@+id/LocationField" />
 
-            <TextView
-                android:id="@+id/dateTimeField"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginRight="20dp"
-                app:layout_constraintBottom_toBottomOf="@+id/dateTimeContainer"
-                app:layout_constraintEnd_toEndOf="@+id/dateTimeContainer"
-                app:layout_constraintHorizontal_bias="0.066"
-                app:layout_constraintStart_toStartOf="@+id/dateTimeContainer"
-                app:layout_constraintTop_toTopOf="@+id/dateTimeContainer"
-                app:layout_constraintVertical_bias="0.512" />
-
-            <!--            <EditText-->
-            <!--                android:id="@+id/LocationField"-->
-            <!--                android:layout_width="0dp"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginStart="16dp"-->
-            <!--                android:layout_marginLeft="16dp"-->
-            <!--                android:background="@drawable/fragment_btn_drawable"-->
-            <!--                android:ems="10"-->
-            <!--                android:inputType="textPersonName"-->
-            <!--                android:padding="20dp"-->
-            <!--                android:text="@string/_8_ogidi_cresent_lekki_phase_1"-->
-            <!--                app:layout_constraintBottom_toBottomOf="@+id/view3"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toEndOf="@+id/view3"-->
-            <!--                app:layout_constraintTop_toTopOf="@+id/view3" />-->
-
-            <!--            <androidx.cardview.widget.CardView-->
-            <!--                android:layout_width="405dp"-->
-            <!--                android:layout_height="0dp"-->
-            <!--                android:layout_marginTop="10dp"-->
-            <!--                android:background="@color/AppPrimaryColorSolid"-->
-            <!--                app:cardCornerRadius="15dp"-->
-            <!--                app:layout_constraintEnd_toEndOf="@+id/editText18"-->
-            <!--                app:layout_constraintStart_toStartOf="@+id/editText17"-->
-            <!--                app:layout_constraintTop_toBottomOf="@+id/textView48">-->
-
-            <!--                -->
-            <!--            </androidx.cardview.widget.CardView>-->
-
-            <!--            <TextView-->
-            <!--                android:id="@+id/textView49"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginTop="16dp"-->
-            <!--                android:fontFamily="@font/sfpro"-->
-            <!--                android:text="Payment Schedule (Business Only)"-->
-            <!--                android:textSize="14sp"-->
-            <!--                app:layout_constraintStart_toStartOf="@+id/textView44"-->
-            <!--                app:layout_constraintTop_toBottomOf="@+id/toggleButton2" />-->
-
-            <!--            <ToggleButton-->
-            <!--                android:id="@+id/toggleButton3"-->
-            <!--                android:layout_width="0dp"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginTop="10dp"-->
-            <!--                android:background="@drawable/orderbuttontoggle"-->
-            <!--                android:gravity="start|center_vertical"-->
-            <!--                android:padding="20dp"-->
-            <!--                android:text="Pay on Delivery"-->
-            <!--                android:textOff="Pay on Delivery"-->
-            <!--                app:layout_constraintEnd_toEndOf="@+id/editText18"-->
-            <!--                app:layout_constraintStart_toStartOf="@+id/editText17"-->
-            <!--                app:layout_constraintTop_toBottomOf="@+id/textView49" />-->
-
-            <!--            <ToggleButton-->
-            <!--                android:id="@+id/toggleButton4"-->
-            <!--                android:layout_width="0dp"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:background="@drawable/orderbuttontoggle"-->
-            <!--                android:gravity="start|center_vertical"-->
-            <!--                android:padding="20dp"-->
-            <!--                android:text="Schudule payment for later"-->
-            <!--                android:textOff="Schudule payment for later"-->
-            <!--                app:layout_constraintEnd_toEndOf="@+id/editText18"-->
-            <!--                app:layout_constraintStart_toStartOf="@+id/editText17"-->
-            <!--                app:layout_constraintTop_toBottomOf="@+id/toggleButton3" />-->
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
@@ -333,8 +264,8 @@
         android:id="@+id/DoneBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginVertical="16dp"
         android:background="@drawable/mail_button_drawable"
         android:paddingHorizontal="20dp"
         android:paddingVertical="17dp"
@@ -370,20 +301,16 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-    <!--    <Button-->
-    <!--        android:id="@+id/button11"-->
-    <!--        android:layout_width="0dp"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:background="@drawable/mail_button_drawable"-->
-    <!--        android:drawableRight="@drawable/check"-->
-    <!--        android:fontFamily="@font/sfpro"-->
-    <!--        android:gravity="start|center_vertical"-->
-    <!--        android:padding="20dp"-->
-    <!--        android:text="Button"-->
-    <!--        android:textColor="#FFFFFF"-->
-    <!--        android:textSize="16sp"-->
-    <!--        android:textStyle="bold"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent" />-->
+
+    <FrameLayout
+        android:id="@+id/addressFrameLayoutFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
