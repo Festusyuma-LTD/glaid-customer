@@ -3,12 +3,15 @@ package festusyuma.com.glaid
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.fragment.app.Fragment
+import festusyuma.com.glaid.model.CustomDate
 import festusyuma.com.glaid.model.Order
 import kotlinx.android.synthetic.main.fragment_quantity.*
 import java.util.*
+
 
 /**
  * A simple [Fragment] subclass.
@@ -35,11 +38,27 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
     private lateinit var paymentTimeLbl: TextView
     private lateinit var paymentTimeToggleGroup: LinearLayout
 
+    private lateinit var datePicker: DatePickerDialog
+    private lateinit var timePicker: TimePickerDialog
+    private var selectedDate: CustomDate = CustomDate()
+
+    private lateinit var dateTimeInput: TextView
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
         initElements()
         toggleAddressType(order.addressType?: "home")
+        initCurrentDate()
+
+        datePicker = DatePickerDialog(requireContext(), this, selectedDate.year, selectedDate.month, selectedDate.day)
+        datePicker.datePicker.minDate = System.currentTimeMillis() - 1000
+
+        timePicker = TimePickerDialog(requireContext(), this, selectedDate.hour, selectedDate.minute, false)
+
+        dateTimeInput.setOnClickListener {
+            datePicker.show()
+        }
 
         LocationField.setOnClickListener {
             // load address fragment
@@ -49,11 +68,17 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
                 .addToBackStack(null)
                 .commit()
         }
+    }
 
-        dateTimeContainer.setOnClickListener {
-            getDateTimeCalender()
-            context?.let { it1 -> DatePickerDialog(it1, this, year, month, day).show() }
-        }
+    private fun initCurrentDate() {
+        val currentDate = Calendar.getInstance()
+        selectedDate.day = currentDate.get(Calendar.DAY_OF_MONTH)
+        selectedDate.month = currentDate.get(Calendar.MONTH)
+        selectedDate.year = currentDate.get(Calendar.YEAR)
+        selectedDate.hour = currentDate.get(Calendar.HOUR_OF_DAY)
+        selectedDate.minute = currentDate.get(Calendar.MINUTE)
+
+        Log.v("ApiLog", "${currentDate.get(Calendar.DAY_OF_MONTH)}")
     }
 
     private fun initElements() {
@@ -71,6 +96,8 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
 
         paymentTimeLbl = requireActivity().findViewById(R.id.paymentTimeLbl)
         paymentTimeToggleGroup = requireActivity().findViewById(R.id.paymentSchLayout)
+
+        dateTimeInput = requireActivity().findViewById(R.id.dateTimeContainer)
     }
 
     private fun toggleAddressType(addressType: String) {
@@ -109,10 +136,6 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
         }
     }
 
-    companion object {
-        fun quantityInstance() = QuantityFragment()
-    }
-
     private fun getDateTimeCalender() {
         val cal = Calendar.getInstance()
         day = cal.get(Calendar.DAY_OF_MONTH)
@@ -122,28 +145,39 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
         minute = cal.get(Calendar.MINUTE)
 
     }
-    private fun pickDate() {
 
-    }
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        savedDay = dayOfMonth
-        savedMonth = month
-        savedYear = year
-
-        getDateTimeCalender()
-
-        TimePickerDialog(context, this, hour, minute, false).show()
+        selectedDate.year = year
+        selectedDate.month = month
+        selectedDate.day = dayOfMonth
+        timePicker.show()
     }
 
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
-        savedHour = hourOfDay
-        savedMinute = minute
 
-        dateTimeField.text = "$savedDay - $savedMonth - $savedYear : $savedHour-$savedMinute"
+        val selected = Calendar.getInstance()
+        val current = Calendar.getInstance()
+        selected[Calendar.HOUR_OF_DAY] = hourOfDay
+        selected[Calendar.MINUTE] = minute
+
+        if (selected.timeInMillis >= current.timeInMillis) {
+            selectedDate.hour = hourOfDay
+            selectedDate.minute = minute
+
+            dateTimeInput.text = getString(R.string.date_format).format(
+                selectedDate.day,
+                selectedDate.month + 1,
+                selectedDate.year,
+                if (selectedDate.hour > 9) selectedDate.hour else "0${selectedDate.hour}",
+                if (selectedDate.minute > 9) selectedDate.minute else "0${selectedDate.minute}"
+            )
+
+        } else {
+            timePicker.show()
+            Toast.makeText(requireContext(), "Time must be in the future", Toast.LENGTH_LONG).show()
+        }
     }
 
-//    fun onCustombtnclicked() {
-//        framelayoutFragment?.setPadding(0,0,0,0)
-//    }
+
 
 }

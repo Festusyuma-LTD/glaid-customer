@@ -57,15 +57,15 @@
                 android:layout_width="107dp"
                 android:layout_height="62dp"
                 android:background="@drawable/fragment_btn_drawable"
-                android:editable="false"
                 android:ems="10"
-                android:inputType="textPersonName"
+                android:inputType="none"
                 android:padding="20dp"
                 android:text="Liters"
                 app:layout_constraintBottom_toBottomOf="@+id/editText17"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/editText17"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintVertical_bias="0.0"
+                android:autofillHints="" />
 
 
             <TextView
@@ -173,30 +173,17 @@
                 app:layout_constraintStart_toStartOf="@+id/paymentTimeLbl"
                 app:layout_constraintTop_toBottomOf="@+id/paymentSchLayout" />
 
-            <View
+            <TextView
                 android:id="@+id/dateTimeContainer"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:textSize="16sp"
                 android:background="@drawable/fragment_btn_drawable"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView7" />
-
-            <TextView
-                android:id="@+id/dateTimeField"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginRight="20dp"
-                app:layout_constraintBottom_toBottomOf="@+id/dateTimeContainer"
-                app:layout_constraintEnd_toEndOf="@+id/dateTimeContainer"
-                app:layout_constraintHorizontal_bias="0.066"
-                app:layout_constraintStart_toStartOf="@+id/dateTimeContainer"
-                app:layout_constraintTop_toTopOf="@+id/dateTimeContainer"
-                app:layout_constraintVertical_bias="0.512" />
+                app:layout_constraintTop_toBottomOf="@+id/textView7"
+                android:autofillHints="Ad" />
 
             <TextView
                 android:id="@+id/textView8"

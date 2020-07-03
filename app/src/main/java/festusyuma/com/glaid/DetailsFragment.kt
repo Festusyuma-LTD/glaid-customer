@@ -51,10 +51,11 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
             queue.cancelAll("getGasTypeDetails")
             requireActivity().supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.slide_up, R.anim.slide_down, R.anim.slide_up, R.anim.slide_down)
-                .replace(R.id.frameLayoutFragment, QuantityFragment.quantityInstance())
+                .replace(R.id.frameLayoutFragment, QuantityFragment())
                 .addToBackStack(null)
                 .commit()
         }
+
         orderNowBtn.setOnClickListener {
             requireActivity().supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.slide_up, R.anim.slide_down, R.anim.slide_up, R.anim.slide_down)
