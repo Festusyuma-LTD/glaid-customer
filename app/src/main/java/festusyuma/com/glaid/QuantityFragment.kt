@@ -7,9 +7,13 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import festusyuma.com.glaid.model.CustomDate
 import festusyuma.com.glaid.model.Order
+import festusyuma.com.glaid.model.live.LiveOrder
 import kotlinx.android.synthetic.main.fragment_quantity.*
+import kotlinx.android.synthetic.main.predefined_quantity.*
 import java.util.*
 
 
@@ -17,19 +21,10 @@ import java.util.*
  * A simple [Fragment] subclass.
  */
 class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.OnDateSetListener,  TimePickerDialog.OnTimeSetListener{
-    var day = 0
-    var month = 0
-    var year = 0
-    var hour = 0
-    var minute = 0
-
-    var savedDay = 0
-    var savedMonth = 0
-    var savedYear = 0
-    var savedHour = 0
-    var savedMinute = 0
 
     private val order = Order(addressType = "home", gasTypeId = 1)
+    private lateinit var liveOrder: LiveOrder
+
     private lateinit var homeAddressToggle: ToggleButton
     private lateinit var businessAddressToggle: ToggleButton
     private lateinit var payOnDeliveryToggle: ToggleButton
@@ -42,6 +37,7 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
     private lateinit var timePicker: TimePickerDialog
     private var selectedDate: CustomDate = CustomDate()
 
+    private lateinit var dateTimeCover: LinearLayout
     private lateinit var dateTimeInput: TextView
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -64,10 +60,12 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
             // load address fragment
             requireActivity().supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.slide_up, R.anim.slide_down,R.anim.slide_up, R.anim.slide_down)
-                .replace(R.id.addressFrameLayoutFragment, AddressFragment())
+                .add(R.id.addressFrameLayoutFragment, AddressFragment())
                 .addToBackStack(null)
                 .commit()
         }
+
+        addressSet()
     }
 
     private fun initCurrentDate() {
@@ -97,7 +95,8 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
         paymentTimeLbl = requireActivity().findViewById(R.id.paymentTimeLbl)
         paymentTimeToggleGroup = requireActivity().findViewById(R.id.paymentSchLayout)
 
-        dateTimeInput = requireActivity().findViewById(R.id.dateTimeContainer)
+        dateTimeCover = requireActivity().findViewById(R.id.dateTimeContainer)
+        dateTimeInput = requireActivity().findViewById(R.id.dateTimeInput)
     }
 
     private fun toggleAddressType(addressType: String) {
@@ -122,6 +121,8 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
 
             paymentTimeLbl.visibility = View.GONE
             paymentTimeToggleGroup.visibility = View.GONE
+            dateTimeCover.visibility = View.GONE
+
         }else {
             paymentTimeLbl.visibility = View.VISIBLE
             paymentTimeToggleGroup.visibility = View.VISIBLE
@@ -129,21 +130,14 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
             if (scheduled) {
                 payOnDeliveryToggle.isChecked = false
                 scheduleLaterToggle.isChecked = true
+                dateTimeCover.visibility = View.VISIBLE
+
             }else {
                 payOnDeliveryToggle.isChecked = true
                 scheduleLaterToggle.isChecked = false
+                dateTimeCover.visibility = View.GONE
             }
         }
-    }
-
-    private fun getDateTimeCalender() {
-        val cal = Calendar.getInstance()
-        day = cal.get(Calendar.DAY_OF_MONTH)
-        month = cal.get(Calendar.MONTH)
-        year = cal.get(Calendar.YEAR)
-        hour = cal.get(Calendar.HOUR)
-        minute = cal.get(Calendar.MINUTE)
-
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
@@ -178,6 +172,10 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
         }
     }
 
-
-
+    private fun addressSet() {
+        liveOrder = ViewModelProviders.of(requireActivity()).get(LiveOrder::class.java)
+        liveOrder.deliveryAddress.observe(viewLifecycleOwner, Observer{
+            //todo update address
+        })
+    }
 }
