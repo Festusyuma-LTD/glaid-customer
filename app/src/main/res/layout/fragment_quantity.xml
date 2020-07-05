@@ -30,52 +30,53 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Quantity"
+                android:text="@string/quantity"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                android:id="@+id/editText17"
+                android:id="@+id/quantityInput"
                 android:layout_width="0dp"
-                android:layout_height="62dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 android:background="@drawable/fragment_btn_drawable"
                 android:ems="10"
-                android:inputType="textPersonName"
+                android:inputType="numberDecimal"
                 android:padding="20dp"
-                android:text="1000"
-                app:layout_constraintEnd_toStartOf="@+id/editText18"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@+id/gasUnit"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView44" />
+                app:layout_constraintTop_toBottomOf="@+id/textView44"
+                android:hint="@string/quantity"
+                android:autofillHints="@string/quantity" />
 
-            <EditText
-                android:id="@+id/editText18"
-                android:layout_width="107dp"
-                android:layout_height="62dp"
+            <TextView
+                android:id="@+id/gasUnit"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
                 android:background="@drawable/fragment_btn_drawable"
                 android:ems="10"
                 android:inputType="none"
                 android:padding="20dp"
-                android:text="Liters"
-                app:layout_constraintBottom_toBottomOf="@+id/editText17"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/quantityInput"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/editText17"
-                app:layout_constraintVertical_bias="0.0"
+                app:layout_constraintTop_toTopOf="@+id/quantityInput"
                 android:autofillHints="" />
 
 
             <TextView
-                android:id="@+id/textView48"
+                android:id="@+id/addressTypeLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Delivery type"
+                android:layout_marginTop="20dp"
+                android:text="@string/delivery_type"
                 app:layout_constraintStart_toStartOf="@+id/textView44"
-                app:layout_constraintTop_toBottomOf="@+id/editText17" />
+                app:layout_constraintTop_toBottomOf="@+id/quantityInput" />
 
             <LinearLayout
                 android:id="@+id/linearLayout"
@@ -85,7 +86,7 @@
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView48"
+                app:layout_constraintTop_toBottomOf="@+id/addressTypeLabel"
                 android:background="@drawable/orderbuttondrawable">
 
                 <ToggleButton
@@ -122,7 +123,7 @@
                 android:id="@+id/paymentTimeLbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="20dp"
                 android:text="@string/payment_schedule_business_only"
                 app:layout_constraintStart_toStartOf="@+id/textView44"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
@@ -194,63 +195,48 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/textView8"
+                android:id="@+id/locationLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="20dp"
                 android:text="@string/location"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/dateTimeContainer" />
 
             <View
-                android:id="@+id/view3"
+                android:id="@+id/locationIconCover"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/fragment_btn_drawable"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView8" />
+                app:layout_constraintTop_toBottomOf="@+id/locationLabel" />
 
             <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="19dp"
-                android:layout_height="19dp"
-                android:layout_marginTop="10dp"
+                android:id="@+id/locationIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                app:layout_constraintDimensionRatio="W, 0.4"
                 android:src="@drawable/loaction_icon_purpul"
-                app:layout_constraintBottom_toBottomOf="@+id/view3"
-                app:layout_constraintEnd_toEndOf="@+id/view3"
-                app:layout_constraintStart_toStartOf="@+id/view3"
-                app:layout_constraintTop_toBottomOf="@+id/textView8" />
-
-            <View
-                android:id="@+id/LocationField"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:background="@drawable/fragment_btn_drawable"
-                app:layout_constraintBottom_toBottomOf="@+id/view3"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/view3"
-                app:layout_constraintTop_toBottomOf="@+id/textView8"
-                app:layout_constraintTop_toTopOf="@+id/view3"
-                app:layout_constraintVertical_bias="1.0" />
+                app:layout_constraintBottom_toBottomOf="@+id/locationIconCover"
+                app:layout_constraintEnd_toEndOf="@+id/locationIconCover"
+                app:layout_constraintStart_toStartOf="@+id/locationIconCover"
+                app:layout_constraintTop_toTopOf="@+id/locationIconCover"
+                android:contentDescription="@string/location_icon" />
 
             <TextView
-                android:id="@+id/textView9"
+                android:id="@+id/locationField"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:text="@string/_8_ogidi_cresent_lekki_phase_1"
-                android:textColor="#000000"
-                app:layout_constraintBottom_toBottomOf="@+id/LocationField"
+                android:padding="20dp"
+                android:background="@drawable/fragment_btn_drawable"
+                app:layout_constraintBottom_toBottomOf="@+id/locationIconCover"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/LocationField"
-                app:layout_constraintTop_toTopOf="@+id/LocationField" />
+                app:layout_constraintStart_toEndOf="@+id/locationIconCover"
+                app:layout_constraintTop_toBottomOf="@+id/locationLabel"
+                app:layout_constraintTop_toTopOf="@+id/locationIconCover" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

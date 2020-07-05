@@ -10,11 +10,14 @@ import festusyuma.com.glaid.helpers.Api
 import festusyuma.com.glaid.helpers.Dashboard
 import festusyuma.com.glaid.helpers.getFirst
 import festusyuma.com.glaid.model.User
+import festusyuma.com.glaid.model.live.LiveOrder
 
 /**
  * A simple [Fragment] subclass.
  */
 class RootFragment : Fragment(R.layout.fragment_root) {
+
+    private lateinit var liveOrder: LiveOrder
 
     private lateinit var greeting: TextView
     private lateinit var dieselBtn: ConstraintLayout
@@ -50,7 +53,7 @@ class RootFragment : Fragment(R.layout.fragment_root) {
     }
 
     private fun openGasDetails(type: String) {
-        val detailsFragment = DetailsFragment.newInstance()
+        val detailsFragment = DetailsFragment()
         val args = Bundle()
         args.putString("type", type)
         detailsFragment.arguments = args

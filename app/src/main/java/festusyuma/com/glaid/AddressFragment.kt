@@ -94,9 +94,10 @@ class AddressFragment : Fragment(R.layout.fragment_address) {
 
     private fun initAddressUpdate() {
         liveAddress = ViewModelProviders.of(this).get(LiveAddress::class.java)
-        liveAddress.placeId.observe(viewLifecycleOwner, Observer{
+        liveAddress.place.observe(viewLifecycleOwner, Observer{
             //todo update address
-            Log.v("ApiLog", "Place id $it")
+            Log.v("ApiLog", "Place id ${it.placeId}")
+            searchInput.setText(it.getPrimaryText(null))
         })
     }
 }

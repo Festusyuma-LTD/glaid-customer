@@ -46,7 +46,7 @@
                 android:textColor="#252525"/>
 
             <TextView
-                android:id="@+id/addressType"
+                android:id="@+id/addressTypeLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/predefined_address_type"/>

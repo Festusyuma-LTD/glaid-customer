@@ -1,7 +1,5 @@
 package festusyuma.com.glaid.utilities
 
-import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.libraries.places.api.model.AutocompletePrediction
-import festusyuma.com.glaid.AddressFragment
 import festusyuma.com.glaid.R
 import festusyuma.com.glaid.model.live.LiveAddress
 import kotlinx.android.synthetic.main.search_address_result.view.*
@@ -36,6 +33,7 @@ class SearchAddressResultAdapter(private val context: Fragment) : RecyclerView.A
 
     fun submitList(searchAddResultList: List<AutocompletePrediction>) {
         items = searchAddResultList
+        notifyDataSetChanged()
     }
 
     // view holder
@@ -47,16 +45,16 @@ class SearchAddressResultAdapter(private val context: Fragment) : RecyclerView.A
         // bind method
         fun bind(searchAddresses: AutocompletePrediction){
             itemView.setOnClickListener {
-                selectAddress(searchAddresses.placeId)
+                selectAddress(searchAddresses)
             }
 
             locationName.text = searchAddresses.getPrimaryText(null)
             locationAddress.text = searchAddresses.getSecondaryText(null)
         }
 
-        private fun selectAddress(placeId: String) {
+        private fun selectAddress(place: AutocompletePrediction) {
             liveAddress = ViewModelProviders.of(context).get(LiveAddress::class.java)
-            liveAddress.placeId.value = placeId
+            liveAddress.place.value = place
         }
     }
 }

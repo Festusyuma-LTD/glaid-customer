@@ -139,4 +139,6 @@
     <string name="home">Home</string>
     <string name="business">Business</string>
     <string name="date_format" >%1$s/%2$s/%3$s %4$s:%5$s</string>
+    <string name="quantity">Quantity</string>
+    <string name="delivery_type">Delivery type</string>
 </resources>

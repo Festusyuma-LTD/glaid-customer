@@ -10,11 +10,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import festusyuma.com.glaid.helpers.Api
+import festusyuma.com.glaid.helpers.capitalizeWords
 import festusyuma.com.glaid.model.GasType
+import festusyuma.com.glaid.model.live.LiveOrder
 import kotlinx.android.synthetic.main.fragment_details.*
 import org.json.JSONArray
 import org.json.JSONObject
@@ -27,6 +30,8 @@ import java.util.*
  */
 class DetailsFragment : Fragment(R.layout.fragment_details) {
 
+    private lateinit var liveOrder: LiveOrder
+
     private var operationRunning = true
     private lateinit var gasType: String
     private lateinit var authToken: String
@@ -37,6 +42,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         super.onActivityCreated(savedInstanceState)
 
         errorMsg = requireActivity().findViewById(R.id.errorMsg)
+        liveOrder = ViewModelProviders.of(requireActivity()).get(LiveOrder::class.java)
 
         val authSharedPref = this.activity?.getSharedPreferences("auth_token", Context.MODE_PRIVATE)
         authToken = authSharedPref?.getString(getString(R.string.auth_key_name), "")?: ""
@@ -107,11 +113,14 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         val predefinedQuantitiesList = data.getJSONArray("predefinedQuantities")
         val gasTypeJson = data.getJSONObject("gasType")
         gasTypeObj = GasType(
+            gasTypeJson.getLong("id"),
             gasTypeJson.getString("type"),
             gasTypeJson.getDouble("price"),
-            gasTypeJson.getString("unit")
+            gasTypeJson.getString("unit").capitalizeWords()
         )
 
+        liveOrder.gasTypeId.value = gasTypeObj.id
+        liveOrder.gasUnit.value = gasTypeObj.unit
         setPredefinedQuantities(gasTypeObj,  predefinedQuantitiesList)
     }
 
@@ -129,7 +138,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
                 val totalPrice = quantity * gasType.price
                 val imgV = preView.findViewById<ImageView>(R.id.predefinedImg)
                 val quantityTV = preView.findViewById<TextView>(R.id.quantity)
-                val addressTypeTV = preView.findViewById<TextView>(R.id.addressType)
+                val addressTypeTV = preView.findViewById<TextView>(R.id.addressTypeLabel)
                 val priceTV = preView.findViewById<TextView>(R.id.price)
 
                 preView.setOnClickListener{ continueOrder(it) }
@@ -141,7 +150,6 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
                 predefinedQuantities.addView(preView)
             }
         }
-        Log.v("ApiLog", data.toString())
     }
 
     fun logout() {
@@ -160,10 +168,5 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
     private fun showError(msg: String) {
         errorMsg.text = msg
         errorMsg.visibility = View.VISIBLE
-    }
-
-    companion object {
-        fun newInstance() = DetailsFragment()
-
     }
 }

@@ -13,7 +13,6 @@ import festusyuma.com.glaid.model.CustomDate
 import festusyuma.com.glaid.model.Order
 import festusyuma.com.glaid.model.live.LiveOrder
 import kotlinx.android.synthetic.main.fragment_quantity.*
-import kotlinx.android.synthetic.main.predefined_quantity.*
 import java.util.*
 
 
@@ -24,6 +23,9 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
 
     private val order = Order(addressType = "home", gasTypeId = 1)
     private lateinit var liveOrder: LiveOrder
+
+    private lateinit var quantity: EditText
+    private lateinit var gasUnit: TextView
 
     private lateinit var homeAddressToggle: ToggleButton
     private lateinit var businessAddressToggle: ToggleButton
@@ -42,21 +44,18 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
+        initCurrentDate()
         initElements()
         toggleAddressType(order.addressType?: "home")
-        initCurrentDate()
 
         datePicker = DatePickerDialog(requireContext(), this, selectedDate.year, selectedDate.month, selectedDate.day)
         datePicker.datePicker.minDate = System.currentTimeMillis() - 1000
-
         timePicker = TimePickerDialog(requireContext(), this, selectedDate.hour, selectedDate.minute, false)
-
         dateTimeInput.setOnClickListener {
             datePicker.show()
         }
 
-        LocationField.setOnClickListener {
+        locationField.setOnClickListener {
             // load address fragment
             requireActivity().supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.slide_up, R.anim.slide_down,R.anim.slide_up, R.anim.slide_down)
@@ -80,6 +79,11 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
     }
 
     private fun initElements() {
+        liveOrder = ViewModelProviders.of(requireActivity()).get(LiveOrder::class.java)
+
+        gasUnit = requireActivity().findViewById(R.id.gasUnit)
+        gasUnit.text = liveOrder.gasUnit.value
+
         homeAddressToggle = requireActivity().findViewById(R.id.homeAddressBtn)
         homeAddressToggle.setOnClickListener{toggleAddressType("home")}
 
@@ -173,7 +177,6 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
     }
 
     private fun addressSet() {
-        liveOrder = ViewModelProviders.of(requireActivity()).get(LiveOrder::class.java)
         liveOrder.deliveryAddress.observe(viewLifecycleOwner, Observer{
             //todo update address
         })
