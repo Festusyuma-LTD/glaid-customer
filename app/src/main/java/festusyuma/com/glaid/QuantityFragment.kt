@@ -42,6 +42,7 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
 
     private lateinit var dateTimeCover: LinearLayout
     private lateinit var dateTimeInput: TextView
+    private lateinit var addressField: TextView
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -110,6 +111,8 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
 
         dateTimeCover = requireActivity().findViewById(R.id.dateTimeContainer)
         dateTimeInput = requireActivity().findViewById(R.id.dateTimeInput)
+
+        addressField = requireActivity().findViewById(R.id.locationField)
     }
 
     private fun toggleAddressType(addressType: String) {
@@ -182,8 +185,8 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
     }
 
     private fun addressSet() {
-        liveOrder.deliveryAddress.observe(viewLifecycleOwner, Observer{
-            //todo update address
+        liveOrder.deliveryAddress.observe(viewLifecycleOwner, Observer{address->
+            locationField.text = address.address
         })
     }
 }

@@ -61,8 +61,8 @@ class AddressFragment : Fragment(R.layout.fragment_address) {
     private lateinit var searchAdapter: SearchAddressResultAdapter
     private lateinit var searchResult: RecyclerView
     private lateinit var searchInput: EditText
-    private val placesToken = AutocompleteSessionToken.newInstance();
 
+    private val placesToken = AutocompleteSessionToken.newInstance();
     private lateinit var placesClient: PlacesClient
 
     private var searching = false
@@ -140,8 +140,12 @@ class AddressFragment : Fragment(R.layout.fragment_address) {
         liveAddress = ViewModelProviders.of(this).get(LiveAddress::class.java)
         liveAddress.place.observe(viewLifecycleOwner, Observer{
             //todo update address
-            Log.v("ApiLog", "Place id ${it.placeId}")
-            searchInput.setText(it.getPrimaryText(null))
+            getPlaceDetails(it.placeId).addOnSuccessListener {placeResponse ->
+                val deliveryType = liveOrder.addressType.value?: "home"
+                val address = convertPlaceToAddress(placeResponse.place, deliveryType)
+                liveOrder.deliveryAddress.value = address
+                requireActivity().supportFragmentManager.popBackStackImmediate()
+            }
         })
     }
 
