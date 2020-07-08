@@ -37,7 +37,8 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
 
     private lateinit var datePicker: DatePickerDialog
     private lateinit var timePicker: TimePickerDialog
-    private var selectedDate: CustomDate = CustomDate()
+    private lateinit var selectedDate: Calendar
+    private lateinit var currentDate: Calendar
 
     private lateinit var dateTimeCover: LinearLayout
     private lateinit var dateTimeInput: TextView
@@ -48,9 +49,23 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
         initElements()
         toggleAddressType(order.addressType?: "home")
 
-        datePicker = DatePickerDialog(requireContext(), this, selectedDate.year, selectedDate.month, selectedDate.day)
+        datePicker = DatePickerDialog(
+            requireContext(),
+            this,
+            selectedDate[Calendar.YEAR],
+            selectedDate[Calendar.MONTH],
+            selectedDate[Calendar.DAY_OF_MONTH]
+        )
         datePicker.datePicker.minDate = System.currentTimeMillis() - 1000
-        timePicker = TimePickerDialog(requireContext(), this, selectedDate.hour, selectedDate.minute, false)
+
+        timePicker = TimePickerDialog(
+            requireContext(),
+            this,
+            selectedDate[Calendar.HOUR_OF_DAY],
+            selectedDate[Calendar.MINUTE],
+            false
+        )
+
         dateTimeInput.setOnClickListener {
             datePicker.show()
         }
@@ -68,14 +83,8 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
     }
 
     private fun initCurrentDate() {
-        val currentDate = Calendar.getInstance()
-        selectedDate.day = currentDate.get(Calendar.DAY_OF_MONTH)
-        selectedDate.month = currentDate.get(Calendar.MONTH)
-        selectedDate.year = currentDate.get(Calendar.YEAR)
-        selectedDate.hour = currentDate.get(Calendar.HOUR_OF_DAY)
-        selectedDate.minute = currentDate.get(Calendar.MINUTE)
-
-        Log.v("ApiLog", "${currentDate.get(Calendar.DAY_OF_MONTH)}")
+        currentDate = Calendar.getInstance()
+        selectedDate = Calendar.getInstance()
     }
 
     private fun initElements() {
@@ -145,33 +154,29 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        selectedDate.year = year
-        selectedDate.month = month
-        selectedDate.day = dayOfMonth
+        selectedDate[Calendar.YEAR] = year
+        selectedDate[Calendar.MONTH] = month
+        selectedDate[Calendar.DAY_OF_MONTH] = dayOfMonth
         timePicker.show()
     }
 
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
+        selectedDate[Calendar.HOUR_OF_DAY] = hourOfDay
+        selectedDate[Calendar.MINUTE] = minute
 
-        val selected = Calendar.getInstance()
-        val current = Calendar.getInstance()
-        selected[Calendar.HOUR_OF_DAY] = hourOfDay
-        selected[Calendar.MINUTE] = minute
-
-        if (selected.timeInMillis >= current.timeInMillis) {
-            selectedDate.hour = hourOfDay
-            selectedDate.minute = minute
+        if (selectedDate > currentDate) {
 
             dateTimeInput.text = getString(R.string.date_format).format(
-                selectedDate.day,
-                selectedDate.month + 1,
-                selectedDate.year,
-                if (selectedDate.hour > 9) selectedDate.hour else "0${selectedDate.hour}",
-                if (selectedDate.minute > 9) selectedDate.minute else "0${selectedDate.minute}"
+                selectedDate[Calendar.DAY_OF_MONTH],
+                selectedDate[Calendar.MONTH] + 1,
+                selectedDate[Calendar.YEAR],
+
+                if (selectedDate[Calendar.HOUR_OF_DAY] > 9) selectedDate[Calendar.HOUR_OF_DAY] else "0${selectedDate[Calendar.HOUR_OF_DAY]}",
+                if (selectedDate[Calendar.MINUTE] > 9) selectedDate[Calendar.MINUTE] else "0${selectedDate[Calendar.MINUTE]}"
             )
 
         } else {
-            timePicker.show()
+            dateTimeInput.text = ""
             Toast.makeText(requireContext(), "Time must be in the future", Toast.LENGTH_LONG).show()
         }
     }
