@@ -2,17 +2,24 @@ package festusyuma.com.glaid
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import festusyuma.com.glaid.model.CustomDate
+import com.android.volley.RequestQueue
+import com.android.volley.toolbox.Volley
+import com.jakewharton.threetenabp.AndroidThreeTen
+import com.wang.avi.AVLoadingIndicatorView
 import festusyuma.com.glaid.model.Order
 import festusyuma.com.glaid.model.live.LiveOrder
 import kotlinx.android.synthetic.main.fragment_quantity.*
+import org.threeten.bp.LocalDateTime
 import java.util.*
 
 
@@ -21,7 +28,12 @@ import java.util.*
  */
 class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.OnDateSetListener,  TimePickerDialog.OnTimeSetListener{
 
-    private val order = Order(addressType = "home", gasTypeId = 1)
+    private lateinit var loadingCover: ConstraintLayout
+    private lateinit var loadingAvi: AVLoadingIndicatorView
+    private lateinit var errorMsg: TextView
+    private var operationRunning = false
+    private lateinit var queue: RequestQueue
+
     private lateinit var liveOrder: LiveOrder
 
     private lateinit var quantity: EditText
@@ -37,36 +49,25 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
 
     private lateinit var datePicker: DatePickerDialog
     private lateinit var timePicker: TimePickerDialog
-    private lateinit var selectedDate: Calendar
-    private lateinit var currentDate: Calendar
+    private lateinit var selectedDate: LocalDateTime
+    private lateinit var currentDate: LocalDateTime
 
     private lateinit var dateTimeCover: LinearLayout
     private lateinit var dateTimeInput: TextView
     private lateinit var addressField: TextView
+    private lateinit var doneBtn: ConstraintLayout
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        AndroidThreeTen.init(requireContext());
         initCurrentDate()
         initElements()
-        toggleAddressType(order.addressType?: "home")
+        toggleAddressType(liveOrder.addressType.value?: "home")
 
-        datePicker = DatePickerDialog(
-            requireContext(),
-            this,
-            selectedDate[Calendar.YEAR],
-            selectedDate[Calendar.MONTH],
-            selectedDate[Calendar.DAY_OF_MONTH]
-        )
+        queue = Volley.newRequestQueue(requireContext())
+        datePicker = DatePickerDialog(requireContext(), this, selectedDate.year, selectedDate.monthValue - 1, selectedDate.dayOfMonth)
         datePicker.datePicker.minDate = System.currentTimeMillis() - 1000
-
-        timePicker = TimePickerDialog(
-            requireContext(),
-            this,
-            selectedDate[Calendar.HOUR_OF_DAY],
-            selectedDate[Calendar.MINUTE],
-            false
-        )
-
+        timePicker = TimePickerDialog(requireContext(), this, selectedDate.hour, selectedDate.minute, false)
         dateTimeInput.setOnClickListener {
             datePicker.show()
         }
@@ -75,7 +76,7 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
             // load address fragment
             requireActivity().supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.slide_up, R.anim.slide_down,R.anim.slide_up, R.anim.slide_down)
-                .add(R.id.addressFrameLayoutFragment, AddressFragment())
+                .replace(R.id.addressFrameLayoutFragment, AddressFragment())
                 .addToBackStack(null)
                 .commit()
         }
@@ -84,13 +85,18 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
     }
 
     private fun initCurrentDate() {
-        currentDate = Calendar.getInstance()
-        selectedDate = Calendar.getInstance()
+        currentDate = LocalDateTime.now()
+        selectedDate = LocalDateTime.now()
     }
 
     private fun initElements() {
+        loadingCover = requireActivity().findViewById(R.id.loadingCoverConstraint)
+        loadingAvi = loadingCover.findViewById(R.id.avi)
+        errorMsg = requireActivity().findViewById(R.id.errorMsg)
+
         liveOrder = ViewModelProviders.of(requireActivity()).get(LiveOrder::class.java)
 
+        quantity = requireActivity().findViewById(R.id.quantityInput)
         gasUnit = requireActivity().findViewById(R.id.gasUnit)
         gasUnit.text = liveOrder.gasUnit.value
 
@@ -113,10 +119,13 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
         dateTimeInput = requireActivity().findViewById(R.id.dateTimeInput)
 
         addressField = requireActivity().findViewById(R.id.locationField)
+
+        doneBtn = requireActivity().findViewById(R.id.doneBtn)
+        doneBtn.setOnClickListener { makeOrderPayment() }
     }
 
     private fun toggleAddressType(addressType: String) {
-        order.addressType = addressType
+        liveOrder.addressType.value = addressType
 
         if (addressType == "home") {
             homeAddressToggle.isChecked = true
@@ -131,7 +140,7 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
 
     private fun togglePaymentTime(scheduled: Boolean) {
 
-        if (order.addressType == "home") {
+        if (liveOrder.addressType.value == "home") {
             payOnDeliveryToggle.isChecked = false
             scheduleLaterToggle.isChecked = false
 
@@ -157,25 +166,22 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        selectedDate[Calendar.YEAR] = year
-        selectedDate[Calendar.MONTH] = month
-        selectedDate[Calendar.DAY_OF_MONTH] = dayOfMonth
+        selectedDate = selectedDate.withYear(year).withMonth(month + 1).withDayOfMonth(dayOfMonth)
         timePicker.show()
     }
 
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
-        selectedDate[Calendar.HOUR_OF_DAY] = hourOfDay
-        selectedDate[Calendar.MINUTE] = minute
+        selectedDate = selectedDate.withHour(hourOfDay).withMinute(minute)
 
-        if (selectedDate > currentDate) {
+        if (selectedDate > LocalDateTime.now()) {
 
             dateTimeInput.text = getString(R.string.date_format).format(
-                selectedDate[Calendar.DAY_OF_MONTH],
-                selectedDate[Calendar.MONTH] + 1,
-                selectedDate[Calendar.YEAR],
+                selectedDate.dayOfMonth,
+                selectedDate.monthValue,
+                selectedDate.year,
 
-                if (selectedDate[Calendar.HOUR_OF_DAY] > 9) selectedDate[Calendar.HOUR_OF_DAY] else "0${selectedDate[Calendar.HOUR_OF_DAY]}",
-                if (selectedDate[Calendar.MINUTE] > 9) selectedDate[Calendar.MINUTE] else "0${selectedDate[Calendar.MINUTE]}"
+                if (selectedDate.hour > 9) selectedDate.hour else "0${selectedDate.hour}",
+                if (selectedDate.minute > 9) selectedDate.minute else "0${selectedDate.minute}"
             )
 
         } else {
@@ -188,5 +194,78 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
         liveOrder.deliveryAddress.observe(viewLifecycleOwner, Observer{address->
             locationField.text = address.address
         })
+    }
+
+    private fun makeOrderPayment() {
+        try {
+            if (quantity.text.toString().isNotEmpty()) {
+                val quantity: Double = quantity.text.toString().toDouble()
+
+                if (quantity <= 0) {
+                    showError("Quantity must be grater than 0")
+                    return
+                }
+
+                if (liveOrder.deliveryAddress.value == null) {
+                    showError("Select delivery address")
+                    return
+                }
+
+                //todo regulate business quantity
+
+                liveOrder.quantity.value = quantity
+                liveOrder.addressType.value = if (homeAddressToggle.isChecked) "home" else "business"
+                if (businessAddressToggle.isChecked && scheduleLaterToggle.isChecked) {
+                    liveOrder.scheduledDate.value = selectedDate
+                }
+
+                startMakePaymentFragment()
+            }else {
+                showError("Quantity is required")
+            }
+        }catch (e: Exception) {
+            showError("An error occurred")
+            Log.v("ApiLog", "Date ${e.message}")
+        }
+    }
+
+    private fun startMakePaymentFragment() {
+        requireActivity().supportFragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.slide_up, R.anim.slide_down,R.anim.slide_up, R.anim.slide_down)
+            .replace(R.id.frameLayoutFragment, PaymentFragment())
+            .addToBackStack(null)
+            .commit()
+    }
+
+    private fun setLoading(loading: Boolean) {
+        if (loading) {
+            loadingCover.visibility = View.VISIBLE
+            loadingAvi.show()
+            operationRunning = true
+        }else {
+            loadingCover.visibility = View.GONE
+            operationRunning = false
+        }
+    }
+
+    private fun showError(msg: String) {
+        errorMsg.text = msg
+        errorMsg.visibility = View.VISIBLE
+    }
+
+    private fun logout() {
+        val sharedPref = requireActivity().getSharedPreferences("auth_token", Context.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            remove(getString(R.string.auth_key_name))
+            commit()
+        }
+
+        startActivity(Intent(requireContext(), MainActivity::class.java))
+        requireActivity().finishAffinity()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        queue.cancelAll("add_address")
     }
 }
