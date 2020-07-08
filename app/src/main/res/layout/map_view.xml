@@ -65,4 +65,5 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <include layout="@layout/error_message" />
+    <include layout="@layout/loading" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
@@ -38,6 +39,8 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
     private lateinit var gasTypeObj: GasType
     private lateinit var errorMsg: TextView
 
+    private lateinit var queue: RequestQueue
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -48,7 +51,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         authToken = authSharedPref?.getString(getString(R.string.auth_key_name), "")?: ""
         gasType = requireArguments().getString("type", "diesel")
 
-        val queue = Volley.newRequestQueue(requireContext())
+        queue = Volley.newRequestQueue(requireContext())
         val req = getGasType()
         req.tag = "getGasTypeDetails"
         queue.add(req)
@@ -63,6 +66,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         }
 
         orderNowBtn.setOnClickListener {
+            queue.cancelAll("getGasTypeDetails")
             requireActivity().supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.slide_up, R.anim.slide_down, R.anim.slide_up, R.anim.slide_down)
                 .replace(R.id.frameLayoutFragment, PaymentFragment.PaymentFragmentInstance())
@@ -168,5 +172,10 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
     private fun showError(msg: String) {
         errorMsg.text = msg
         errorMsg.visibility = View.VISIBLE
+    }
+
+    override fun onPause() {
+        super.onPause()
+        queue.cancelAll("getGasTypeDetails")
     }
 }
