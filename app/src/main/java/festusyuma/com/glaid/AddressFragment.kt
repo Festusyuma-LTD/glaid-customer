@@ -20,11 +20,13 @@ import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.google.android.gms.tasks.Task
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.AutocompletePrediction
 import com.google.android.libraries.places.api.model.AutocompleteSessionToken
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.FetchPlaceRequest
+import com.google.android.libraries.places.api.net.FetchPlaceResponse
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.wang.avi.AVLoadingIndicatorView
@@ -34,7 +36,6 @@ import festusyuma.com.glaid.model.live.LiveAddress
 import festusyuma.com.glaid.model.live.LiveOrder
 import festusyuma.com.glaid.utilities.SearchAddressResultAdapter
 import kotlinx.android.synthetic.main.fragment_address.*
-import kotlinx.android.synthetic.main.fragment_quantity.*
 import org.json.JSONObject
 
 /**
@@ -152,37 +153,31 @@ class AddressFragment : Fragment(R.layout.fragment_address) {
         addOfficeAddress.setOnClickListener { addAddress("business") }
     }
 
+    private fun getPlaceDetails(placeId: String): Task<FetchPlaceResponse> {
+        val placeFields = listOf(
+            Place.Field.ADDRESS,
+            Place.Field.LAT_LNG,
+            Place.Field.NAME
+        )
+        val request = FetchPlaceRequest.newInstance(placeId, placeFields)
+
+        return placesClient.fetchPlace(request)
+    }
+
     private fun addAddress(type: String) {
         if (!operationRunning) {
             setLoading(true)
 
             if (currentSearchResult.isNotEmpty()) {
                 val placeId = currentSearchResult[0].placeId
-                val placeFields = listOf(
-                    Place.Field.ADDRESS,
-                    Place.Field.LAT_LNG,
-                    Place.Field.NAME
-                )
-                val request = FetchPlaceRequest.newInstance(placeId, placeFields)
+                getPlaceDetails(placeId).addOnSuccessListener {
+                    val address = convertPlaceToAddress(it.place, type)
 
-                placesClient.fetchPlace(request).addOnSuccessListener {
-                    val found = it.place
-                    val location = found.latLng
-
-                    if (location == null){
+                    if (address == null) {
                         showError("An error occurred")
-                        return@addOnSuccessListener
-                    }
-
-                    val address = Address(
-                        address = found.address?: found.name?: "${location.longitude}, ${location.latitude}",
-                        lat = location.latitude,
-                        lng = location.longitude,
-                        type = type
-                    )
-
-                    saveAddress(address)
+                    }else saveAddress(address)
                     Log.v("ApiLog", "$address")
+
                 }.addOnFailureListener{
                     showError("An error occurred")
                 }
@@ -224,6 +219,22 @@ class AddressFragment : Fragment(R.layout.fragment_address) {
 
         req.tag = "add_address"
         queue.add(req)
+    }
+
+    private fun convertPlaceToAddress(place: Place, type: String): Address? {
+        val location = place.latLng
+
+        if (location == null){
+            showError("An error occurred")
+            return null
+        }
+
+        return Address(
+            address = place.address?: place.name?: "${location.longitude}, ${location.latitude}",
+            lat = location.latitude,
+            lng = location.longitude,
+            type = type
+        )
     }
 
     private fun setLoading(loading: Boolean) {
