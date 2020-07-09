@@ -5,8 +5,10 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingHorizontal="20dp"
     android:clickable="true"
     android:focusable="true"
+    android:background="@drawable/fragment_btn_drawable"
     android:id="@+id/predefinedQCover" >
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -46,7 +48,7 @@
                 android:textColor="#252525"/>
 
             <TextView
-                android:id="@+id/addressType"
+                android:id="@+id/addressTypeLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/predefined_address_type"/>
