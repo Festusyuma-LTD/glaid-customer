@@ -110,7 +110,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
     private fun startPaymentFragment() {
         requireActivity().supportFragmentManager.beginTransaction()
             .setCustomAnimations(R.anim.slide_up, R.anim.slide_down, R.anim.slide_up, R.anim.slide_down)
-            .replace(R.id.frameLayoutFragment, PaymentFragment.PaymentFragmentInstance())
+            .replace(R.id.frameLayoutFragment, PaymentFragment())
             .addToBackStack(null)
             .commit()
     }
