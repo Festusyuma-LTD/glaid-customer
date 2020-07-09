@@ -32,9 +32,13 @@ import kotlinx.android.synthetic.main.drawer_header.*
 import android.provider.Settings;
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
+import festusyuma.com.glaid.model.Order
 import festusyuma.com.glaid.model.User
+import festusyuma.com.glaid.model.live.LiveOrder
+import festusyuma.com.glaid.model.live.PendingOrder
 import kotlin.properties.Delegates
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -65,8 +69,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         setContentView(R.layout.activity_maps)
 
         nav_view.itemIconTintList = null;
-        val sharedPref = getSharedPreferences("cached_data", Context.MODE_PRIVATE)
-        val userJson = sharedPref.getString("userDetails", "null")
+        val dataPref = getSharedPreferences("cached_data", Context.MODE_PRIVATE)
+        val userJson = dataPref.getString("userDetails", "null")
 
         if (userJson != null) {
             val fullNameTV: TextView = drawer_header.findViewById(R.id.fullName)
@@ -81,14 +85,42 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             initMap()
         }
 
+        if (dataPref.contains(getString(R.string.sh_pending_order))) {
+            val orderJson = dataPref.getString(getString(R.string.sh_pending_order), null)
+            if (orderJson != null) {
+                val order = gson.fromJson(orderJson, Order::class.java)
+                initiateLivePendingOrder(order)
+
+                when(order.statusId) {
+                    1L -> startPendingOrderFragment()
+                    2L -> startPendingOrderFragment()
+                    3L -> startPendingOrderFragment()
+                }
+            }else startRootFragment()
+        }else startRootFragment()
+    }
+
+    private fun initiateLivePendingOrder(order: Order) {
+        val livePendingOrder = ViewModelProviders.of(this).get(PendingOrder::class.java)
+        livePendingOrder.amount.value = order.amount
+        livePendingOrder.gasType.value = order.gasType
+        livePendingOrder.gasUnit.value = order.gasUnit
+        livePendingOrder.quantity.value = order.quantity
+        livePendingOrder.statusId.value = order.statusId
+        livePendingOrder.truck.value = order.truck
+    }
+
+    private fun startRootFragment() {
         supportFragmentManager.beginTransaction()
-            .setCustomAnimations(
-                R.anim.slide_up,
-                R.anim.slide_down,
-                R.anim.slide_up,
-                R.anim.slide_down
-            )
+            .setCustomAnimations(R.anim.slide_up, R.anim.slide_down, R.anim.slide_up, R.anim.slide_down)
             .replace(R.id.frameLayoutFragment, RootFragment())
+            .commit()
+    }
+
+    private fun startPendingOrderFragment() {
+        supportFragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.slide_up, R.anim.slide_down, R.anim.slide_up, R.anim.slide_down)
+            .replace(R.id.frameLayoutFragment, PendingOrderFragment())
             .commit()
     }
 

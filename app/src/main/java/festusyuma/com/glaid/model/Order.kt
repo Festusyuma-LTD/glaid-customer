@@ -5,6 +5,7 @@ import org.threeten.bp.LocalDateTime
 data class Order (
     val paymentMethod: String,
     val gasType: String,
+    val gasUnit: String,
     val quantity: Double,
     val amount: Double,
     val deliveryPrice: Double,

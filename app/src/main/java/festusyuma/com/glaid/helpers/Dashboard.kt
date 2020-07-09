@@ -172,6 +172,7 @@ class Dashboard {
 
         val gasTypeJson = data.getJSONObject("gasType")
         val gasType = gasTypeJson.getString("type")
+        val gasUnit = gasTypeJson.getString("unit")
 
         val statusJson = data.getJSONObject("status")
         val statusId = statusJson.getLong("id")
@@ -191,6 +192,6 @@ class Dashboard {
             )
         }else null
 
-        return Order(paymentMethod, gasType, quantity, amount, deliveryPrice, tax, statusId, address, scheduledDate, truck)
+        return Order(paymentMethod, gasType, gasUnit, quantity, amount, deliveryPrice, tax, statusId, address, scheduledDate, truck)
     }
 }
