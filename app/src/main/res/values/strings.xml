@@ -144,4 +144,7 @@
     <string name="date_format" >%1$s/%2$s/%3$s %4$s:%5$s</string>
     <string name="quantity">Quantity</string>
     <string name="delivery_type">Delivery type</string>
+    <string name="pending_order_message">Waiting to be assigned to driver…</string>
+    <string name="driver_order_message">Driver assigned</string>
+    <string name="driver_on_the_way_message">Your order is on it\'s way</string>
 </resources>
