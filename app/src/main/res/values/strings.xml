@@ -99,6 +99,7 @@
     <string name="sh_home_address">home_address</string>
     <string name="sh_business_address">business_address</string>
     <string name="sh_pending_order">pending_order</string>
+    <string name="sh_orders">pending_order</string>
     <string name="glaid_wallet">Glaid Wallet</string>
     <string name="preferred_payment_method">Preferred payment Method</string>
     <string name="wallet_balance">Wallet Balance</string>

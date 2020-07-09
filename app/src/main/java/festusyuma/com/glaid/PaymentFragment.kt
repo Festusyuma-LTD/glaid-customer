@@ -19,6 +19,7 @@ import com.android.volley.toolbox.Volley
 import com.google.gson.reflect.TypeToken
 import com.wang.avi.AVLoadingIndicatorView
 import festusyuma.com.glaid.helpers.Api
+import festusyuma.com.glaid.helpers.Dashboard
 import festusyuma.com.glaid.helpers.capitalizeWords
 import festusyuma.com.glaid.request.OrderRequest
 import festusyuma.com.glaid.model.PaymentCards
@@ -231,7 +232,8 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
                 if (response.getInt("status") == 200) {
                     with(dataPref.edit()) {
                         val orderJson = response.getJSONObject("data")
-                        putString(getString(R.string.sh_pending_order), gson.toJson(orderJson))
+                        val order = gson.toJson(Dashboard().convertOrderJSonToOrder(orderJson))
+                        putString(getString(R.string.sh_pending_order), order)
                         commit()
                     }
 
