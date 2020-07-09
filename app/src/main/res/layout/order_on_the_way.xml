@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:textColor="#EDE5F2"
-            android:text="Your driver is Agboma Festus"
+            android:text="@string/order_driver_name"
             app:layout_constraintTop_toBottomOf="@+id/assignedOrderMessage"
             app:layout_constraintStart_toStartOf="@+id/assignedOrderMessage" />
 
