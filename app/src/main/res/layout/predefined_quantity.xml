@@ -5,8 +5,10 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingHorizontal="20dp"
     android:clickable="true"
     android:focusable="true"
+    android:background="@drawable/fragment_btn_drawable"
     android:id="@+id/predefinedQCover" >
 
     <androidx.constraintlayout.widget.ConstraintLayout

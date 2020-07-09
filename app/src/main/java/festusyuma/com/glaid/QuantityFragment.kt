@@ -118,8 +118,12 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
         liveOrder = ViewModelProviders.of(requireActivity()).get(LiveOrder::class.java)
 
         quantity = requireActivity().findViewById(R.id.quantityInput)
+        if (liveOrder.quantity.value != null) {
+            quantity.setText(liveOrder.quantity.value.toString())
+        }
+
         gasUnit = requireActivity().findViewById(R.id.gasUnit)
-        gasUnit.text = liveOrder.gasUnit.value
+        gasUnit.text = liveOrder.gasType.value?.unit
 
         homeAddressToggle = requireActivity().findViewById(R.id.homeAddressBtn)
         homeAddressToggle.setOnClickListener{toggleAddressType("home")}
