@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
@@ -12,19 +11,19 @@ import android.widget.ScrollView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.android.volley.RequestQueue
+import com.android.volley.Response
+import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.reflect.TypeToken
 import com.wang.avi.AVLoadingIndicatorView
+import festusyuma.com.glaid.helpers.Api
 import festusyuma.com.glaid.helpers.capitalizeWords
-import festusyuma.com.glaid.model.GasType
+import festusyuma.com.glaid.model.Order
 import festusyuma.com.glaid.model.PaymentCards
 import festusyuma.com.glaid.model.live.LiveOrder
-import kotlinx.android.synthetic.main.activity_add_funds.*
-import kotlinx.android.synthetic.main.fragment_payment.*
-import kotlinx.android.synthetic.main.fragment_quantity.*
+import org.json.JSONObject
 import java.text.NumberFormat
 
 
@@ -43,7 +42,7 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
     private lateinit var dataPref: SharedPreferences
 
     private lateinit var liveOrder: LiveOrder
-    private lateinit var authToken: String
+    private lateinit var token: String
 
     private lateinit var paymentMethod: TextView
     private lateinit var changePaymentMethod: TextView
@@ -65,13 +64,20 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
         liveOrder = ViewModelProviders.of(requireActivity()).get(LiveOrder::class.java)
         queue = Volley.newRequestQueue(requireContext())
         authSharedPref = requireActivity().getSharedPreferences("auth_token", Context.MODE_PRIVATE)
-        authToken = authSharedPref.getString(getString(R.string.auth_key_name), "")?: ""
+        token = authSharedPref.getString(getString(R.string.auth_key_name), "")?: ""
         dataPref = requireActivity().getSharedPreferences("cached_data", Context.MODE_PRIVATE)
 
+        initLoadingAndError()
         initElements()
         initCardListView()
         getCardsList()
         setPreferredPaymentMethod()
+    }
+
+    private fun initLoadingAndError() {
+        loadingCover = requireActivity().findViewById(R.id.loadingCoverConstraint)
+        loadingAvi = loadingCover.findViewById(R.id.avi)
+        errorMsg = requireActivity().findViewById(R.id.errorMsg)
     }
 
     private fun initElements() {
@@ -94,6 +100,9 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
             val numberFormatter = NumberFormat.getInstance()
             totalAmount.text = getString(R.string.formatted_amount).format(numberFormatter.format((q * p)))
         }else requireActivity().supportFragmentManager.popBackStackImmediate()
+
+        orderNowBtn = requireActivity().findViewById(R.id.orderNowBtn)
+        orderNowBtn.setOnClickListener { placeOrder() }
     }
 
     private fun initCardListView() {
@@ -180,6 +189,82 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
         updatePaymentMethodInput()
     }
 
+    private fun placeOrder() {
+        if (!operationRunning) {
+            setLoading(true)
+
+            if (liveOrder.paymentType.value != null) {
+                if (liveOrder.paymentType.value == "card" && liveOrder.paymentCard.value == null) {
+                    showError("An error occurred")
+                    setLoading(false)
+                    return
+                }
+
+                val address = liveOrder.deliveryAddress.value
+
+                if (address != null) {
+                    val order = Order(
+                        liveOrder.quantity.value,
+                        liveOrder.gasType.value?.id?: 1,
+                        address,
+                        liveOrder.paymentType.value,
+                        liveOrder.paymentCard.value?.id,
+                        liveOrder.scheduledDate.value
+                    )
+
+                    orderRequest(order)
+                }else requireActivity().supportFragmentManager.popBackStackImmediate()
+            }else {
+                showError("Select payment method")
+                setLoading(false)
+            }
+        }
+    }
+
+    private fun orderRequest(order: Order) {
+        val reqObj = JSONObject(gson.toJson(order))
+        val req = object : JsonObjectRequest(
+            Method.POST,
+            Api.CREATE_ORDER,
+            reqObj,
+            Response.Listener { response ->
+                if (response.getInt("status") == 200) {
+                    with(dataPref.edit()) {
+                        val orderJson = response.getJSONObject("data")
+                        putString(getString(R.string.sh_pending_order), gson.toJson(orderJson))
+                        commit()
+                    }
+
+                    val intent = Intent(requireContext(), MapsActivity::class.java)
+                    startActivity(intent)
+                    requireActivity().finishAffinity()
+                }else {
+                    showError(response.getString("message"))
+                }
+
+                setLoading(false)
+            },
+            Response.ErrorListener { response->
+                if (response.networkResponse == null) showError(getString(R.string.internet_error_msg)) else {
+                    if (response.networkResponse.statusCode == 403) {
+                        logout()
+                    }else showError(getString(R.string.api_error_msg))
+                }
+
+                setLoading(false)
+            }
+        ) {
+            override fun getHeaders(): MutableMap<String, String> {
+                return mutableMapOf(
+                    "Authorization" to "Bearer $token"
+                )
+            }
+        }
+
+        req.tag = "create_order"
+        queue.add(req)
+    }
+
     private fun setLoading(loading: Boolean) {
         if (loading) {
             loadingCover.visibility = View.VISIBLE
@@ -205,6 +290,11 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
 
         startActivity(Intent(requireContext(), MainActivity::class.java))
         requireActivity().finishAffinity()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        queue.cancelAll("create_order")
     }
 
 }

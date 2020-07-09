@@ -1,10 +1,10 @@
 package festusyuma.com.glaid.model
 
-import java.time.LocalDateTime
+import org.threeten.bp.LocalDateTime
+
 
 data class Order (
     var quantity: Double? = null,
-    var addressType: String? = null,
     val gasTypeId: Long,
     val deliveryAddress: Address? = null,
     var paymentType: String? = "cash",
