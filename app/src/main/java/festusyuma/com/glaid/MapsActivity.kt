@@ -322,10 +322,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
-            rating.setRating(4.5f)
+            driverRating.setRating(4.5f)
         } else {
             drawerLayout.openDrawer(GravityCompat.START);
-            rating.setRating(4.5f)
+            driverRating.setRating(4.5f)
         }
     }
 

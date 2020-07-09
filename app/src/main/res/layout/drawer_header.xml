@@ -48,7 +48,7 @@
         app:layout_constraintTop_toBottomOf="@+id/fullName" />
 
     <RatingBar
-        android:id="@+id/rating"
+        android:id="@+id/driverRating"
         style="?android:attr/ratingBarStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -77,6 +77,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintTop_toBottomOf="@+id/rating" />
+        app:layout_constraintTop_toBottomOf="@+id/driverRating" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

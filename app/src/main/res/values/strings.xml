@@ -147,4 +147,6 @@
     <string name="pending_order_message">Waiting to be assigned to driver…</string>
     <string name="driver_order_message">Driver assigned</string>
     <string name="driver_on_the_way_message">Your order is on it\'s way</string>
+    <string name="telephone_icon">telephone icon</string>
+    <string name="call_driver">Call Driver</string>
 </resources>
