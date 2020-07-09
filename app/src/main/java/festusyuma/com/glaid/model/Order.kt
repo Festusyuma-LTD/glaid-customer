@@ -1,13 +1,15 @@
 package festusyuma.com.glaid.model
 
-import org.threeten.bp.LocalDateTime
-
+import java.time.LocalDateTime
 
 data class Order (
-    var quantity: Double? = null,
-    val gasTypeId: Long,
-    val deliveryAddress: Address? = null,
-    var paymentType: String? = "cash",
-    val paymentCardId: Long? = null,
-    var scheduledDate: LocalDateTime? = null
+    var truck: Truck? = null,
+    val paymentMethod: String,
+    val quantity: Double,
+    val amount: Double,
+    val deliveryPrice: Double,
+    val tax: Double,
+    val scheduledDate: LocalDateTime? = null,
+    var status: String,
+    var deliveryAddress: Address
 )

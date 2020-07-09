@@ -1,11 +1,14 @@
 package festusyuma.com.glaid.request
 
-import android.location.Address
+import festusyuma.com.glaid.model.Address
+import org.threeten.bp.LocalDateTime
+
 
 data class OrderRequest (
-    val quantity: Double,
+    var quantity: Double? = null,
     val gasTypeId: Long,
-    var deliveryAddress: Address? = null,
-    var paymentType: String? = null,
-    var paymentCardId: Long? = null
+    val deliveryAddress: Address? = null,
+    var paymentType: String? = "cash",
+    val paymentCardId: Long? = null,
+    var scheduledDate: LocalDateTime? = null
 )

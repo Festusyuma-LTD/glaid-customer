@@ -20,7 +20,7 @@ import com.google.gson.reflect.TypeToken
 import com.wang.avi.AVLoadingIndicatorView
 import festusyuma.com.glaid.helpers.Api
 import festusyuma.com.glaid.helpers.capitalizeWords
-import festusyuma.com.glaid.model.Order
+import festusyuma.com.glaid.request.OrderRequest
 import festusyuma.com.glaid.model.PaymentCards
 import festusyuma.com.glaid.model.live.LiveOrder
 import org.json.JSONObject
@@ -203,9 +203,9 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
                 val address = liveOrder.deliveryAddress.value
 
                 if (address != null) {
-                    val order = Order(
+                    val order = OrderRequest(
                         liveOrder.quantity.value,
-                        liveOrder.gasType.value?.id?: 1,
+                        liveOrder.gasType.value?.id ?: 1,
                         address,
                         liveOrder.paymentType.value,
                         liveOrder.paymentCard.value?.id,
@@ -221,8 +221,8 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
         }
     }
 
-    private fun orderRequest(order: Order) {
-        val reqObj = JSONObject(gson.toJson(order))
+    private fun orderRequest(orderRequest: OrderRequest) {
+        val reqObj = JSONObject(gson.toJson(orderRequest))
         val req = object : JsonObjectRequest(
             Method.POST,
             Api.CREATE_ORDER,

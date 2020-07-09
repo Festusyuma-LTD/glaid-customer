@@ -18,11 +18,9 @@ import com.android.volley.toolbox.Volley
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.wang.avi.AVLoadingIndicatorView
 import festusyuma.com.glaid.model.Address
-import festusyuma.com.glaid.model.Order
 import festusyuma.com.glaid.model.live.LiveOrder
 import kotlinx.android.synthetic.main.fragment_quantity.*
 import org.threeten.bp.LocalDateTime
-import java.util.*
 
 
 /**
