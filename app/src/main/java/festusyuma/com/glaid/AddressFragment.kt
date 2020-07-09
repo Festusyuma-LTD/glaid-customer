@@ -2,6 +2,7 @@ package festusyuma.com.glaid
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -31,6 +32,7 @@ import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRe
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.wang.avi.AVLoadingIndicatorView
 import festusyuma.com.glaid.helpers.Api
+import festusyuma.com.glaid.helpers.Dashboard
 import festusyuma.com.glaid.model.Address
 import festusyuma.com.glaid.model.live.LiveAddress
 import festusyuma.com.glaid.model.live.LiveOrder
@@ -42,6 +44,9 @@ import org.json.JSONObject
  * A simple [Fragment] subclass.
  */
 class AddressFragment : Fragment(R.layout.fragment_address) {
+
+    private lateinit var authPref: SharedPreferences
+    private lateinit var dataPref: SharedPreferences
 
     private lateinit var loadingCover: ConstraintLayout
     private lateinit var loadingAvi: AVLoadingIndicatorView
@@ -76,10 +81,12 @@ class AddressFragment : Fragment(R.layout.fragment_address) {
         liveAddress = ViewModelProviders.of(this).get(LiveAddress::class.java)
 
         queue = Volley.newRequestQueue(requireContext())
-        val authPref = requireActivity().getSharedPreferences("auth_token", Context.MODE_PRIVATE)
+        authPref = requireActivity().getSharedPreferences("auth_token", Context.MODE_PRIVATE)
         if (authPref.contains(getString(R.string.auth_key_name))) {
             token = authPref.getString(getString(R.string.auth_key_name), token)
         }
+
+        dataPref = requireActivity().getSharedPreferences("cached_data", Context.MODE_PRIVATE)
 
         initLoadingAndError()
         initLiveSearch()
@@ -197,6 +204,17 @@ class AddressFragment : Fragment(R.layout.fragment_address) {
             reqObj,
             Response.Listener { response ->
                 if (response.getInt("status") == 200) {
+                    Log.v("ApiLog", "$response")
+                    val addressJson = response.getJSONObject("data")
+                    val addressTypeKey = if (address.type == "home") R.string.sh_home_address else R.string.sh_business_address
+                    val id = addressJson.getLong("id")
+                    address.id = id
+
+                    with(dataPref.edit()) {
+                        putString(getString(addressTypeKey), gson.toJson(address))
+                        commit()
+                    }
+
                     Toast.makeText(requireContext(), "${address.type} address added", Toast.LENGTH_SHORT).show()
                 }else {
                     showError(response.getString("message"))
