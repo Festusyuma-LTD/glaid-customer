@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -16,6 +17,7 @@ import com.android.volley.RequestQueue
 import com.android.volley.toolbox.Volley
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.wang.avi.AVLoadingIndicatorView
+import festusyuma.com.glaid.model.Address
 import festusyuma.com.glaid.model.Order
 import festusyuma.com.glaid.model.live.LiveOrder
 import kotlinx.android.synthetic.main.fragment_quantity.*
@@ -57,11 +59,18 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
     private lateinit var addressField: TextView
     private lateinit var doneBtn: ConstraintLayout
 
+    private lateinit var dataPref: SharedPreferences
+    private var homeAddress: Address? = null
+    private var businessAddress: Address? = null
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         AndroidThreeTen.init(requireContext());
         initCurrentDate()
         initElements()
+
+        dataPref = requireActivity().getSharedPreferences("cached_data", Context.MODE_PRIVATE)
+        initDefaultAddress()
         toggleAddressType(liveOrder.addressType.value?: "home")
 
         queue = Volley.newRequestQueue(requireContext())
@@ -82,6 +91,18 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
         }
 
         addressSet()
+    }
+
+    private fun initDefaultAddress() {
+        val homeAddressJson = dataPref.getString(getString(R.string.sh_home_address), null)
+        homeAddress = if (homeAddressJson != null) {
+            gson.fromJson(homeAddressJson, Address::class.java)
+        }else null
+
+        val businessAddressJson = dataPref.getString(getString(R.string.sh_business_address), null)
+        businessAddress = if (businessAddressJson != null) {
+            gson.fromJson(businessAddressJson, Address::class.java)
+        }else null
     }
 
     private fun initCurrentDate() {
@@ -130,9 +151,17 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
         if (addressType == "home") {
             homeAddressToggle.isChecked = true
             businessAddressToggle.isChecked = false
+
+            if (homeAddress != null) liveOrder.deliveryAddress.value = homeAddress else {
+                Toast.makeText(requireContext(), "No saved home address", Toast.LENGTH_SHORT).show()
+            }
         }else {
             homeAddressToggle.isChecked = false
             businessAddressToggle.isChecked = true
+
+            if (businessAddress != null) liveOrder.deliveryAddress.value = businessAddress else {
+                Toast.makeText(requireContext(), "No saved business address", Toast.LENGTH_SHORT).show()
+            }
         }
 
         togglePaymentTime(false)
