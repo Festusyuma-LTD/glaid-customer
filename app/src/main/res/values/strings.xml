@@ -149,4 +149,5 @@
     <string name="driver_on_the_way_message">Your order is on it\'s way</string>
     <string name="telephone_icon">telephone icon</string>
     <string name="call_driver">Call Driver</string>
+    <string name="profile_image_placeholder">profile_image_placeholder</string>
 </resources>

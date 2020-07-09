@@ -151,7 +151,8 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/driverRating"/>
+                app:layout_constraintBottom_toTopOf="@+id/driverRating"
+                android:contentDescription="@string/profile_image_placeholder" />
 
             <RatingBar
                 android:id="@+id/driverRating"
