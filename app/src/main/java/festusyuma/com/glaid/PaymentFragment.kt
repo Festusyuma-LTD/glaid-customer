@@ -19,8 +19,9 @@ import com.android.volley.toolbox.Volley
 import com.google.gson.reflect.TypeToken
 import com.wang.avi.AVLoadingIndicatorView
 import festusyuma.com.glaid.helpers.Api
+import festusyuma.com.glaid.helpers.Dashboard
 import festusyuma.com.glaid.helpers.capitalizeWords
-import festusyuma.com.glaid.model.Order
+import festusyuma.com.glaid.request.OrderRequest
 import festusyuma.com.glaid.model.PaymentCards
 import festusyuma.com.glaid.model.live.LiveOrder
 import org.json.JSONObject
@@ -84,7 +85,7 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
         paymentMethod = requireActivity().findViewById(R.id.paymentMethod)
 
         quantity = requireActivity().findViewById(R.id.quantity)
-        quantity.text = getString(R.string.predefined_quantity).format(liveOrder.quantity.value, liveOrder.gasType.value?.unit)
+        quantity.text = getString(R.string.formatted_quantity).format(liveOrder.quantity.value, liveOrder.gasType.value?.unit)
 
         gasType = requireActivity().findViewById(R.id.gasType)
         val gasTypeString = liveOrder.gasType.value?.type
@@ -203,9 +204,9 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
                 val address = liveOrder.deliveryAddress.value
 
                 if (address != null) {
-                    val order = Order(
+                    val order = OrderRequest(
                         liveOrder.quantity.value,
-                        liveOrder.gasType.value?.id?: 1,
+                        liveOrder.gasType.value?.id ?: 1,
                         address,
                         liveOrder.paymentType.value,
                         liveOrder.paymentCard.value?.id,
@@ -221,8 +222,8 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
         }
     }
 
-    private fun orderRequest(order: Order) {
-        val reqObj = JSONObject(gson.toJson(order))
+    private fun orderRequest(orderRequest: OrderRequest) {
+        val reqObj = JSONObject(gson.toJson(orderRequest))
         val req = object : JsonObjectRequest(
             Method.POST,
             Api.CREATE_ORDER,
@@ -231,7 +232,8 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
                 if (response.getInt("status") == 200) {
                     with(dataPref.edit()) {
                         val orderJson = response.getJSONObject("data")
-                        putString(getString(R.string.sh_pending_order), gson.toJson(orderJson))
+                        val order = gson.toJson(Dashboard().convertOrderJSonToOrder(orderJson))
+                        putString(getString(R.string.sh_pending_order), order)
                         commit()
                     }
 
