@@ -85,7 +85,7 @@
     <string name="set_payment_date_and_time">Set Payment date and time</string>
     <string name="sign_out_btn_label">Sign Out</string>
     <string name="sidebar_background_icon">sidebar_background_icon</string>
-    <string name="predefined_quantity">%1$.1f %2$s</string>
+    <string name="formatted_quantity">%1$.1f %2$s</string>
     <string name="formatted_amount">&#8358;%1$s</string>
     <string name="predefined_address_type">%1$s</string>
     <string name="location">Location</string>
@@ -99,6 +99,7 @@
     <string name="sh_home_address">home_address</string>
     <string name="sh_business_address">business_address</string>
     <string name="sh_pending_order">pending_order</string>
+    <string name="sh_orders">orders</string>
     <string name="glaid_wallet">Glaid Wallet</string>
     <string name="preferred_payment_method">Preferred payment Method</string>
     <string name="wallet_balance">Wallet Balance</string>
@@ -124,7 +125,7 @@
     <string name="wallet_icon">wallet icon</string>
     <string name="wallet_background">wallet_background</string>
     <string name="credit_card_icon">Credit card icon</string>
-    <string name="amount_input_label" >Amount (&#8358;)</string>
+    <string name="amount_input_label">Amount (&#8358;)</string>
     <string name="processing">Processing</string>
     <string name="share_to_whatsapp">Share to Whatsapp</string>
     <string name="lekki_phase_1_lagos">Lekki Phase 1, Lagos</string>
@@ -141,7 +142,15 @@
     <string name="location_icon">location_icon</string>
     <string name="home">Home</string>
     <string name="business">Business</string>
-    <string name="date_format" >%1$s/%2$s/%3$s %4$s:%5$s</string>
+    <string name="date_format">%1$s/%2$s/%3$s %4$s:%5$s</string>
     <string name="quantity">Quantity</string>
     <string name="delivery_type">Delivery type</string>
+    <string name="pending_order_message">Taking order......</string>
+    <string name="driver_order_message">Driver assigned</string>
+    <string name="driver_on_the_way_message">Your order is on it\'s way</string>
+    <string name="telephone_icon">telephone icon</string>
+    <string name="call_driver">Call Driver</string>
+    <string name="profile_image_placeholder">profile_image_placeholder</string>
+    <string name="order_driver_name">Your driver is %1$s</string>
+    <string name="from_the_nearest_fuel_station">From the nearest fuel station</string>
 </resources>

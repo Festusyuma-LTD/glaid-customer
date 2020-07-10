@@ -42,9 +42,10 @@
 
     <ScrollView
         android:id="@+id/orderDetailScroll"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="20dp"
+        android:background="#F7F7F7"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -88,12 +89,12 @@
                 app:layout_constraintTop_toBottomOf="@+id/mapScreenShot" />
 
             <TextView
-                android:id="@+id/detailLiters"
+                android:id="@+id/quantity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginLeft="20dp"
-                android:text="1000"
+                android:text="1000 Liters"
                 android:textColor="#333333"
                 android:textSize="16sp"
                 android:textStyle="bold"
@@ -102,27 +103,14 @@
                 app:layout_constraintTop_toBottomOf="@+id/mapScreenShot" />
 
             <TextView
-                android:id="@+id/textView27"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginLeft="5dp"
-                android:text="@string/liters"
-                android:textColor="#333333"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintBaseline_toBaselineOf="@+id/detailLiters"
-                app:layout_constraintStart_toEndOf="@+id/detailLiters" />
-
-            <TextView
-                android:id="@+id/standardOilDetail"
+                android:id="@+id/gasType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
                 android:layout_marginRight="20dp"
                 android:text="Standard Oil"
                 android:textColor="#808080"
-                app:layout_constraintBaseline_toBaselineOf="@+id/textView27"
+                app:layout_constraintBaseline_toBaselineOf="@+id/quantity"
                 app:layout_constraintEnd_toEndOf="parent" />
 
             <View
@@ -154,7 +142,7 @@
                 android:layout_height="100dp"
                 android:background="#fff"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/locationAndTimeView" />
 
@@ -177,21 +165,25 @@
 
             <TextView
                 android:id="@+id/location"
-                android:layout_width="wrap_content"
-                android:layout_height="22dp"
-                android:text="From the nearest fuel station"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:text="@string/from_the_nearest_fuel_station"
                 android:textColor="#333333"
                 app:layout_constraintBottom_toTopOf="@+id/divider7"
                 app:layout_constraintStart_toStartOf="@+id/guideline2"
+                app:layout_constraintEnd_toStartOf="@id/locationTime"
                 app:layout_constraintTop_toBottomOf="@+id/locationAndTimeView" />
 
             <TextView
                 android:id="@+id/destination"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Customer location"
+                android:layout_marginHorizontal="10dp"
                 android:textColor="#333333"
                 app:layout_constraintBottom_toBottomOf="@+id/locationAndTimeDetails"
+                app:layout_constraintEnd_toStartOf="@id/destinationTime"
                 app:layout_constraintStart_toStartOf="@+id/guideline2"
                 app:layout_constraintTop_toBottomOf="@+id/divider7" />
 
@@ -203,9 +195,11 @@
                 android:layout_marginRight="20dp"
                 android:text="10:30 AM"
                 android:textColor="#333333"
-                app:layout_constraintBottom_toTopOf="@+id/divider7"
+                app:layout_constraintBottom_toBottomOf="@+id/location"
+                app:layout_constraintStart_toEndOf="@+id/location"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/locationAndTimeDetails" />
+                app:layout_constraintTop_toTopOf="@+id/location"
+                app:layout_constraintHorizontal_bias="1" />
 
             <TextView
                 android:id="@+id/destinationTime"
@@ -215,9 +209,11 @@
                 android:layout_marginRight="20dp"
                 android:text="12:45 PM"
                 android:textColor="#333333"
-                app:layout_constraintBottom_toBottomOf="@+id/locationAndTimeDetails"
+                app:layout_constraintBottom_toBottomOf="@+id/destination"
+                app:layout_constraintStart_toEndOf="@+id/destination"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider7" />
+                app:layout_constraintTop_toTopOf="@+id/destination"
+                app:layout_constraintHorizontal_bias="1"/>
 
             <View
                 android:id="@+id/paymentView"

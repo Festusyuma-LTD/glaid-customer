@@ -5,107 +5,74 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <View
-        android:id="@+id/grayBox"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:background="#f6f6f6"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="15dp"
+        android:paddingVertical="20dp"
+        android:paddingHorizontal="20dp"
+        android:background="#FFFFFF"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:id="@+id/info"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="#fff"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/grayBox" />
+        app:layout_constraintStart_toStartOf="parent" >
 
-    <TextView
-        android:id="@+id/literView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:alpha="0.7"
-        android:text="1000"
-        android:textColor="#333333"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/grayBox"
-        app:lineHeight="14sp" />
+        <TextView
+            android:id="@+id/quantity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#333333"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/textView24"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:alpha="0.7"
-        android:text="@string/liters"
-        android:textColor="#333333"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        app:layout_constraintBaseline_toBaselineOf="@+id/literView"
-        app:layout_constraintStart_toEndOf="@+id/literView"
-        app:lineHeight="14sp" />
+        <TextView
+            android:id="@+id/gasType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:textColor="#808080"
+            android:textSize="12sp"
+            app:layout_constraintTop_toBottomOf="@+id/quantity"
+            app:layout_constraintStart_toStartOf="@+id/quantity" />
 
-    <TextView
-        android:id="@+id/oilType"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="Standard Oil"
-        android:textColor="#808080"
-        android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="@+id/literView"
-        app:layout_constraintTop_toBottomOf="@+id/literView"
-        app:lineHeight="14sp" />
+        <TextView
+            android:id="@+id/dot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:text="@string/dot"
+            android:textColor="#808080"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="@+id/gasType"
+            app:layout_constraintStart_toEndOf="@+id/gasType"
+            app:layout_constraintBottom_toBottomOf="@+id/gasType" />
 
-    <TextView
-        android:id="@+id/textView26"
-        android:layout_width="wrap_content"
-        android:layout_height="19dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
-        android:text="@string/dot"
-        app:layout_constraintBaseline_toBaselineOf="@+id/oilType"
-        app:layout_constraintStart_toEndOf="@+id/oilType"
-        app:lineHeight="14sp" />
+        <TextView
+            android:id="@+id/deliveryAddress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:textColor="#808080"
+            android:textSize="12sp"
+            app:layout_constraintTop_toTopOf="@+id/dot"
+            app:layout_constraintStart_toEndOf="@+id/dot"
+            app:layout_constraintBottom_toBottomOf="@+id/dot"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"/>
 
-    <TextView
-        android:id="@+id/addressView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
-        android:text="8, Ogidi cresent, Lekki Phase 1"
-        android:textColor="#333333"
-        android:textSize="12sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/textView26"
-        app:layout_constraintStart_toEndOf="@+id/textView26"
-        app:lineHeight="14sp" />
-
-    <TextView
-        android:id="@+id/deliverStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="20dp"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/info"
-        app:layout_constraintStart_toStartOf="@+id/literView"
-        app:layout_constraintTop_toBottomOf="@+id/oilType"
-        app:layout_constraintVertical_bias="0.0"
-        app:lineHeight="14sp"
-        tools:text="Delivering..." />
+        <TextView
+            android:id="@+id/status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:textColor="#27AE60"
+            android:textSize="12sp"
+            app:layout_constraintTop_toBottomOf="@+id/gasType"
+            app:layout_constraintStart_toStartOf="@+id/gasType"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
