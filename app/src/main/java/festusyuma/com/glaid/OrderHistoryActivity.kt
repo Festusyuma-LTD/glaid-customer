@@ -3,7 +3,6 @@ package festusyuma.com.glaid
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -12,7 +11,6 @@ import android.view.WindowManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.reflect.TypeToken
 import festusyuma.com.glaid.model.Order
-import festusyuma.com.glaid.utilities.DataServices
 import festusyuma.com.glaid.utilities.OrderHistoryAdapter
 import kotlinx.android.synthetic.main.activity_order_history.*
 
@@ -38,8 +36,9 @@ class OrderHistoryActivity : AppCompatActivity() {
         if (ordersJson != null) {
             val orders: MutableList<Order> = gson.fromJson(ordersJson, typeToken)
             orderHistoryAdapter = OrderHistoryAdapter(this, orders) {
-                val productPageLink = Intent(this, OrderDetailsActivity::class.java)
-                startActivity(productPageLink)
+                val orderDetails = Intent(this, OrderDetailsActivity::class.java)
+                orderDetails.putExtra("order", gson.toJson(it))
+                startActivity(orderDetails)
             }
 
             orderHistoryRecycler.layoutManager = layoutManager
