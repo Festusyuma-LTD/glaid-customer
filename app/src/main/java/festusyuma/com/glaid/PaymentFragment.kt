@@ -85,7 +85,7 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
         paymentMethod = requireActivity().findViewById(R.id.paymentMethod)
 
         quantity = requireActivity().findViewById(R.id.quantity)
-        quantity.text = getString(R.string.predefined_quantity).format(liveOrder.quantity.value, liveOrder.gasType.value?.unit)
+        quantity.text = getString(R.string.formatted_quantity).format(liveOrder.quantity.value, liveOrder.gasType.value?.unit)
 
         gasType = requireActivity().findViewById(R.id.gasType)
         val gasTypeString = liveOrder.gasType.value?.type

@@ -27,7 +27,6 @@ import kotlinx.android.synthetic.main.fragment_details.*
 import org.json.JSONArray
 import org.json.JSONObject
 import java.text.NumberFormat
-import java.util.*
 
 
 /**
@@ -181,7 +180,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
                 val priceTV = preView.findViewById<TextView>(R.id.price)
 
                 imgV.setImageResource(imgDrawable)
-                quantityTV.text = getString(R.string.predefined_quantity).format(quantity, gasType.unit)
+                quantityTV.text = getString(R.string.formatted_quantity).format(quantity, gasType.unit)
                 priceTV.text = getString(R.string.formatted_amount).format(numberFormatter.format(totalPrice))
                 addressTypeTV.text = getString(R.string.predefined_address_type).format("Home Delivery")
 

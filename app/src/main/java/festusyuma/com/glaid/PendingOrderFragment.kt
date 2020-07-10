@@ -2,9 +2,6 @@ package festusyuma.com.glaid
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProviders
 import festusyuma.com.glaid.helpers.capitalizeWords
@@ -35,7 +32,7 @@ class PendingOrderFragment : Fragment(R.layout.pending_order) {
         amount = requireActivity().findViewById(R.id.amount)
         gasType = requireActivity().findViewById(R.id.gasType)
 
-        quantity.text = getString(R.string.predefined_quantity).format(livePendingOrder.quantity.value, livePendingOrder.gasUnit.value)
+        quantity.text = getString(R.string.formatted_quantity).format(livePendingOrder.quantity.value, livePendingOrder.gasUnit.value)
         amount.text = getString(R.string.formatted_amount).format(numberFormatter.format(livePendingOrder.amount.value))
         gasType.text = livePendingOrder.gasType.value?.capitalizeWords()
     }
