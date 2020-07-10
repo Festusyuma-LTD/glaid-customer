@@ -30,6 +30,7 @@
     <string name="sign_up_agreement">By signing up you agree to our</string>
     <string name="terms_of_use">Terms of Use</string>
     <string name="phone_number_input_label">Phone Number</string>
+    <string name="home_address_input_label">Home Address</string>
     <string name="full_name_input_label">Full Name</string>
     <string name="sign_up_intro_text">Let’s get you signed up so you can begin ordering your diesel</string>
     <string name="sign_up_intro_title">Hi There!</string>
@@ -95,6 +96,9 @@
     <string name="sh_wallet">wallet</string>
     <string name="sh_payment_cards">cards</string>
     <string name="sh_preferred_payment">preferred_payment</string>
+    <string name="sh_home_address">home_address</string>
+    <string name="sh_business_address">business_address</string>
+    <string name="sh_pending_order">pending_order</string>
     <string name="glaid_wallet">Glaid Wallet</string>
     <string name="preferred_payment_method">Preferred payment Method</string>
     <string name="wallet_balance">Wallet Balance</string>
@@ -120,7 +124,7 @@
     <string name="wallet_icon">wallet icon</string>
     <string name="wallet_background">wallet_background</string>
     <string name="credit_card_icon">Credit card icon</string>
-    <string name="amount_input_label" >Amount (&#8358;)</string>
+    <string name="amount_input_label">Amount (&#8358;)</string>
     <string name="processing">Processing</string>
     <string name="share_to_whatsapp">Share to Whatsapp</string>
     <string name="lekki_phase_1_lagos">Lekki Phase 1, Lagos</string>
@@ -131,6 +135,26 @@
     <string name="exp_date">%1$s/%2$s</string>
     <string name="delete">Delete</string>
     <string name="work_address">Work Address</string>
+    <string name="work_address_input_label">Work Address</string>
     <string name="menu_btn_icon">menu button icon</string>
     <string name="user_location_btn_icon">userLocationBtnIcon</string>
+    <string name="location_icon">location_icon</string>
+    <string name="home">Home</string>
+    <string name="business">Business</string>
+    <string name="date_format">%1$s/%2$s/%3$s %4$s:%5$s</string>
+    <string name="quantity">Quantity</string>
+    <string name="delivery_type">Delivery type</string>
+    <string name="_500">500</string>
+    <string name="tax">Tax</string>
+    <string name="delivery">Delivery</string>
+    <string name="_8000">8000</string>
+    <string name="subtotal">Subtotal</string>
+    <string name="_8000">8000</string>
+    <string name="_10_liters">10 Liters</string>
+    <string name="diesel">Diesel</string>
+    <string name="quantity">Quantity</string>
+    <string name="item">Item</string>
+    <string name="price">Price</string>
+    <string name="oghenekaro_joshua">Oghenekaro Joshua</string>
+    <string name="billed_to">Billed to</string>
 </resources>

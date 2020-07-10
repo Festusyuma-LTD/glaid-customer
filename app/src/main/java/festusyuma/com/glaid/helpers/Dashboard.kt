@@ -22,6 +22,8 @@ class Dashboard {
             }else dashboard.getPreferredPayment(data.getJSONObject("preferredPaymentMethod"))
             val wallet = gson.toJson(dashboard.getWallet(data.getJSONObject("wallet")))
             val paymentCards = gson.toJson(dashboard.getPaymentCards(data.getJSONArray("paymentCards")))
+            val homeAddress = gson.toJson(dashboard.getHomeAddress(data.getJSONArray("address")))
+            val businessAddress = gson.toJson(dashboard.getBusinessAddress(data.getJSONArray("address")))
 
             with(sharedPref.edit()) {
                 clear()
@@ -29,6 +31,8 @@ class Dashboard {
                 putString(context.getString(R.string.sh_wallet), wallet)
                 putString(context.getString(R.string.sh_payment_cards), paymentCards)
                 putString(context.getString(R.string.sh_preferred_payment), prefPayment)
+                putString(context.getString(R.string.sh_home_address), homeAddress)
+                putString(context.getString(R.string.sh_business_address), businessAddress)
                 commit()
             }
         }
@@ -81,15 +85,43 @@ class Dashboard {
         }else data.getString("cardId")
     }
 
-    /*fun getAddress(data: JSONObject): Address {
+    fun getHomeAddress(data: JSONArray): Address? {
+        for (i in 0 until data.length()) {
+            val addressJson = data[i] as JSONObject
+            val type = addressJson.getString("type")
 
+            if (type == "home") return getAddress(addressJson, type)
+        }
+
+        return null
     }
 
-    fun getOrders(data: JSONObject): Orders {
+    fun getBusinessAddress(data: JSONArray): Address? {
+        for (i in 0 until data.length()) {
+            val addressJson = data[i] as JSONObject
+            val type = addressJson.getString("type")
 
+            if (type == "business") return getAddress(addressJson, type)
+        }
+
+        return null
     }
 
-    fun getPaymentCards(data: JsonObject): PaymentCards {
+    private fun getAddress(addressJson: JSONObject, type: String): Address {
+        val address = Address(
+            addressJson.getLong("id"),
+            addressJson.getString("address"),
+            type
+        )
+
+        val locationJson = addressJson.getJSONObject("location")
+        address.lat = locationJson.getDouble("lat")
+        address.lng = locationJson.getDouble("lng")
+
+        return address
+    }
+
+    /*fun getOrders(data: JSONObject): Orders {
 
     }*/
 }

@@ -220,100 +220,69 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/telInputCover" />
 
-            <TextView
-                android:id="@+id/textView36"
-                android:layout_width="wrap_content"
+            <!-- Home address input -->
+            <LinearLayout
+                android:id="@+id/homeAddressInputCover"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:fontFamily="@font/sfpro"
-                android:text="Home Address"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.05"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/dividerLine2" />
-
-            <View
-                android:id="@+id/homeAddressField"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:background="@drawable/viewdrawable"
-                android:onClick="loadEditAddressFragment"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="15dp"
+                android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView36" />
+                app:layout_constraintTop_toBottomOf="@+id/dividerLine2">
 
-<!--            <EditText-->
-<!--                android:id="@+id/homeAddressField"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginStart="16dp"-->
-<!--                android:layout_marginLeft="16dp"-->
-<!--                android:layout_marginTop="10dp"-->
-<!--                android:layout_marginEnd="16dp"-->
-<!--                android:layout_marginRight="16dp"-->
-<!--                android:background="@drawable/noneditableinput"-->
-<!--                android:ems="10"-->
-<!--                android:fontFamily="@font/sfpro"-->
-<!--                android:inputType="textPersonName"-->
-<!--                android:onClick="loadEditAddressFragment"-->
-<!--                android:padding="20dp"-->
-<!--                android:text="@string/_8_ogidi_cresent_lekki_phase_1"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/textView36" />-->
+                <TextView
+                    android:id="@+id/homeAddressInputLbl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:fontFamily="@font/sfpro"
+                    android:text="@string/home_address_input_label" />
 
-            <TextView
-                android:id="@+id/textView37"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/homeAddressInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/noneditableinput"
+                    android:ems="10"
+                    android:fontFamily="@font/sfpro"
+                    android:padding="20dp"
+                    android:textColor="#000000"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <!-- Work address input -->
+            <LinearLayout
+                android:id="@+id/workAddressInputCover"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="@string/work_address"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="15dp"
+                android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.05"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/homeAddressField" />
+                app:layout_constraintTop_toBottomOf="@+id/homeAddressInputCover">
 
-            <View
-                android:id="@+id/workAddressField"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:background="@drawable/viewdrawable"
-                android:onClick="loadEditAddressFragment"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView37" />
+                <TextView
+                    android:id="@+id/workAddressInputLbl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:fontFamily="@font/sfpro"
+                    android:text="@string/work_address" />
 
-<!--            <EditText-->
-<!--                android:id="@+id/workAddressField"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginStart="16dp"-->
-<!--                android:layout_marginLeft="16dp"-->
-<!--                android:layout_marginTop="8dp"-->
-<!--                android:layout_marginEnd="16dp"-->
-<!--                android:layout_marginRight="16dp"-->
-<!--                android:background="@drawable/noneditableinput"-->
-<!--                android:ems="10"-->
-<!--                android:fontFamily="@font/sfpro"-->
-<!--                android:inputType="textPersonName"-->
-<!--                android:onClick="loadEditAddressFragment"-->
-<!--                android:padding="20dp"-->
-<!--                android:text="@string/_8_ogidi_cresent_lekki_phase_1"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintHorizontal_bias="1.0"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/textView37" />-->
+                <TextView
+                    android:id="@+id/workAddressInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/noneditableinput"
+                    android:ems="10"
+                    android:fontFamily="@font/sfpro"
+                    android:padding="20dp"
+                    android:textColor="#000000"
+                    android:textSize="18sp" />
+            </LinearLayout>
 
             <View
                 android:id="@+id/dividerLine3"
@@ -328,7 +297,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/workAddressField" />
+                app:layout_constraintTop_toBottomOf="@+id/workAddressInputCover" />
 
             <Button
                 android:id="@+id/button5"
@@ -393,53 +362,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/button8" />
 
-            <TextView
-                android:id="@+id/homeLocationText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginRight="20dp"
-                android:fontFamily="@font/sfpro"
-                android:text="@string/_8_ogidi_cresent_lekki_phase_1"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/homeAddressField"
-                app:layout_constraintEnd_toEndOf="@+id/homeAddressField"
-                app:layout_constraintStart_toStartOf="@+id/homeAddressField"
-                app:layout_constraintTop_toTopOf="@+id/homeAddressField" />
-
-            <TextView
-                android:id="@+id/textView20"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginRight="20dp"
-                android:fontFamily="@font/sfpro"
-                android:text="@string/_8_ogidi_cresent_lekki_phase_1"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/workAddressField"
-                app:layout_constraintEnd_toEndOf="@+id/workAddressField"
-                app:layout_constraintStart_toStartOf="@+id/workAddressField"
-                app:layout_constraintTop_toTopOf="@+id/workAddressField" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
     <FrameLayout
         android:id="@+id/addressFragmentLayout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:elevation="300dp"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
