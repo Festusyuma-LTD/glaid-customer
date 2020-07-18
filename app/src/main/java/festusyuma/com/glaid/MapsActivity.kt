@@ -33,6 +33,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.tasks.Task
+import festusyuma.com.glaid.model.FSLocation
 import festusyuma.com.glaid.model.Order
 import festusyuma.com.glaid.model.User
 import festusyuma.com.glaid.model.live.PendingOrder
@@ -119,7 +120,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun initUserLocationBtn() {
         userLocationBtn = findViewById(R.id.userLocationBtn)
-        userLocationBtn.setOnClickListener { getUserLocation { markUserLocation(it) } }
+        userLocationBtn.setOnClickListener {
+            getUserLocation { markUserLocation(it) }
+            getUserLocation("festusyuma@gmail.com") {
+                Log.v(FIRE_STORE_LOG_TAG, "$it")
+            }
+        }
     }
 
     private fun isServiceOk(): Boolean {
@@ -226,6 +232,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         return null
+    }
+
+    private fun getUserLocation(uid: String, listener: (lc: FSLocation) -> Unit) {
+        val locationRef =
+            db.collection(getString(R.string.fs_user_locations))
+                .document(uid)
+
+        locationRef.get()
+            .addOnSuccessListener {
+                val lc = it.toObject(FSLocation::class.java)
+                if (lc != null) listener(lc)
+            }
     }
 
     private fun markUserLocation(lc: Location) {

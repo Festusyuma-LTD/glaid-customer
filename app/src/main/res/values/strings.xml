@@ -154,4 +154,5 @@
     <string name="profile_image_placeholder">profile_image_placeholder</string>
     <string name="order_driver_name">Your driver is %1$s</string>
     <string name="from_the_nearest_fuel_station">From the nearest fuel station</string>
+    <string name="fs_user_locations" >User Locations</string>
 </resources>
