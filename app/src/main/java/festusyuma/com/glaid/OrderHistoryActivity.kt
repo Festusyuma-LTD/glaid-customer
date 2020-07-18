@@ -16,8 +16,8 @@ import kotlinx.android.synthetic.main.activity_order_history.*
 
 class OrderHistoryActivity : AppCompatActivity() {
 
-    lateinit var dataPref: SharedPreferences
-    lateinit var orderHistoryAdapter: OrderHistoryAdapter
+    private lateinit var dataPref: SharedPreferences
+    private lateinit var orderHistoryAdapter: OrderHistoryAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
 

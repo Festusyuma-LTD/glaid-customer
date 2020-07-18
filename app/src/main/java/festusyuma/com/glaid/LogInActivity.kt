@@ -68,29 +68,48 @@ class LogInActivity : AppCompatActivity() {
                     if (response.getInt("status") == 200) {
                         val sharedPref = getSharedPreferences("auth_token", Context.MODE_PRIVATE)
                         val data = response.getJSONObject("data")
-                        val token = data.getString("token")
+                        val serverToken = data.getString("token")
 
-                        with (sharedPref.edit()) {
-                            putString(getString(R.string.auth_key_name), token)
-                            commit()
-                        }
+                        auth.signInWithCustomToken(serverToken)
+                            .addOnSuccessListener {res->
+                                val user = res.user
 
-                        queue.add(dashboard(token))
+                                user?.getIdToken(true)
+                                    ?.addOnSuccessListener {tokenRes ->
+                                        val token = tokenRes.token
+                                        if (token != null) {
+                                            with (sharedPref.edit()) {
+                                                putString(getString(R.string.auth_key_name), token)
+                                                commit()
+                                            }
+
+                                            queue.add(dashboard(token))
+                                        }else errorOccurred()
+                                    }
+                                    ?.addOnFailureListener { errorOccurred() }
+                            }.addOnFailureListener { errorOccurred() }
                     }else {
                         setLoading(false)
                         showError(response.getString("message"))
                     }
                 },
-                Response.ErrorListener {
-                    response ->
-                    response.printStackTrace()
-                    showError("An error occurred")
+                Response.ErrorListener { response ->
+                    if (response.networkResponse != null) {
+                        showError(getString(R.string.error_occurred))
+                        response.printStackTrace()
+                    }else showError(getString(R.string.internet_error_msg))
+
                     setLoading(false)
                 }
             )
 
             queue.add(request)
         }
+    }
+
+    private fun errorOccurred(message: String? = null) {
+        setLoading(false)
+        showError(message?: "An error occurred")
     }
 
     private fun setLoading(loading: Boolean) {
