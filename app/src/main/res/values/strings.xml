@@ -155,4 +155,16 @@
     <string name="order_driver_name">Your driver is %1$s</string>
     <string name="from_the_nearest_fuel_station">From the nearest fuel station</string>
     <string name="fs_user_locations" >User Locations</string>
+    <string name="item">Item</string>
+    <string name="price">Price</string>
+    <string name="diesel">Diesel</string>
+    <string name="_10_liters">10 Liters</string>
+    <string name="_8000">8000</string>
+    <string name="subtotal">Subtotal</string>
+    <string name="delivery">Delivery</string>
+    <string name="_500">500</string>
+    <string name="tax">Tax</string>
+    <string name="billed_to">Billed to</string>
+    <string name="oghenekaro_joshua">Oghenekaro Joshua</string>
+    <string name="view_reciept">View Reciept</string>
 </resources>
