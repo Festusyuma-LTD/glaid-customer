@@ -1,5 +1,6 @@
 package festusyuma.com.glaid
 
+import com.android.volley.DefaultRetryPolicy
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -15,3 +16,9 @@ const val EXTRA_QUESTION = "question"
 const val API_LOG_TAG = "apiLog"
 const val APP_LOG_TAG = "appLog"
 const val FIRE_STORE_LOG_TAG = "fireStoreLog"
+
+val defaultRetryPolicy = DefaultRetryPolicy(
+    0,
+    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+)
