@@ -28,14 +28,24 @@
             app:layout_constraintStart_toStartOf="parent"/>
 
         <TextView
+            android:id="@+id/tripStartSoon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/trip_start_soon"
+            android:textColor="#9B72B3"
+            android:textSize="12sp"
+            app:layout_constraintTop_toBottomOf="@+id/assignedOrderMessage"
+            app:layout_constraintStart_toStartOf="@+id/assignedOrderMessage"/>
+
+        <TextView
             android:id="@+id/driverName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:textColor="#EDE5F2"
             android:text="@string/order_driver_name"
-            app:layout_constraintTop_toBottomOf="@+id/assignedOrderMessage"
-            app:layout_constraintStart_toStartOf="@+id/assignedOrderMessage" />
+            app:layout_constraintTop_toBottomOf="@+id/tripStartSoon"
+            app:layout_constraintStart_toStartOf="@+id/tripStartSoon" />
 
         <TextView
             android:id="@+id/quantity"
