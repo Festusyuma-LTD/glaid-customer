@@ -1,7 +1,6 @@
 package festusyuma.com.glaid
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -10,7 +9,6 @@ import android.graphics.Color
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
-import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.TextView
@@ -29,17 +27,16 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import kotlinx.android.synthetic.main.activity_maps.*
 import kotlinx.android.synthetic.main.drawer_header.*
-import android.provider.Settings;
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
+import com.google.android.gms.tasks.Task
+import festusyuma.com.glaid.model.FSLocation
 import festusyuma.com.glaid.model.Order
 import festusyuma.com.glaid.model.User
-import festusyuma.com.glaid.model.live.LiveOrder
 import festusyuma.com.glaid.model.live.PendingOrder
-import kotlin.properties.Delegates
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -56,9 +53,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var userMarker: Marker
-
-    var longitude by Delegates.notNull<Double>()
-    var latitude by Delegates.notNull<Double>()
 
     private lateinit var userLocationBtn: ImageView
 
@@ -93,7 +87,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
                 when(order.statusId) {
                     1L -> startPendingOrderFragment()
-                    2L -> startPendingOrderFragment()
+                    2L -> startDriverAssignedFragment()
                     3L -> startPendingOrderFragment()
                 }
             }else startRootFragment()
@@ -108,6 +102,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         livePendingOrder.quantity.value = order.quantity
         livePendingOrder.statusId.value = order.statusId
         livePendingOrder.truck.value = order.truck
+        livePendingOrder.driverName.value = order.truck?.driverName
     }
 
     private fun startRootFragment() {
@@ -124,9 +119,21 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             .commit()
     }
 
+    private fun startDriverAssignedFragment() {
+        supportFragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.slide_up, R.anim.slide_down, R.anim.slide_up, R.anim.slide_down)
+            .replace(R.id.frameLayoutFragment, DriverAssignedFragment())
+            .commit()
+    }
+
     private fun initUserLocationBtn() {
         userLocationBtn = findViewById(R.id.userLocationBtn)
-        userLocationBtn.setOnClickListener { goToUserLocation() }
+        userLocationBtn.setOnClickListener {
+            getUserLocation { markUserLocation(it) }
+            getUserLocation("festusyuma@gmail.com") {
+                Log.v(FIRE_STORE_LOG_TAG, "$it")
+            }
+        }
     }
 
     private fun isServiceOk(): Boolean {
@@ -168,7 +175,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }else {
             locationPermissionsGranted = true
             initUserLocationBtn()
-            goToUserLocation()
         }
     }
 
@@ -187,7 +193,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 locationPermissionsGranted = granted
                 if (locationPermissionsGranted) {
                     initUserLocationBtn()
-                    goToUserLocation()
                 }
             }
         }
@@ -198,7 +203,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap = googleMap
 
         if (locationPermissionsGranted) {
+            getUserLocation {markUserLocation(it)}
+
             mMap.isMyLocationEnabled = true
+            mMap.uiSettings.isMyLocationButtonEnabled = false
         }
 
         try {
@@ -211,137 +219,71 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         } catch (e: Resources.NotFoundException) {
             Log.e("FragmentActivity.TAG", "Error parsing style. Error: ", e)
         }
-
-
-        //getLastLocation()
     }
 
-    private fun goToUserLocation() {
+    private fun getUserLocation(listener: (lc: Location) -> Unit): Task<Location>? {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         try {
             if (locationPermissionsGranted) {
-                fusedLocationClient.lastLocation
-                    .addOnSuccessListener {lc ->  
-                        if (lc != null) {
-                            val userLocation = LatLng(lc.latitude, lc.longitude)
-
-                            val mapIcon = AppCompatResources.getDrawable(this, R.drawable.customlocation)!!.toBitmap()
-                            if (!this::userMarker.isInitialized) {
-                                userMarker = mMap.addMarker(
-                                    MarkerOptions()
-                                        .position(userLocation).title("Marker in Sydney")
-                                        .icon(BitmapDescriptorFactory.fromBitmap(mapIcon))
-                                )
-                            }else userMarker.position = userLocation
-
-                            moveCamera(userLocation)
-                        }else Toast.makeText(this, "Unable to get location, Please check GPS", Toast.LENGTH_SHORT).show()
-                    }
-            }else Toast.makeText(this, "Permission not granted", Toast.LENGTH_SHORT).show()
+                if (isLocationEnabled()) {
+                    return fusedLocationClient.lastLocation
+                        .addOnSuccessListener {lc ->
+                            if (lc != null) {
+                                listener(lc)
+                            }else Toast.makeText(this, "Unable to get location, Please check GPS", Toast.LENGTH_SHORT).show()
+                        }
+                }
+             }else Toast.makeText(this, "Permission not granted", Toast.LENGTH_SHORT).show()
         }catch (e: SecurityException) {
             Log.v("ApiLog", "${e.message}")
         }
+
+        return null
     }
 
-    private fun markUserLocation(location: LatLng) {
-        moveCamera(location)
+    private fun getUserLocation(uid: String, listener: (lc: FSLocation) -> Unit) {
+        val locationRef =
+            db.collection(getString(R.string.fs_user_locations))
+                .document(uid)
+
+        locationRef.get()
+            .addOnSuccessListener {
+                val lc = it.toObject(FSLocation::class.java)
+                if (lc != null) listener(lc)
+            }
+    }
+
+    private fun markUserLocation(lc: Location) {
+        val userLocation = LatLng(lc.latitude, lc.longitude)
+
+        val mapIcon = AppCompatResources.getDrawable(this, R.drawable.customlocation)!!.toBitmap()
+        if (!this::userMarker.isInitialized) {
+            userMarker = mMap.addMarker(
+                MarkerOptions()
+                    .position(userLocation).title("Marker in Sydney")
+                    .icon(BitmapDescriptorFactory.fromBitmap(mapIcon))
+                    .rotation(lc.bearing)
+            )
+        }else {
+            userMarker.position = userLocation
+            userMarker.rotation = lc.bearing
+        }
+
+        moveCamera(userLocation)
     }
 
     private fun moveCamera(location: LatLng) {
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 15.0f))
     }
 
-    fun setUserLocationOnMap(latitude: Double, longitude: Double) {
-        var userLocation = LatLng(latitude, longitude)
-        val circleOptions = CircleOptions()
-            .center(userLocation)
-            .radius(500.0)
-            .strokeWidth(0.0f)
-            .strokeColor(Color.argb(50, 78, 0, 124))
-            .fillColor(Color.argb(50, 78, 0, 124))
-            .clickable(true); // In meters
-        val mapIcon = AppCompatResources.getDrawable(this, R.drawable.customlocation)!!.toBitmap()
-        mMap.addMarker(
-            MarkerOptions().position(userLocation).title("Marker in Sydney")
-                .icon(BitmapDescriptorFactory.fromBitmap(mapIcon))
-        )
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15.0f))
-        mMap.addCircle(circleOptions)
-
-    }
-
     // This will check if the user has turned on location from the setting
     private fun isLocationEnabled(): Boolean {
-        var locationManager: LocationManager =
-            getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val locationManager: LocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
             LocationManager.NETWORK_PROVIDER
         )
-    }
-
-    // request permission from user if they've no granted the permission
-    private fun requestPermissions() {
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ),
-            requestCode
-        )
-    }
-
-    @SuppressLint("MissingPermission")
-    private fun getLastLocation() {
-        if (locationPermissionsGranted) {
-            if (isLocationEnabled()) {
-
-                fusedLocationClient.lastLocation.addOnCompleteListener(this) { task ->
-                    var location: Location? = task.result
-                    if (location == null) {
-                        requestNewLocationData()
-                    } else {
-                        latitude = location.latitude
-                        longitude = location.longitude
-//                        mMap.isMyLocationEnabled = true
-//                        mMap.uiSettings.isMyLocationButtonEnabled = true
-                        setUserLocationOnMap(latitude, longitude)
-                    }
-                }
-            } else {
-                Toast.makeText(this, "Turn on location", Toast.LENGTH_LONG).show()
-                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                startActivity(intent)
-            }
-        } else {
-            requestPermissions()
-        }
-    }
-
-    // record the location information in runtime to prevent location from being null
-    @SuppressLint("MissingPermission")
-    private fun requestNewLocationData() {
-        var mLocationRequest = LocationRequest()
-        mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        mLocationRequest.interval = 0
-        mLocationRequest.fastestInterval = 0
-        mLocationRequest.numUpdates = 1
-
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        fusedLocationClient!!.requestLocationUpdates(
-            mLocationRequest, mLocationCallback,
-            Looper.myLooper()
-        )
-    }
-
-    // callback for previous locations
-    private val mLocationCallback = object : LocationCallback() {
-        override fun onLocationResult(locationResult: LocationResult) {
-            var mLastLocation: Location = locationResult.lastLocation
-            latitude = mLastLocation.latitude
-            longitude = mLastLocation.longitude
-        }
     }
 
     // edit profile intent
@@ -354,14 +296,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
-            driverRating.setRating(4.5f)
+            driverRating.rating = 4.5f
         } else {
             drawerLayout.openDrawer(GravityCompat.START);
-            driverRating.setRating(4.5f)
+            driverRating.rating = 4.5f
         }
     }
 
-    private fun henryCloseDrawer() {
+    private fun closeDrawer() {
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
@@ -370,26 +312,26 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     fun inviteFriendsClick(view: View) {
-        henryCloseDrawer()
+        closeDrawer()
         val intent = Intent(this, InviteFriendsActivity::class.java)
         startActivity(intent)
     }
 
     fun helpClick(view: View) {
-        henryCloseDrawer()
+        closeDrawer()
         val intent = Intent(this, HelpSupportActivity::class.java)
         startActivity(intent)
     }
 
     fun orderHistoryClick(view: View) {
-        henryCloseDrawer()
+        closeDrawer()
         val intent = Intent(this, OrderHistoryActivity::class.java)
         startActivity(intent)
 
     }
 
     fun paymentClick(view: View) {
-        var paymentIntent = Intent(this, PaymentActivity::class.java)
+        val paymentIntent = Intent(this, PaymentActivity::class.java)
         startActivity(paymentIntent)
     }
 

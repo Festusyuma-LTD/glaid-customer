@@ -119,6 +119,7 @@
     <string name="cvv_input_label">CVV</string>
     <string name="add_card_btn_label">Add Card</string>
     <string name="internet_error_msg">Please check your internet</string>
+    <string name="error_occurred">An error occurred, please try again later</string>
     <string name="api_error_msg">An error occurred</string>
     <string name="wallet_title">Glaid wallet</string>
     <string name="add_funds_btn_label">Add Funds</string>
@@ -153,6 +154,7 @@
     <string name="profile_image_placeholder">profile_image_placeholder</string>
     <string name="order_driver_name">Your driver is %1$s</string>
     <string name="from_the_nearest_fuel_station">From the nearest fuel station</string>
+    <string name="fs_user_locations">User Locations</string>
     <string name="item">Item</string>
     <string name="price">Price</string>
     <string name="diesel">Diesel</string>

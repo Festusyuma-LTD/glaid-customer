@@ -11,4 +11,5 @@ class PendingOrder: ViewModel() {
     val amount: MutableLiveData<Double> = MutableLiveData()
     var statusId: MutableLiveData<Long> = MutableLiveData()
     var truck: MutableLiveData<Truck> = MutableLiveData()
+    var driverName: MutableLiveData<String> = MutableLiveData()
 }
