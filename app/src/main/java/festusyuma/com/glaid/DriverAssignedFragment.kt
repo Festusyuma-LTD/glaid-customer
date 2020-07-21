@@ -35,7 +35,7 @@ class DriverAssignedFragment : Fragment(R.layout.driver_assigned_order) {
         amount = requireActivity().findViewById(R.id.amount)
         gasType = requireActivity().findViewById(R.id.gasType)
 
-        driverName.text = getString(R.string.order_driver_name).format(livePendingOrder.driverName.value)
+        driverName.text = getString(R.string.order_driver_name).format(livePendingOrder.driverName.value?.capitalizeWords())
         quantity.text = getString(R.string.formatted_quantity).format(livePendingOrder.quantity.value, livePendingOrder.gasUnit.value)
         amount.text = getString(R.string.formatted_amount).format(numberFormatter.format(livePendingOrder.amount.value))
         gasType.text = livePendingOrder.gasType.value?.capitalizeWords()

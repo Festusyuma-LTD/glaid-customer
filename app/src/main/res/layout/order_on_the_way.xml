@@ -35,6 +35,7 @@
             app:layout_constraintStart_toStartOf="@+id/assignedOrderMessage" />
 
         <TextView
+            android:visibility="invisible"
             android:id="@+id/quantity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -44,6 +45,7 @@
             app:layout_constraintStart_toStartOf="@+id/driverName" />
 
         <TextView
+            android:visibility="invisible"
             android:id="@+id/amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -54,6 +56,7 @@
             app:layout_constraintTop_toTopOf="@+id/quantity"/>
 
         <TextView
+            android:visibility="invisible"
             android:id="@+id/gasType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
