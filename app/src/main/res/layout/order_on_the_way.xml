@@ -2,6 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginHorizontal="20dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="50dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -10,7 +13,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:paddingHorizontal="24dp"
-        android:paddingVertical="15sp"
+        android:paddingVertical="20dp"
         android:background="@drawable/mail_button_drawable"
         app:layout_constraintStart_toStartOf="parent" >
 
@@ -21,6 +24,7 @@
             android:text="@string/driver_on_the_way_message"
             android:textColor="#9B72B3"
             android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
 
@@ -31,6 +35,7 @@
             android:layout_marginTop="10dp"
             android:textColor="#EDE5F2"
             android:text="@string/order_driver_name"
+            android:textSize="12sp"
             app:layout_constraintTop_toBottomOf="@+id/assignedOrderMessage"
             app:layout_constraintStart_toStartOf="@+id/assignedOrderMessage" />
 
@@ -41,6 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:textColor="#FFFFFF"
+            android:textSize="12sp"
             app:layout_constraintTop_toBottomOf="@+id/driverName"
             app:layout_constraintStart_toStartOf="@+id/driverName" />
 
@@ -49,9 +55,9 @@
             android:id="@+id/amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
             android:textColor="#FFFFFF"
+            android:textSize="12sp"
             app:layout_constraintStart_toEndOf="@+id/quantity"
             app:layout_constraintTop_toTopOf="@+id/quantity"/>
 
@@ -60,15 +66,15 @@
             android:id="@+id/gasType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
             android:textColor="#FFFFFF"
+            android:textSize="12sp"
             app:layout_constraintStart_toEndOf="@+id/amount"
             app:layout_constraintTop_toTopOf="@id/amount"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/driverPhone"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@+id/quantity"
@@ -79,7 +85,7 @@
                 android:id="@+id/telephoneIcon"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                app:layout_constraintDimensionRatio="W, 1"
+                app:layout_constraintDimensionRatio="H, 0.8"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -89,10 +95,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
+                android:layout_marginStart="15dp"
                 android:text="@string/call_driver"
                 android:textColor="#FFFFFF"
-                android:textSize="15sp"
+                android:textSize="12sp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -103,11 +109,10 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/driverChat"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginLeft="10dp"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="20dp"
             app:layout_constraintTop_toTopOf="@+id/driverPhone"
             app:layout_constraintStart_toEndOf="@+id/driverPhone"
             app:layout_constraintBottom_toBottomOf="@+id/driverPhone">
@@ -116,7 +121,7 @@
                 android:id="@+id/messageIcon"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                app:layout_constraintDimensionRatio="W, 1"
+                app:layout_constraintDimensionRatio="H, 0.8"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -126,10 +131,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
-                android:text="@string/call_driver"
+                android:layout_marginStart="15dp"
+                android:text="@string/text_driver"
                 android:textColor="#FFFFFF"
-                android:textSize="15sp"
+                android:textSize="12sp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -139,6 +144,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/driverPicAndRating"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             app:layout_constraintTop_toTopOf="@+id/assignedOrderMessage"

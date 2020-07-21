@@ -88,7 +88,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 when(order.statusId) {
                     1L -> startPendingOrderFragment()
                     2L -> startDriverAssignedFragment()
-                    3L -> startPendingOrderFragment()
+                    3L -> startOnTheWayFragment()
                 }
             }else startRootFragment()
         }else startRootFragment()
@@ -103,6 +103,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         livePendingOrder.statusId.value = order.statusId
         livePendingOrder.truck.value = order.truck
         livePendingOrder.driverName.value = order.truck?.driverName
+        livePendingOrder.driver.value = order.driver
     }
 
     private fun startRootFragment() {
@@ -123,6 +124,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         supportFragmentManager.beginTransaction()
             .setCustomAnimations(R.anim.slide_up, R.anim.slide_down, R.anim.slide_up, R.anim.slide_down)
             .replace(R.id.frameLayoutFragment, DriverAssignedFragment())
+            .commit()
+    }
+
+    private fun startOnTheWayFragment() {
+        supportFragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.slide_up, R.anim.slide_down, R.anim.slide_up, R.anim.slide_down)
+            .replace(R.id.frameLayoutFragment, OrderOnTheWayFragment())
             .commit()
     }
 
