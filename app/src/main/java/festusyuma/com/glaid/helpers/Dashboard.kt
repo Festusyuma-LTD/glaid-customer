@@ -192,6 +192,19 @@ class Dashboard {
             )
         }else null
 
-        return Order(paymentMethod, gasType, gasUnit, quantity, amount, deliveryPrice, tax, statusId, address, scheduledDate, truck)
+
+        val driver = if (!data.isNull("driver")) {
+            val driverJson = data.getJSONObject("driver")
+            val userJson = driverJson.getJSONObject("user")
+
+            User(
+                userJson.getString("email"),
+                userJson.getString("fullName"),
+                userJson.getString("tel"),
+                userJson.getLong("id")
+            )
+        }else null
+
+        return Order(driver, paymentMethod, gasType, gasUnit, quantity, amount, deliveryPrice, tax, statusId, address, scheduledDate, truck)
     }
 }

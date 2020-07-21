@@ -167,4 +167,6 @@
     <string name="billed_to">Billed to</string>
     <string name="oghenekaro_joshua">Oghenekaro Joshua</string>
     <string name="view_reciept">View Reciept</string>
+    <string name="trip_start_soon">Driver will soon start trip</string>
+    <string name="text_driver">Text Driver</string>
 </resources>

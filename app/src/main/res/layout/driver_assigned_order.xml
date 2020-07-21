@@ -2,9 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginHorizontal="15dp"
+    android:layout_marginHorizontal="20dp"
     android:layout_marginTop="10dp"
-    android:layout_marginBottom="30dp"
+    android:layout_marginBottom="50dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,7 +13,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:paddingHorizontal="24dp"
-        android:paddingVertical="15sp"
+        android:paddingVertical="20dp"
         android:background="@drawable/mail_button_drawable"
         app:layout_constraintStart_toStartOf="parent" >
 
@@ -24,6 +24,7 @@
             android:text="@string/driver_order_message"
             android:textColor="#9B72B3"
             android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
 
@@ -31,9 +32,10 @@
             android:id="@+id/driverName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:textColor="#EDE5F2"
             android:text="@string/order_driver_name"
+            android:textSize="12sp"
             app:layout_constraintTop_toBottomOf="@+id/assignedOrderMessage"
             app:layout_constraintStart_toStartOf="@+id/assignedOrderMessage" />
 
@@ -41,8 +43,9 @@
             android:id="@+id/quantity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:textColor="#FFFFFF"
+            android:textSize="12sp"
             app:layout_constraintTop_toBottomOf="@+id/driverName"
             app:layout_constraintStart_toStartOf="@+id/driverName" />
 
@@ -52,6 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:textColor="#FFFFFF"
+            android:textSize="12sp"
             app:layout_constraintStart_toEndOf="@+id/quantity"
             app:layout_constraintTop_toTopOf="@+id/quantity"/>
 
@@ -61,6 +65,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:textColor="#FFFFFF"
+            android:textSize="12sp"
             app:layout_constraintStart_toEndOf="@+id/amount"
             app:layout_constraintTop_toTopOf="@id/amount"/>
 
@@ -85,11 +90,12 @@
 
             <RatingBar
                 android:id="@+id/driverRating"
-                style="?android:attr/ratingBarStyleSmall"
+                style="@style/Widget.AppCompat.RatingBar.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:isIndicator="true"
+                android:max="5"
                 android:numStars="5"
                 android:stepSize="0.1"
                 app:layout_constraintTop_toBottomOf="@+id/driverProfileImage"

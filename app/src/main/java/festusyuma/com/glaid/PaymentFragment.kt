@@ -263,6 +263,7 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
             }
         }
 
+        req.retryPolicy = defaultRetryPolicy
         req.tag = "create_order"
         queue.add(req)
     }

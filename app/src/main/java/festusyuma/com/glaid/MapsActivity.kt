@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Resources
-import android.graphics.Color
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
@@ -53,8 +52,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var userMarker: Marker
+    private lateinit var driverMarker: Marker
 
     private lateinit var userLocationBtn: ImageView
+    private lateinit var livePendingOrder: PendingOrder
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,14 +89,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 when(order.statusId) {
                     1L -> startPendingOrderFragment()
                     2L -> startDriverAssignedFragment()
-                    3L -> startPendingOrderFragment()
+                    3L -> startOnTheWayFragment()
                 }
             }else startRootFragment()
         }else startRootFragment()
     }
 
     private fun initiateLivePendingOrder(order: Order) {
-        val livePendingOrder = ViewModelProviders.of(this).get(PendingOrder::class.java)
+        livePendingOrder = ViewModelProviders.of(this).get(PendingOrder::class.java)
         livePendingOrder.amount.value = order.amount
         livePendingOrder.gasType.value = order.gasType
         livePendingOrder.gasUnit.value = order.gasUnit
@@ -103,6 +104,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         livePendingOrder.statusId.value = order.statusId
         livePendingOrder.truck.value = order.truck
         livePendingOrder.driverName.value = order.truck?.driverName
+        livePendingOrder.driver.value = order.driver
     }
 
     private fun startRootFragment() {
@@ -123,6 +125,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         supportFragmentManager.beginTransaction()
             .setCustomAnimations(R.anim.slide_up, R.anim.slide_down, R.anim.slide_up, R.anim.slide_down)
             .replace(R.id.frameLayoutFragment, DriverAssignedFragment())
+            .commit()
+    }
+
+    private fun startOnTheWayFragment() {
+        supportFragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.slide_up, R.anim.slide_down, R.anim.slide_up, R.anim.slide_down)
+            .replace(R.id.frameLayoutFragment, OrderOnTheWayFragment())
             .commit()
     }
 
@@ -207,6 +216,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
             mMap.isMyLocationEnabled = true
             mMap.uiSettings.isMyLocationButtonEnabled = false
+
+            if (this::livePendingOrder.isInitialized) markDriverLocation()
         }
 
         try {
@@ -261,7 +272,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         if (!this::userMarker.isInitialized) {
             userMarker = mMap.addMarker(
                 MarkerOptions()
-                    .position(userLocation).title("Marker in Sydney")
+                    .position(userLocation).title("User")
                     .icon(BitmapDescriptorFactory.fromBitmap(mapIcon))
                     .rotation(lc.bearing)
             )
@@ -273,8 +284,35 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         moveCamera(userLocation)
     }
 
-    private fun moveCamera(location: LatLng) {
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 15.0f))
+    private fun markDriverLocation() {
+        val driverId = livePendingOrder.driver.value?.id
+        if (driverId != null) {
+            getUserLocation(driverId.toString()) {lc ->
+
+                lc.geoPoint?: return@getUserLocation
+                lc.bearing?: return@getUserLocation
+
+                val driverLocation = LatLng(lc.geoPoint.latitude, lc.geoPoint.longitude)
+
+                val mapIcon = AppCompatResources.getDrawable(this, R.drawable.truck_marker)!!.toBitmap()
+                if (!this::driverMarker.isInitialized) {
+                    driverMarker = mMap.addMarker(
+                        MarkerOptions()
+                            .position(driverLocation).title("Driver")
+                            .icon(BitmapDescriptorFactory.fromBitmap(mapIcon))
+                    )
+                }else {
+                    driverMarker.position = driverLocation
+                    driverMarker.rotation = lc.bearing
+                }
+
+                moveCamera(driverLocation, 17f)
+            }
+        }
+    }
+
+    private fun moveCamera(location: LatLng, zoom: Float = 15.0f) {
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, zoom))
     }
 
     // This will check if the user has turned on location from the setting

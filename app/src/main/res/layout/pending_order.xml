@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="15dp"
     android:layout_marginTop="10dp"
-    android:layout_marginBottom="30dp"
+    android:layout_marginBottom="50dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,7 +13,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:paddingHorizontal="24dp"
-        android:paddingVertical="15sp"
+        android:paddingVertical="20dp"
         android:background="@drawable/mail_button_drawable"
         app:layout_constraintStart_toStartOf="parent" >
 
@@ -24,6 +24,7 @@
             android:text="@string/pending_order_message"
             android:textColor="#9B72B3"
             android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
 
@@ -33,6 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:textColor="#EDE5F2"
+            android:textSize="12sp"
             app:layout_constraintTop_toBottomOf="@+id/assignedOrderMessage"
             app:layout_constraintStart_toStartOf="@+id/assignedOrderMessage" />
 
@@ -40,9 +42,9 @@
             android:id="@+id/amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
             android:textColor="#EDE5F2"
+            android:textSize="12sp"
             app:layout_constraintStart_toEndOf="@+id/quantity"
             app:layout_constraintTop_toTopOf="@+id/quantity"/>
 
@@ -50,13 +52,23 @@
             android:id="@+id/gasType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
             android:textColor="#EDE5F2"
+            android:textSize="12sp"
             app:layout_constraintStart_toEndOf="@+id/amount"
             app:layout_constraintTop_toTopOf="@id/amount"/>
 
-
+        <ImageView
+            android:id="@+id/imageView15"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="@string/home_intro_image"
+            android:src="@drawable/glaidwelcomelogo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="W, 1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
