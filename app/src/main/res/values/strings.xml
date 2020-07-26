@@ -155,6 +155,7 @@
     <string name="order_driver_name">Your driver is %1$s</string>
     <string name="from_the_nearest_fuel_station">From the nearest fuel station</string>
     <string name="fs_user_locations">User Locations</string>
+    <string name="fs_pending_orders">Pending Orders</string>
     <string name="item">Item</string>
     <string name="price">Price</string>
     <string name="diesel">Diesel</string>
@@ -169,4 +170,5 @@
     <string name="view_reciept">View Reciept</string>
     <string name="trip_start_soon">Driver will soon start trip</string>
     <string name="text_driver">Text Driver</string>
+    <string name="cached_data">cached_data</string>
 </resources>

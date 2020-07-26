@@ -39,7 +39,7 @@ class RootFragment : Fragment(R.layout.fragment_root) {
 
         if (userJson != null) {
             val user = gson.fromJson(userJson, User::class.java)
-            greeting.text = getString(R.string.home_greeting_intro_text).format(user.fullName.getFirst())
+            greeting.text = getString(R.string.home_greeting_intro_text).format(user.fullName?.getFirst())
         }
 
         dieselBtn.setOnClickListener{

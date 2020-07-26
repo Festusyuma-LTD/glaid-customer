@@ -1,8 +1,10 @@
 package festusyuma.com.glaid
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.location.Location
@@ -35,6 +37,7 @@ import com.google.android.gms.tasks.Task
 import festusyuma.com.glaid.model.FSLocation
 import festusyuma.com.glaid.model.Order
 import festusyuma.com.glaid.model.User
+import festusyuma.com.glaid.model.fs.FSPendingOrder
 import festusyuma.com.glaid.model.live.PendingOrder
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -57,6 +60,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var userLocationBtn: ImageView
     private lateinit var livePendingOrder: PendingOrder
 
+    private lateinit var authPref: SharedPreferences
+    private lateinit var dataPref: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -64,7 +69,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         setContentView(R.layout.activity_maps)
 
         nav_view.itemIconTintList = null;
-        val dataPref = getSharedPreferences("cached_data", Context.MODE_PRIVATE)
+        dataPref = getSharedPreferences(getString(R.string.cached_data), Context.MODE_PRIVATE)
         val userJson = dataPref.getString("userDetails", "null")
 
         if (userJson != null) {
@@ -76,10 +81,36 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             emailTV.text = user.email
         }
 
-        if (isServiceOk()) {
-            initMap()
+        if (isServiceOk()) initMap()
+        startFragment()
+    }
+
+    private fun isServiceOk(): Boolean {
+        // check google service
+        val apiAvailabilityInstance = GoogleApiAvailability.getInstance()
+        val availability = apiAvailabilityInstance.isGooglePlayServicesAvailable(this)
+
+        if (availability == ConnectionResult.SUCCESS) {
+            return true
+        }else {
+            if (apiAvailabilityInstance.isUserResolvableError(availability)) {
+                val dialog = apiAvailabilityInstance.getErrorDialog(this, availability, errorDialogRequest)
+                dialog.show()
+            }else {
+                Toast.makeText(this, "You device can't make map request", Toast.LENGTH_SHORT).show()
+            }
         }
 
+        return false
+    }
+
+    private fun initMap() {
+        getLocationPermission()
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
+    }
+
+    private fun startFragment() {
         if (dataPref.contains(getString(R.string.sh_pending_order))) {
             val orderJson = dataPref.getString(getString(R.string.sh_pending_order), null)
             if (orderJson != null) {
@@ -93,6 +124,23 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
             }else startRootFragment()
         }else startRootFragment()
+    }
+
+    private fun getLocationPermission() {
+        val deniedPermissions = mutableListOf<String>()
+
+        for (permission in permissions) {
+            if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_DENIED) {
+                deniedPermissions.add(permission)
+            }
+        }
+
+        if (deniedPermissions.size > 0) {
+            ActivityCompat.requestPermissions(this, deniedPermissions.toTypedArray(), requestCode)
+        }else {
+            locationPermissionsGranted = true
+            initUserLocationBtn()
+        }
     }
 
     private fun initiateLivePendingOrder(order: Order) {
@@ -145,48 +193,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun isServiceOk(): Boolean {
-        // check google service
-        val apiAvailabilityInstance = GoogleApiAvailability.getInstance()
-        val availability = apiAvailabilityInstance.isGooglePlayServicesAvailable(this)
-
-        if (availability == ConnectionResult.SUCCESS) {
-            return true
-        }else {
-            if (apiAvailabilityInstance.isUserResolvableError(availability)) {
-                val dialog = apiAvailabilityInstance.getErrorDialog(this, availability, errorDialogRequest)
-                dialog.show()
-            }else {
-                Toast.makeText(this, "You device can't make map request", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        return false
-    }
-
-    private fun initMap() {
-        getLocationPermission()
-        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
-    }
-
-    private fun getLocationPermission() {
-        val deniedPermissions = mutableListOf<String>()
-
-        for (permission in permissions) {
-            if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_DENIED) {
-                deniedPermissions.add(permission)
-            }
-        }
-
-        if (deniedPermissions.size > 0) {
-            ActivityCompat.requestPermissions(this, deniedPermissions.toTypedArray(), requestCode)
-        }else {
-            locationPermissionsGranted = true
-            initUserLocationBtn()
-        }
-    }
-
     // This method is called when a user Allow or Deny our requested permissions. So it will help us to move forward if the permissions are granted
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         if (requestCode == this.requestCode) {
@@ -208,6 +214,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     // Callback when map ready
+    @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
@@ -291,22 +298,78 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
                 lc.geoPoint?: return@getUserLocation
                 lc.bearing?: return@getUserLocation
-
                 val driverLocation = LatLng(lc.geoPoint.latitude, lc.geoPoint.longitude)
 
-                val mapIcon = AppCompatResources.getDrawable(this, R.drawable.truck_marker)!!.toBitmap()
-                if (!this::driverMarker.isInitialized) {
-                    driverMarker = mMap.addMarker(
-                        MarkerOptions()
-                            .position(driverLocation).title("Driver")
-                            .icon(BitmapDescriptorFactory.fromBitmap(mapIcon))
-                    )
-                }else {
-                    driverMarker.position = driverLocation
-                    driverMarker.rotation = lc.bearing
-                }
-
+                updateMarkerPosition(driverLocation, lc)
                 moveCamera(driverLocation, 17f)
+            }
+        }
+    }
+
+    private fun updateMarkerPosition(driverLocation: LatLng, lc: FSLocation) {
+        if (!this::driverMarker.isInitialized) {
+            val mapIcon = AppCompatResources.getDrawable(this, R.drawable.truck_marker)!!.toBitmap()
+            driverMarker = mMap.addMarker(
+                MarkerOptions()
+                    .position(driverLocation).title("Driver")
+                    .icon(BitmapDescriptorFactory.fromBitmap(mapIcon))
+            )
+        }else {
+            driverMarker.position = driverLocation
+            driverMarker.rotation = lc.bearing!!
+        }
+    }
+
+    private fun startOrderStatusListener() {
+        val orderId = livePendingOrder.id.value?: return
+
+        val locationRef =
+            db.collection(getString(R.string.fs_pending_orders))
+                .document(orderId.toString())
+
+        locationRef.addSnapshotListener { snapshot, e ->
+            if (e != null) {
+                Log.v(FIRE_STORE_LOG_TAG, "$e")
+                return@addSnapshotListener
+            }
+
+            if (snapshot != null) {
+                val order = snapshot.toObject(FSPendingOrder::class.java)
+                if (order != null) {
+                    if (order.status != livePendingOrder.statusId.value) {
+                        when(order.status) {
+                            2L -> driverAssignedData(order)
+                            3L -> startOnTheWayFragment()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun driverAssignedData(order: FSPendingOrder) {
+        livePendingOrder.statusId.value = order.status
+        livePendingOrder.driverName.value = order.driver?.fullName
+
+        val fsDriver = order.driver?: return
+        livePendingOrder.driver.value = User(
+            fsDriver.email,
+            fsDriver.fullName,
+            fsDriver.tel,
+            order.driverId?.toLong()
+        )
+    }
+
+    private fun startTrackingDriver() {
+        val driverId = livePendingOrder.driver.value?.id?: return
+
+        val locationRef =
+            db.collection(getString(R.string.fs_user_locations))
+                .document(driverId.toString())
+
+        locationRef.addSnapshotListener { snapshot, e ->
+            if (e != null) {
+
             }
         }
     }
