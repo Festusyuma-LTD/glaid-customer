@@ -22,7 +22,7 @@ import festusyuma.com.glaid.helpers.Api
 import festusyuma.com.glaid.helpers.Dashboard
 import festusyuma.com.glaid.model.PaymentCards
 import festusyuma.com.glaid.model.Wallet
-import festusyuma.com.glaid.request.PreferredPayment
+import festusyuma.com.glaid.requestdto.PreferredPayment
 import org.json.JSONObject
 import java.text.NumberFormat
 
@@ -233,7 +233,10 @@ class PaymentActivity : AppCompatActivity() {
             setLoading(true)
             val prefPayment = if (value in listOf("wallet", "cash")) {
                 PreferredPayment(value)
-            }else PreferredPayment("card", value.toLong())
+            }else PreferredPayment(
+                "card",
+                value.toLong()
+            )
 
             val req = object : JsonObjectRequest(
                 Method.POST,

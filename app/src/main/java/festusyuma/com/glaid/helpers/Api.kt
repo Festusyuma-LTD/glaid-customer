@@ -21,5 +21,9 @@ class Api {
         fun removeCardUrl(cardId: Long): String {
             return "${API_BASE_URL}customer/payment/card/$cardId/remove"
         }
+
+        fun orderDetails(orderId: Long): String {
+            return "${API_BASE_URL}customer/booking/order/$orderId"
+        }
     }
 }

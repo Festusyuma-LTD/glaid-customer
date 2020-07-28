@@ -21,7 +21,7 @@ import com.wang.avi.AVLoadingIndicatorView
 import festusyuma.com.glaid.helpers.Api
 import festusyuma.com.glaid.helpers.Dashboard
 import festusyuma.com.glaid.helpers.capitalizeWords
-import festusyuma.com.glaid.request.OrderRequest
+import festusyuma.com.glaid.requestdto.OrderRequest
 import festusyuma.com.glaid.model.PaymentCards
 import festusyuma.com.glaid.model.live.LiveOrder
 import org.json.JSONObject

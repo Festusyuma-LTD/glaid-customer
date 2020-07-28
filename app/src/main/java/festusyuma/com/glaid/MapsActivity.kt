@@ -34,14 +34,19 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.*
+import festusyuma.com.glaid.helpers.Dashboard
 import festusyuma.com.glaid.model.FSLocation
 import festusyuma.com.glaid.model.Order
+import festusyuma.com.glaid.model.Truck
 import festusyuma.com.glaid.model.User
 import festusyuma.com.glaid.model.fs.FSPendingOrder
 import festusyuma.com.glaid.model.live.PendingOrder
+import festusyuma.com.glaid.request.OrderRequests
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
+    private var firstLaunch = true
     private val errorDialogRequest = 9001
 
     private val requestCode = 42
@@ -58,10 +63,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var driverMarker: Marker
 
     private lateinit var userLocationBtn: ImageView
-    private lateinit var livePendingOrder: PendingOrder
 
     private lateinit var authPref: SharedPreferences
     private lateinit var dataPref: SharedPreferences
+    private lateinit var livePendingOrder: PendingOrder
+    private lateinit var listener: ListenerRegistration
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -83,6 +89,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         if (isServiceOk()) initMap()
         startFragment()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (firstLaunch) {
+            firstLaunch = false
+            return
+        }
+
+
+        startOrderStatusListener()
     }
 
     private fun isServiceOk(): Boolean {
@@ -116,6 +134,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             if (orderJson != null) {
                 val order = gson.fromJson(orderJson, Order::class.java)
                 initiateLivePendingOrder(order)
+                startOrderStatusListener()
 
                 when(order.statusId) {
                     1L -> startPendingOrderFragment()
@@ -145,13 +164,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun initiateLivePendingOrder(order: Order) {
         livePendingOrder = ViewModelProviders.of(this).get(PendingOrder::class.java)
+        livePendingOrder.id.value = order.id
         livePendingOrder.amount.value = order.amount
         livePendingOrder.gasType.value = order.gasType
         livePendingOrder.gasUnit.value = order.gasUnit
         livePendingOrder.quantity.value = order.quantity
         livePendingOrder.statusId.value = order.statusId
-        livePendingOrder.truck.value = order.truck
-        livePendingOrder.driverName.value = order.truck?.driverName
         livePendingOrder.driver.value = order.driver
     }
 
@@ -321,25 +339,33 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun startOrderStatusListener() {
+        Log.v(FIRE_STORE_LOG_TAG, "Listener started")
         val orderId = livePendingOrder.id.value?: return
 
         val locationRef =
             db.collection(getString(R.string.fs_pending_orders))
                 .document(orderId.toString())
 
-        locationRef.addSnapshotListener { snapshot, e ->
+        listener = locationRef.addSnapshotListener(this, MetadataChanges.INCLUDE) { snapshot, e ->
             if (e != null) {
                 Log.v(FIRE_STORE_LOG_TAG, "$e")
                 return@addSnapshotListener
             }
 
+            Log.v(FIRE_STORE_LOG_TAG, "Got here")
             if (snapshot != null) {
-                val order = snapshot.toObject(FSPendingOrder::class.java)
-                if (order != null) {
-                    if (order.status != livePendingOrder.statusId.value) {
-                        when(order.status) {
-                            2L -> driverAssignedData(order)
-                            3L -> startOnTheWayFragment()
+                Log.v(FIRE_STORE_LOG_TAG, "Got here too")
+                if (!snapshot.metadata.isFromCache) {
+                    Log.v(FIRE_STORE_LOG_TAG, "Got here defs")
+                    val order = snapshot.toObject(FSPendingOrder::class.java)
+                    if (order != null) {
+                        Log.v(FIRE_STORE_LOG_TAG, "Got here inside")
+                        if (order.status != livePendingOrder.statusId.value) {
+                            when(order.status) {
+                                OrderStatusCode.DRIVER_ASSIGNED -> driverAssignedData(order)
+                                OrderStatusCode.ON_THE_WAY -> startTrackingDriver()
+                                OrderStatusCode.DELIVERED -> orderCompleted()
+                            }
                         }
                     }
                 }
@@ -349,29 +375,44 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun driverAssignedData(order: FSPendingOrder) {
         livePendingOrder.statusId.value = order.status
-        livePendingOrder.driverName.value = order.driver?.fullName
 
         val fsDriver = order.driver?: return
-        livePendingOrder.driver.value = User(
+        val driver = User(
             fsDriver.email,
             fsDriver.fullName,
             fsDriver.tel,
-            order.driverId?.toLong()
+            order.driverId
         )
+
+        order.truck?: return
+        val truck = Truck(
+            order.truck.make,
+            order.truck.model,
+            order.truck.year,
+            order.truck.color
+        )
+
+        livePendingOrder.driver.value = driver
+        livePendingOrder.truck.value = truck
+        startDriverAssignedFragment()
     }
 
     private fun startTrackingDriver() {
-        val driverId = livePendingOrder.driver.value?.id?: return
+        startOnTheWayFragment()
+    }
 
-        val locationRef =
-            db.collection(getString(R.string.fs_user_locations))
-                .document(driverId.toString())
+    private fun orderCompleted() {
+        livePendingOrder.id.value = null
+        livePendingOrder.amount.value = null
+        livePendingOrder.gasType.value = null
+        livePendingOrder.gasUnit.value = null
+        livePendingOrder.quantity.value = null
+        livePendingOrder.statusId.value = null
+        livePendingOrder.driver.value = null
+        livePendingOrder.truck.value = null
 
-        locationRef.addSnapshotListener { snapshot, e ->
-            if (e != null) {
-
-            }
-        }
+        startRootFragment()
+        listener.remove()
     }
 
     private fun moveCamera(location: LatLng, zoom: Float = 15.0f) {

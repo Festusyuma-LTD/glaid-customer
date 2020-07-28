@@ -10,9 +10,10 @@ data class FSPendingOrder (
         var gasType: String?= null,
         var gasTypeUnit: String?= null,
         var amount: Double?= null,
-        var driverId: String? = null,
+        var driverId: Long? = null,
         var driver: FSUser? = null,
         var status: Long? = OrderStatusCode.PENDING,
+        val truck: FSTruck? = null,
 
         @ServerTimestamp
         val timestamp: Timestamp? = null

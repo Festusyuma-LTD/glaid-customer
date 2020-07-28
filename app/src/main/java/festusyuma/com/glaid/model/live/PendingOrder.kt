@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import festusyuma.com.glaid.model.Truck
 import festusyuma.com.glaid.model.User
+import festusyuma.com.glaid.model.fs.FSUser
 
 class PendingOrder: ViewModel() {
     val id: MutableLiveData<Long> = MutableLiveData()
@@ -13,6 +14,5 @@ class PendingOrder: ViewModel() {
     val amount: MutableLiveData<Double> = MutableLiveData()
     var statusId: MutableLiveData<Long> = MutableLiveData()
     var truck: MutableLiveData<Truck> = MutableLiveData()
-    val driverName: MutableLiveData<String> = MutableLiveData()
     val driver: MutableLiveData<User> = MutableLiveData()
 }

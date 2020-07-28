@@ -66,6 +66,7 @@
     <string name="order_details">Order Details</string>
     <string name="top_questions">Top Questions</string>
     <string name="contact_us">Contact Us</string>
+    <string name="sh_token">auth_token</string>
     <string name="auth_key_name">authorization</string>
     <string name="gas_button_label">Gas</string>
     <string name="diesel_button_label">Diesel</string>
@@ -156,6 +157,8 @@
     <string name="from_the_nearest_fuel_station">From the nearest fuel station</string>
     <string name="fs_user_locations">User Locations</string>
     <string name="fs_pending_orders">Pending Orders</string>
+    <string name="fs_pending_orders_driver_id">driverId</string>
+    <string name="fs_pending_orders_status">status</string>
     <string name="item">Item</string>
     <string name="price">Price</string>
     <string name="diesel">Diesel</string>

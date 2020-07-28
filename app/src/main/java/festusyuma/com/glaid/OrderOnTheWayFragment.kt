@@ -42,7 +42,7 @@ class OrderOnTheWayFragment : Fragment(R.layout.order_on_the_way) {
         driverPhone = requireActivity().findViewById(R.id.driverPhone)
         driverChat = requireActivity().findViewById(R.id.driverChat)
 
-        driverName.text = getString(R.string.order_driver_name).format(livePendingOrder.driverName.value?.capitalizeWords())
+        driverName.text = getString(R.string.order_driver_name).format(livePendingOrder.driver.value?.fullName?.capitalizeWords())
         quantity.text = getString(R.string.formatted_quantity).format(livePendingOrder.quantity.value, livePendingOrder.gasUnit.value)
         amount.text = getString(R.string.formatted_amount).format(numberFormatter.format(livePendingOrder.amount.value))
         gasType.text = livePendingOrder.gasType.value?.capitalizeWords()
