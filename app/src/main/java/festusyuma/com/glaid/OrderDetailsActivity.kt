@@ -72,5 +72,8 @@ class OrderDetailsActivity : AppCompatActivity() {
     }
 
     fun viewInvoiceClick(view: View) {}
-    fun rateCustomerClick(view: View) {}
+    fun rateCustomerClick(view: View) {
+        val intent = Intent(this,RateDriverActivity::class.java)
+        startActivity(intent)
+    }
 }
