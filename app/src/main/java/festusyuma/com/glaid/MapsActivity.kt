@@ -99,8 +99,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             return
         }
 
-
-        startOrderStatusListener()
+        if (this::livePendingOrder.isInitialized) {
+            if (livePendingOrder.id.value != null) startOrderStatusListener()
+        }
     }
 
     private fun isServiceOk(): Boolean {
