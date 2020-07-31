@@ -204,7 +204,19 @@ class Dashboard {
             )
         }else null
 
+        val driverRating = if (!data.isNull("driverRating")) {
+            val rating =  data.getJSONObject("driverRating")
+            rating.getDouble("userRating")
+        }else null
+
+        val customerRating = if (!data.isNull("customerRating")) {
+            val rating =  data.getJSONObject("customerRating")
+            rating.getDouble("userRating")
+        }else null
+
         val order = Order(driver, paymentMethod, gasType, gasUnit, quantity, amount, deliveryPrice, tax, statusId, address, scheduledDate, truck)
+        order.driverRating = driverRating
+        order.customerRating = customerRating
         order.id = id
 
         return order

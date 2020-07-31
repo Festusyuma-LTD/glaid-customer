@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.Window
-import android.view.WindowManager
+import android.widget.RatingBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import festusyuma.com.glaid.helpers.capitalizeWords
@@ -23,6 +23,8 @@ class OrderDetailsActivity : AppCompatActivity() {
     private lateinit var amount: TextView
     private lateinit var status: TextView
     private lateinit var driverName: TextView
+    private lateinit var rateDriverBtn: TextView
+    private lateinit var driverRatingBar: RatingBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val w: Window = window
@@ -49,6 +51,8 @@ class OrderDetailsActivity : AppCompatActivity() {
         amount = findViewById(R.id.paymentCost)
         status = findViewById(R.id.statusType)
         driverName = findViewById(R.id.driverNameText)
+        rateDriverBtn = findViewById(R.id.rateDriverBtn)
+        driverRatingBar = findViewById(R.id.driverRating)
 
         quantity.text = getString(R.string.formatted_quantity).format(order.quantity, order.gasUnit)
         gasType.text = order.gasType.capitalizeWords()
@@ -58,6 +62,14 @@ class OrderDetailsActivity : AppCompatActivity() {
         driverName.text = getString(R.string.order_details_driver_name).format(
             order.driver?.fullName?.capitalizeWords()
         )
+
+        val driverRating = order.driverRating
+
+        if (driverRating != null) {
+            rateDriverBtn.visibility = View.GONE
+            driverRatingBar.visibility = View.VISIBLE
+            driverRatingBar.rating = driverRating.toFloat()
+        }
     }
 
     private fun getDeliveryStatusString(statusId: Long): String {
@@ -74,7 +86,11 @@ class OrderDetailsActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    fun viewInvoiceClick(view: View) {}
+    fun viewInvoiceClick(view: View) {
+        val intent = Intent(this, ReceiptActivity::class.java)
+        intent.putExtra("order", gson.toJson(order))
+        startActivity(intent)
+    }
 
     fun rateCustomerClick(view: View) {
         val bundle = Bundle()
