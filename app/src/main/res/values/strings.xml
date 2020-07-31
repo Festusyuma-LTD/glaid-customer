@@ -177,4 +177,6 @@
     <string name="order_number">Order number: %1$s</string>
     <string name="order_date">12:30 AM</string>
     <string name="total">Total</string>
+    <string name="view_receipt">View Receipt</string>
+    <string name="status">Status</string>
 </resources>
