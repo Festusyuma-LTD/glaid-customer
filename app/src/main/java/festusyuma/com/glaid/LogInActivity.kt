@@ -66,7 +66,7 @@ class LogInActivity : AppCompatActivity() {
                 Response.Listener {
                     response ->
                     if (response.getInt("status") == 200) {
-                        val sharedPref = getSharedPreferences("auth_token", Context.MODE_PRIVATE)
+                        val sharedPref = getSharedPreferences(getString(R.string.cached_authentication), Context.MODE_PRIVATE)
                         val data = response.getJSONObject("data")
                         val serverToken = data.getString("token")
 
@@ -79,7 +79,7 @@ class LogInActivity : AppCompatActivity() {
                                         val token = tokenRes.token
                                         if (token != null) {
                                             with (sharedPref.edit()) {
-                                                putString(getString(R.string.auth_key_name), token)
+                                                putString(getString(R.string.sh_authorization), token)
                                                 commit()
                                             }
 
@@ -158,9 +158,9 @@ class LogInActivity : AppCompatActivity() {
     }
 
     fun logout() {
-        val sharedPref = getSharedPreferences("auth_token", Context.MODE_PRIVATE)
+        val sharedPref = getSharedPreferences(getString(R.string.cached_authentication), Context.MODE_PRIVATE)
         with(sharedPref.edit()) {
-            remove(getString(R.string.auth_key_name))
+            remove(getString(R.string.sh_authorization))
             commit()
         }
 

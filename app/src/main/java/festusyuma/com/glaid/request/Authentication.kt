@@ -13,8 +13,8 @@ open class Authentication(private val c: Activity): LoadingAndErrorHandler(c) {
     private lateinit var authPref: SharedPreferences
 
     fun getAuthentication(callback: (authentication: MutableMap<String, String>) -> Unit) {
-        val authKeyName = c.getString(R.string.auth_key_name)
-        val tokenKeyName = c.getString(R.string.sh_token)
+        val authKeyName = c.getString(R.string.sh_authorization)
+        val tokenKeyName = c.getString(R.string.cached_authentication)
 
         authPref = c.getSharedPreferences(authKeyName, Context.MODE_PRIVATE)
         if (authPref.contains(tokenKeyName)) {
@@ -33,7 +33,7 @@ open class Authentication(private val c: Activity): LoadingAndErrorHandler(c) {
     }
 
     fun logout() {
-        val dataPref = c.getSharedPreferences(c.getString(R.string.auth_key_name), Context.MODE_PRIVATE)
+        val dataPref = c.getSharedPreferences(c.getString(R.string.sh_authorization), Context.MODE_PRIVATE)
         val authPref = c.getSharedPreferences(c.getString(R.string.cached_data), Context.MODE_PRIVATE)
 
         with(authPref.edit()) {

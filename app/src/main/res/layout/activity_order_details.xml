@@ -44,7 +44,6 @@
         android:id="@+id/orderDetailScroll"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="20dp"
         android:background="#F7F7F7"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -179,7 +178,8 @@
                 android:id="@+id/destination"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Customer location"
+                android:padding="5dp"
+                tools:text="Customer location"
                 android:layout_marginHorizontal="10dp"
                 android:textColor="#333333"
                 app:layout_constraintBottom_toBottomOf="@+id/locationAndTimeDetails"
@@ -328,7 +328,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
-                android:layout_marginRight="20dp"
                 android:onClick="rateCustomerClick"
                 android:text="Rate Driver"
                 android:textAllCaps="false"
@@ -388,44 +387,41 @@
                 app:layout_constraintTop_toBottomOf="@+id/imageView23" />
 
             <TextView
-                android:id="@+id/textView50"
+                android:id="@+id/driverNameText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginLeft="20dp"
-                android:text="Your driver was"
                 android:textColor="#EDE5F2"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="@+id/yourDriver"
                 app:layout_constraintStart_toStartOf="@+id/yourDriver"
                 app:layout_constraintTop_toTopOf="@+id/yourDriver" />
 
-            <TextView
-                android:id="@+id/driverNameText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginLeft="5dp"
-                android:text="John Musa"
-                android:textColor="#EDE5F2"
-                android:textSize="12sp"
-                app:layout_constraintBaseline_toBaselineOf="@+id/textView50"
-                app:layout_constraintStart_toEndOf="@+id/textView50" />
-
             <ImageView
                 android:id="@+id/userProfileImg"
                 android:layout_width="44dp"
                 android:layout_height="44dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginRight="20dp"
                 app:layout_constraintBottom_toBottomOf="@+id/yourDriver"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/yourDriver"
                 app:srcCompat="@drawable/ic_user_light"
-                android:contentDescription="TODO"
+                android:contentDescription="@string/profile_image_placeholder"
                 tools:ignore="VectorDrawableCompat" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
+    <FrameLayout
+        android:id="@+id/ratingFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <include layout="@layout/loading" />
+    <include layout="@layout/error_message" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,7 +17,7 @@ class Dashboard {
             val dashboard = Dashboard()
             Log.v("ApiLog", "Response lass: $data")
 
-            val sharedPref = context.getSharedPreferences("cached_data", Context.MODE_PRIVATE)
+            val sharedPref = context.getSharedPreferences(context.getString(R.string.cached_data), Context.MODE_PRIVATE)
             val user = gson.toJson(dashboard.getUser(data.getJSONObject("user")))
             val prefPayment = if (data.isNull("preferredPaymentMethod")) {
                 "wallet"

@@ -53,12 +53,12 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        dataPref = requireActivity().getSharedPreferences("cached_data", Context.MODE_PRIVATE)
+        dataPref = requireActivity().getSharedPreferences(getString(R.string.cached_data), Context.MODE_PRIVATE)
         errorMsg = requireActivity().findViewById(R.id.errorMsg)
         liveOrder = ViewModelProviders.of(requireActivity()).get(LiveOrder::class.java)
 
-        val authSharedPref = this.activity?.getSharedPreferences("auth_token", Context.MODE_PRIVATE)
-        authToken = authSharedPref?.getString(getString(R.string.auth_key_name), "")?: ""
+        val authSharedPref = this.activity?.getSharedPreferences(getString(R.string.cached_authentication), Context.MODE_PRIVATE)
+        authToken = authSharedPref?.getString(getString(R.string.sh_authorization), "")?: ""
         gasType = requireArguments().getString("type", "diesel")
 
         queue = Volley.newRequestQueue(requireContext())
@@ -207,9 +207,9 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
     fun logout() {
         val act = requireActivity()
 
-        val sharedPref = act.getSharedPreferences("auth_token", Context.MODE_PRIVATE)
+        val sharedPref = act.getSharedPreferences(getString(R.string.cached_authentication), Context.MODE_PRIVATE)
         with(sharedPref.edit()) {
-            remove(getString(R.string.auth_key_name))
+            remove(getString(R.string.sh_authorization))
             commit()
         }
 

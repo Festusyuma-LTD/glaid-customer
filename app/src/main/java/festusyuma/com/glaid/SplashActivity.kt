@@ -10,11 +10,8 @@ import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import com.google.gson.JsonElement
-import com.google.gson.JsonParser
 import festusyuma.com.glaid.helpers.Api
 import festusyuma.com.glaid.helpers.Dashboard
-import festusyuma.com.glaid.model.CustomResponse
 
 
 class SplashActivity : AppCompatActivity() {
@@ -32,10 +29,10 @@ class SplashActivity : AppCompatActivity() {
     private val runnable = Runnable {
 
         if (!isFinishing) {
-            val sharedPref = getSharedPreferences("auth_token", Context.MODE_PRIVATE)
-            if (sharedPref.contains(getString(R.string.auth_key_name))) {
+            val sharedPref = getSharedPreferences(getString(R.string.cached_authentication), Context.MODE_PRIVATE)
+            if (sharedPref.contains(getString(R.string.sh_authorization))) {
 
-                val auth = sharedPref.getString(getString(R.string.auth_key_name), "")
+                val auth = sharedPref.getString(getString(R.string.sh_authorization), "")
                 if (auth != null) {
                     queue.add(dashboard(auth))
                 }
@@ -85,9 +82,9 @@ class SplashActivity : AppCompatActivity() {
     }
 
     fun logout() {
-        val sharedPref = getSharedPreferences("auth_token", Context.MODE_PRIVATE)
+        val sharedPref = getSharedPreferences(getString(R.string.cached_authentication), Context.MODE_PRIVATE)
         with(sharedPref.edit()) {
-            remove(getString(R.string.auth_key_name))
+            remove(getString(R.string.sh_authorization))
             commit()
         }
 

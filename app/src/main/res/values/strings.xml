@@ -66,8 +66,8 @@
     <string name="order_details">Order Details</string>
     <string name="top_questions">Top Questions</string>
     <string name="contact_us">Contact Us</string>
-    <string name="sh_token">auth_token</string>
-    <string name="auth_key_name">authorization</string>
+    <string name="cached_authentication">cached_authentication</string>
+    <string name="sh_authorization">authorization</string>
     <string name="gas_button_label">Gas</string>
     <string name="diesel_button_label">Diesel</string>
     <string name="custom_quantity_button_label">Enter custom quantity</string>
@@ -174,4 +174,6 @@
     <string name="trip_start_soon">Driver will soon start trip</string>
     <string name="text_driver">Text Driver</string>
     <string name="cached_data">cached_data</string>
+    <string name="order_details_driver_name" >Your driver was %1$s</string>
+    <string name="please_rate_your_driver">Please rate your driver</string>
 </resources>

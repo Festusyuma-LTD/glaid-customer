@@ -9,7 +9,6 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.EditText
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -55,10 +54,10 @@ class AddCardActivity : AppCompatActivity() {
         setContentView(R.layout.activity_add_card)
 
         PaystackSdk.initialize(this)
-        sharedPref = getSharedPreferences("auth_token", Context.MODE_PRIVATE)
-        dataSharedPref = getSharedPreferences("cached_data", Context.MODE_PRIVATE)
-        if (sharedPref.contains(getString(R.string.auth_key_name))) {
-            token = sharedPref.getString(getString(R.string.auth_key_name), token)
+        sharedPref = getSharedPreferences(getString(R.string.cached_authentication), Context.MODE_PRIVATE)
+        dataSharedPref = getSharedPreferences(getString(R.string.cached_data), Context.MODE_PRIVATE)
+        if (sharedPref.contains(getString(R.string.sh_authorization))) {
+            token = sharedPref.getString(getString(R.string.sh_authorization), token)
         }
 
         loadingCover = findViewById(R.id.loadingCoverConstraint)
@@ -316,9 +315,9 @@ class AddCardActivity : AppCompatActivity() {
     }
 
     fun logout() {
-        val sharedPref = getSharedPreferences("auth_token", Context.MODE_PRIVATE)
+        val sharedPref = getSharedPreferences(getString(R.string.cached_authentication), Context.MODE_PRIVATE)
         with(sharedPref.edit()) {
-            remove(getString(R.string.auth_key_name))
+            remove(getString(R.string.sh_authorization))
             commit()
         }
 

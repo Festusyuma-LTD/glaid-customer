@@ -28,7 +28,7 @@ class OrderHistoryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_order_history)
 
-        dataPref = getSharedPreferences("cached_data", Context.MODE_PRIVATE)
+        dataPref = getSharedPreferences(getString(R.string.cached_data), Context.MODE_PRIVATE)
         val layoutManager = LinearLayoutManager(this)
         val typeToken = object: TypeToken<MutableList<Order>>(){}.type
         val ordersJson = dataPref.getString(getString(R.string.sh_orders), null)

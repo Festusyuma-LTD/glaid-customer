@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.EditText
 import android.widget.TextView
 import festusyuma.com.glaid.model.User
 
@@ -18,7 +17,7 @@ class EditProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_profile)
 
-        val sharedPref = getSharedPreferences("cached_data", Context.MODE_PRIVATE)
+        val sharedPref = getSharedPreferences(getString(R.string.cached_data), Context.MODE_PRIVATE)
         if (sharedPref.contains(getString(R.string.sh_user_details))) {
 
             val user = sharedPref.getString(getString(R.string.sh_user_details), null)
@@ -44,15 +43,15 @@ class EditProfileActivity : AppCompatActivity() {
     }
 
     fun logout(view: View) {
-        val sharedPref = getSharedPreferences("auth_token", Context.MODE_PRIVATE)
-        val dataSharedPref = getSharedPreferences("cached_data", Context.MODE_PRIVATE)
+        val sharedPref = getSharedPreferences(getString(R.string.cached_authentication), Context.MODE_PRIVATE)
+        val dataSharedPref = getSharedPreferences(getString(R.string.cached_data), Context.MODE_PRIVATE)
         with(sharedPref.edit()) {
             clear()
             commit()
         }
 
         with(dataSharedPref.edit()) {
-            remove(getString(R.string.auth_key_name))
+            remove(getString(R.string.sh_authorization))
             clear()
             commit()
         }
