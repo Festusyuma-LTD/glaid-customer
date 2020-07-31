@@ -22,13 +22,15 @@ class RateDriverActivity : Fragment(R.layout.activity_rate_driver) {
         ratingBar = requireActivity().findViewById(R.id.ratingBar)
         doneBtn = requireActivity().findViewById(R.id.doneBtn)
         doneBtn.setOnClickListener {
-            if (ratingBar.rating <= 0) OrderRequests(requireActivity()).showError("Rating cannot be 0")
+            if (ratingBar.rating <= 0) {
+                OrderRequests(requireActivity()).showError("Rating cannot be 0")
+            }else {
+                val orderId = order.id ?: return@setOnClickListener
+                val ratingRequest = RatingRequest(orderId, ratingBar.rating.toDouble())
 
-            val orderId = order.id ?: return@setOnClickListener
-            val ratingRequest = RatingRequest(orderId, ratingBar.rating.toDouble())
-
-            OrderRequests(requireActivity()).rateDriver(ratingRequest) {
-                requireActivity().supportFragmentManager.popBackStackImmediate()
+                OrderRequests(requireActivity()).rateDriver(ratingRequest) {
+                    requireActivity().supportFragmentManager.popBackStackImmediate()
+                }
             }
         }
     }

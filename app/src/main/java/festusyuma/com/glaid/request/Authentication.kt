@@ -13,8 +13,8 @@ open class Authentication(private val c: Activity): LoadingAndErrorHandler(c) {
     private lateinit var authPref: SharedPreferences
 
     fun getAuthentication(callback: (authentication: MutableMap<String, String>) -> Unit) {
-        val authKeyName = c.getString(R.string.sh_authorization)
-        val tokenKeyName = c.getString(R.string.cached_authentication)
+        val authKeyName = c.getString(R.string.cached_authentication)
+        val tokenKeyName = c.getString(R.string.sh_authorization)
 
         authPref = c.getSharedPreferences(authKeyName, Context.MODE_PRIVATE)
         if (authPref.contains(tokenKeyName)) {

@@ -54,7 +54,7 @@ class OrderRequests(private val c: Activity): Authentication(c) {
         }
     }
 
-    fun rateDriver(ratingRequest: RatingRequest, callback: (response: JSONObject) -> Unit) {
+    fun rateDriver(ratingRequest: RatingRequest, callback: () -> Unit) {
         if (!operationRunning) {
             setLoading(true)
 
@@ -66,7 +66,7 @@ class OrderRequests(private val c: Activity): Authentication(c) {
                     ratingRequestJsonObj,
                     Response.Listener { response ->
                         if (response.getInt("status") == 200) {
-                            callback(response.getJSONObject("data"))
+                            callback()
                         }else showError(response.getString("message"))
 
                         setLoading(false)
