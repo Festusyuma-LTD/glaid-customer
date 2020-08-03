@@ -49,3 +49,18 @@ class OrderStatusCode {
         }
     }
 }
+
+class PaymentType {
+    companion object {
+        const val CARD = "card"
+        const val WALLET = "wallet"
+        const val CASH = "on_delivery"
+
+        const val WALLET_TEXT = "Glaid Wallet"
+        const val CASH_TEXT = "Cash"
+
+        fun all(): List<String> {
+            return listOf(CARD, WALLET, CASH)
+        }
+    }
+}

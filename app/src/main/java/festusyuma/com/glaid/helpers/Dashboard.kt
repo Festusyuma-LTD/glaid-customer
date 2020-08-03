@@ -132,8 +132,8 @@ class Dashboard {
     }
 
     fun pendingOrder(data: JSONArray): Order? {
-        if (data.length() > 0) {
-            val order = convertOrderJSonToOrder(data[0] as JSONObject)
+        for (i in 0 until data.length()) {
+            val order = convertOrderJSonToOrder(data[i] as JSONObject)
             if (order.statusId < 4) {
                 return order
             }
