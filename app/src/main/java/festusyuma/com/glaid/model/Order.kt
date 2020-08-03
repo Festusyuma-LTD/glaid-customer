@@ -15,5 +15,7 @@ data class Order (
     var deliveryAddress: Address,
     val scheduledDate: LocalDateTime? = null,
     var truck: Truck? = null,
-    var driverRating: Double? = null
+    var driverRating: Double? = null,
+    var customerRating: Double? = null,
+    var id: Long? = null
 )

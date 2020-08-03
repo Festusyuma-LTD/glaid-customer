@@ -1,13 +1,12 @@
 package festusyuma.com.glaid
 
 import android.content.Intent
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.Window
-import android.view.WindowManager
+import android.widget.RatingBar
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import festusyuma.com.glaid.helpers.capitalizeWords
 import festusyuma.com.glaid.model.Order
 import java.text.NumberFormat
@@ -23,10 +22,12 @@ class OrderDetailsActivity : AppCompatActivity() {
     private lateinit var deliveryTime: TextView
     private lateinit var amount: TextView
     private lateinit var status: TextView
+    private lateinit var driverName: TextView
+    private lateinit var rateDriverBtn: TextView
+    private lateinit var driverRatingBar: RatingBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val w: Window = window
-        w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
         w.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
 
         super.onCreate(savedInstanceState)
@@ -49,12 +50,26 @@ class OrderDetailsActivity : AppCompatActivity() {
         deliveryTime = findViewById(R.id.destinationTime)
         amount = findViewById(R.id.paymentCost)
         status = findViewById(R.id.statusType)
+        driverName = findViewById(R.id.driverNameText)
+        rateDriverBtn = findViewById(R.id.rateDriverBtn)
+        driverRatingBar = findViewById(R.id.driverRating)
 
         quantity.text = getString(R.string.formatted_quantity).format(order.quantity, order.gasUnit)
         gasType.text = order.gasType.capitalizeWords()
         deliveryAddress.text = order.deliveryAddress.address
         amount.text = getString(R.string.formatted_amount).format(numberFormatter.format(order.amount))
         status.text = getDeliveryStatusString(order.statusId)
+        driverName.text = getString(R.string.order_details_driver_name).format(
+            order.driver?.fullName?.capitalizeWords()
+        )
+
+        val driverRating = order.driverRating
+
+        if (driverRating != null) {
+            rateDriverBtn.visibility = View.GONE
+            driverRatingBar.visibility = View.VISIBLE
+            driverRatingBar.rating = driverRating.toFloat()
+        }
     }
 
     private fun getDeliveryStatusString(statusId: Long): String {
@@ -71,6 +86,23 @@ class OrderDetailsActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    fun viewInvoiceClick(view: View) {}
-    fun rateCustomerClick(view: View) {}
+    fun viewInvoiceClick(view: View) {
+        val intent = Intent(this, ReceiptActivity::class.java)
+        intent.putExtra("order", gson.toJson(order))
+        startActivity(intent)
+    }
+
+    fun rateCustomerClick(view: View) {
+        val bundle = Bundle()
+        val ratingFragment = RateDriverActivity()
+
+        bundle.putString("order", gson.toJson(order))
+        ratingFragment.arguments = bundle
+
+        supportFragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.slide_up, R.anim.slide_down, R.anim.slide_up, R.anim.slide_down)
+            .replace(R.id.ratingFragment, ratingFragment)
+            .addToBackStack(null)
+            .commit()
+    }
 }

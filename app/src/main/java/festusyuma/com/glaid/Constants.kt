@@ -36,3 +36,16 @@ val defaultRetryPolicy = DefaultRetryPolicy(
     DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
     DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
 )
+
+class OrderStatusCode {
+    companion object {
+        const val PENDING: Long = 1
+        const val DRIVER_ASSIGNED: Long = 2
+        const val ON_THE_WAY: Long = 3
+        const val DELIVERED: Long = 4
+
+        fun all(): List<Long> {
+            return listOf(PENDING, DRIVER_ASSIGNED, ON_THE_WAY, DELIVERED)
+        }
+    }
+}

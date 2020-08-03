@@ -21,7 +21,7 @@ import com.wang.avi.AVLoadingIndicatorView
 import festusyuma.com.glaid.helpers.Api
 import festusyuma.com.glaid.helpers.Dashboard
 import festusyuma.com.glaid.helpers.capitalizeWords
-import festusyuma.com.glaid.request.OrderRequest
+import festusyuma.com.glaid.requestdto.OrderRequest
 import festusyuma.com.glaid.model.PaymentCards
 import festusyuma.com.glaid.model.live.LiveOrder
 import org.json.JSONObject
@@ -64,9 +64,9 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
 
         liveOrder = ViewModelProviders.of(requireActivity()).get(LiveOrder::class.java)
         queue = Volley.newRequestQueue(requireContext())
-        authSharedPref = requireActivity().getSharedPreferences("auth_token", Context.MODE_PRIVATE)
-        token = authSharedPref.getString(getString(R.string.auth_key_name), "")?: ""
-        dataPref = requireActivity().getSharedPreferences("cached_data", Context.MODE_PRIVATE)
+        authSharedPref = requireActivity().getSharedPreferences(getString(R.string.cached_authentication), Context.MODE_PRIVATE)
+        token = authSharedPref.getString(getString(R.string.sh_authorization), "")?: ""
+        dataPref = requireActivity().getSharedPreferences(getString(R.string.cached_data), Context.MODE_PRIVATE)
 
         initLoadingAndError()
         initElements()
@@ -285,9 +285,9 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
     }
 
     private fun logout() {
-        val sharedPref = requireActivity().getSharedPreferences("auth_token", Context.MODE_PRIVATE)
+        val sharedPref = requireActivity().getSharedPreferences(getString(R.string.cached_authentication), Context.MODE_PRIVATE)
         with(sharedPref.edit()) {
-            remove(getString(R.string.auth_key_name))
+            remove(getString(R.string.sh_authorization))
             commit()
         }
 

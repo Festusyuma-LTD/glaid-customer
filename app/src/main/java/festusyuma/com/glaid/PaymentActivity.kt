@@ -22,7 +22,7 @@ import festusyuma.com.glaid.helpers.Api
 import festusyuma.com.glaid.helpers.Dashboard
 import festusyuma.com.glaid.model.PaymentCards
 import festusyuma.com.glaid.model.Wallet
-import festusyuma.com.glaid.request.PreferredPayment
+import festusyuma.com.glaid.requestdto.PreferredPayment
 import org.json.JSONObject
 import java.text.NumberFormat
 
@@ -54,16 +54,16 @@ class PaymentActivity : AppCompatActivity() {
 
         queue = Volley.newRequestQueue(this)
 
-        val authPref = getSharedPreferences("auth_token", Context.MODE_PRIVATE)
-        if (authPref.contains(getString(R.string.auth_key_name))) {
-            token = authPref.getString(getString(R.string.auth_key_name), token)
+        val authPref = getSharedPreferences(getString(R.string.cached_authentication), Context.MODE_PRIVATE)
+        if (authPref.contains(getString(R.string.sh_authorization))) {
+            token = authPref.getString(getString(R.string.sh_authorization), token)
         }
     }
 
     override fun onResume() {
         super.onResume()
 
-        dataPref = getSharedPreferences("cached_data", Context.MODE_PRIVATE)
+        dataPref = getSharedPreferences(getString(R.string.cached_data), Context.MODE_PRIVATE)
         if (dataPref.contains(getString(R.string.sh_preferred_payment))) {
             val prefPayment = dataPref.getString(getString(R.string.sh_preferred_payment), "wallet")
             preferredPayment = prefPayment?: "wallet"
@@ -233,7 +233,10 @@ class PaymentActivity : AppCompatActivity() {
             setLoading(true)
             val prefPayment = if (value in listOf("wallet", "cash")) {
                 PreferredPayment(value)
-            }else PreferredPayment("card", value.toLong())
+            }else PreferredPayment(
+                "card",
+                value.toLong()
+            )
 
             val req = object : JsonObjectRequest(
                 Method.POST,
@@ -318,9 +321,9 @@ class PaymentActivity : AppCompatActivity() {
     }
 
     private fun logout() {
-        val sharedPref = getSharedPreferences("auth_token", Context.MODE_PRIVATE)
+        val sharedPref = getSharedPreferences(getString(R.string.cached_authentication), Context.MODE_PRIVATE)
         with(sharedPref.edit()) {
-            remove(getString(R.string.auth_key_name))
+            remove(getString(R.string.sh_authorization))
             commit()
         }
 

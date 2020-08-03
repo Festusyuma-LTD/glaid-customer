@@ -32,7 +32,6 @@ import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRe
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.wang.avi.AVLoadingIndicatorView
 import festusyuma.com.glaid.helpers.Api
-import festusyuma.com.glaid.helpers.Dashboard
 import festusyuma.com.glaid.model.Address
 import festusyuma.com.glaid.model.live.LiveAddress
 import festusyuma.com.glaid.model.live.LiveOrder
@@ -81,12 +80,12 @@ class AddressFragment : Fragment(R.layout.fragment_address) {
         liveAddress = ViewModelProviders.of(this).get(LiveAddress::class.java)
 
         queue = Volley.newRequestQueue(requireContext())
-        authPref = requireActivity().getSharedPreferences("auth_token", Context.MODE_PRIVATE)
-        if (authPref.contains(getString(R.string.auth_key_name))) {
-            token = authPref.getString(getString(R.string.auth_key_name), token)
+        authPref = requireActivity().getSharedPreferences(getString(R.string.cached_authentication), Context.MODE_PRIVATE)
+        if (authPref.contains(getString(R.string.sh_authorization))) {
+            token = authPref.getString(getString(R.string.sh_authorization), token)
         }
 
-        dataPref = requireActivity().getSharedPreferences("cached_data", Context.MODE_PRIVATE)
+        dataPref = requireActivity().getSharedPreferences(getString(R.string.cached_data), Context.MODE_PRIVATE)
 
         initLoadingAndError()
         initLiveSearch()
@@ -276,9 +275,9 @@ class AddressFragment : Fragment(R.layout.fragment_address) {
     }
 
     private fun logout() {
-        val sharedPref = requireActivity().getSharedPreferences("auth_token", Context.MODE_PRIVATE)
+        val sharedPref = requireActivity().getSharedPreferences(getString(R.string.cached_authentication), Context.MODE_PRIVATE)
         with(sharedPref.edit()) {
-            remove(getString(R.string.auth_key_name))
+            remove(getString(R.string.sh_authorization))
             commit()
         }
 

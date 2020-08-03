@@ -67,7 +67,7 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
         initCurrentDate()
         initElements()
 
-        dataPref = requireActivity().getSharedPreferences("cached_data", Context.MODE_PRIVATE)
+        dataPref = requireActivity().getSharedPreferences(getString(R.string.cached_data), Context.MODE_PRIVATE)
         initDefaultAddress()
         toggleAddressType(liveOrder.addressType.value?: "home")
 
@@ -285,9 +285,9 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
     }
 
     private fun logout() {
-        val sharedPref = requireActivity().getSharedPreferences("auth_token", Context.MODE_PRIVATE)
+        val sharedPref = requireActivity().getSharedPreferences(getString(R.string.cached_authentication), Context.MODE_PRIVATE)
         with(sharedPref.edit()) {
-            remove(getString(R.string.auth_key_name))
+            remove(getString(R.string.sh_authorization))
             commit()
         }
 
