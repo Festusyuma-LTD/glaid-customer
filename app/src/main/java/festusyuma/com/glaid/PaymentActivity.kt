@@ -115,9 +115,9 @@ class PaymentActivity : AppCompatActivity() {
             cardRadioGroup.addView(cardRadioItem)
         }
 
-        walletRadio = getDefaultRadio(PaymentType.WALLET, PaymentType.WALLET)
+        walletRadio = getDefaultRadio(PaymentType.WALLET, PaymentType.WALLET_TEXT)
         cardRadioGroup.addView(walletRadio)
-        cardRadioGroup.addView(getDefaultRadio(PaymentType.CASH, PaymentType.CASH))
+        cardRadioGroup.addView(getDefaultRadio(PaymentType.CASH, PaymentType.CASH_TEXT))
     }
 
     private fun getDefaultRadio(value: String, title: String): View {
@@ -234,11 +234,10 @@ class PaymentActivity : AppCompatActivity() {
             val prefPayment = when (value) {
                 PaymentType.WALLET -> PreferredPayment(PaymentType.WALLET)
                 PaymentType.CASH -> PreferredPayment(PaymentType.CASH)
-                PaymentType.CARD -> PreferredPayment(
+                else -> PreferredPayment(
                     "card",
                     value.toLong()
                 )
-                else -> return
             }
 
             val req = object : JsonObjectRequest(
