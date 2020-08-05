@@ -24,6 +24,7 @@ import festusyuma.com.glaid.helpers.capitalizeWords
 import festusyuma.com.glaid.requestdto.OrderRequest
 import festusyuma.com.glaid.model.PaymentCards
 import festusyuma.com.glaid.model.live.LiveOrder
+import festusyuma.com.glaid.requestdto.PreferredPayment
 import org.json.JSONObject
 import java.text.NumberFormat
 
@@ -120,10 +121,10 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
         }
 
         cashPayment = requireActivity().findViewById(R.id.cashPayment)
-        cashPayment.setOnClickListener {updatePredefinedPaymentMethod("cash")}
+        cashPayment.setOnClickListener {updatePredefinedPaymentMethod(PaymentType.CASH)}
 
         walletPayment = requireActivity().findViewById(R.id.walletPayment)
-        walletPayment.setOnClickListener { updatePredefinedPaymentMethod("wallet") }
+        walletPayment.setOnClickListener { updatePredefinedPaymentMethod(PaymentType.WALLET) }
     }
 
     private fun updatePredefinedPaymentMethod(method: String) {
@@ -134,13 +135,15 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
     }
 
     private fun updatePaymentMethodInput() {
-        if (liveOrder.paymentType.value.equals("card", true)) {
+        if (liveOrder.paymentType.value == PaymentType.CARD) {
             val card = liveOrder.paymentCard.value
             if (card != null) {
                 paymentMethod.text = getString(R.string.card_no_input).format(card.cardNo)
             }else { requireActivity().supportFragmentManager.popBackStackImmediate() }
         }else {
-            paymentMethod.text = liveOrder.paymentType.value?.capitalizeWords()
+            paymentMethod.text = if (liveOrder.paymentType.value == PaymentType.WALLET) {
+                PaymentType.WALLET_TEXT
+            }else PaymentType.CASH_TEXT
         }
     }
 
@@ -168,7 +171,7 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
             expDateTV.text = getString(R.string.exp_date).format(card.expMonth, card.expYear)
             preView.setOnClickListener {
                 cardsListCover.visibility = View.GONE
-                liveOrder.paymentType.value = "card"
+                liveOrder.paymentType.value = PaymentType.CARD
                 liveOrder.paymentCard.value = card
                 updatePaymentMethodInput()
             }
@@ -178,13 +181,13 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
     }
 
     private fun setPreferredPaymentMethod() {
-        val prefPayment = dataPref.getString(getString(R.string.sh_preferred_payment), null)?: "wallet"
-        if (!prefPayment.equals("wallet", true) && !prefPayment.equals("cash", true)) {
-            liveOrder.paymentType.value = "card"
-            liveOrder.paymentCard.value = cards.find { it.id == prefPayment.toLong() }
-        }else {
+        val prefPayment = dataPref.getString(getString(R.string.sh_preferred_payment), null)?: PaymentType.WALLET
+        if (prefPayment == PaymentType.WALLET || prefPayment == PaymentType.CASH) {
             liveOrder.paymentType.value = prefPayment
             liveOrder.paymentCard.value = null
+        }else {
+            liveOrder.paymentType.value = PaymentType.CARD
+            liveOrder.paymentCard.value = cards.find { it.id == prefPayment.toLong() }
         }
 
         updatePaymentMethodInput()

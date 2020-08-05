@@ -132,8 +132,8 @@ class Dashboard {
     }
 
     fun pendingOrder(data: JSONArray): Order? {
-        if (data.length() > 0) {
-            val order = convertOrderJSonToOrder(data[0] as JSONObject)
+        for (i in 0 until data.length()) {
+            val order = convertOrderJSonToOrder(data[i] as JSONObject)
             if (order.statusId < 4) {
                 return order
             }
@@ -214,10 +214,44 @@ class Dashboard {
             rating.getDouble("userRating")
         }else null
 
-        val order = Order(driver, paymentMethod, gasType, gasUnit, quantity, amount, deliveryPrice, tax, statusId, address, scheduledDate, truck)
-        order.driverRating = driverRating
-        order.customerRating = customerRating
-        order.id = id
+        val tripStarted = if (!data.isNull("tripStarted")) {
+            val timeJson = data.getString("tripStarted")
+            LocalDateTime.parse(timeJson)
+        }else {
+            val timeJson = data.getString("created")
+            LocalDateTime.parse(timeJson)
+        }
+
+        val tripEnded = if (!data.isNull("tripEnded")) {
+            val timeJson = data.getString("tripEnded")
+            LocalDateTime.parse(timeJson)
+        }else {
+            val timeJson = data.getString("created")
+            LocalDateTime.parse(timeJson)
+        }
+
+        val timeJson = data.getString("created")
+        val created = LocalDateTime.parse(timeJson)
+
+        val order = Order(
+            driver,
+            paymentMethod,
+            gasType,
+            gasUnit,
+            quantity,
+            amount,
+            deliveryPrice,
+            tax, statusId,
+            address,
+            scheduledDate,
+            truck,
+            id = id,
+            driverRating = driverRating,
+            customerRating = customerRating,
+            tripStarted = tripStarted,
+            tripEnded = tripEnded,
+            created = created
+        )
 
         return order
     }

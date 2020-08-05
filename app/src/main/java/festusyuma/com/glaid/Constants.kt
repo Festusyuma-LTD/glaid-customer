@@ -49,9 +49,26 @@ class OrderStatusCode {
         const val DRIVER_ASSIGNED: Long = 2
         const val ON_THE_WAY: Long = 3
         const val DELIVERED: Long = 4
+        const val PENDING_PAYMENT: Long = 5
+        const val FAILED: Long = 6
 
         fun all(): List<Long> {
             return listOf(PENDING, DRIVER_ASSIGNED, ON_THE_WAY, DELIVERED)
+        }
+    }
+}
+
+class PaymentType {
+    companion object {
+        const val CARD = "card"
+        const val WALLET = "wallet"
+        const val CASH = "on_delivery"
+
+        const val WALLET_TEXT = "Glaid Wallet"
+        const val CASH_TEXT = "Cash"
+
+        fun all(): List<String> {
+            return listOf(CARD, WALLET, CASH)
         }
     }
 }

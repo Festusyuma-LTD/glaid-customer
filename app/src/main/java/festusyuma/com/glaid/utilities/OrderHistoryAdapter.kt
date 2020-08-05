@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import festusyuma.com.glaid.OrderStatusCode
 import festusyuma.com.glaid.R
 import festusyuma.com.glaid.helpers.capitalizeWords
 import festusyuma.com.glaid.model.Order
@@ -55,18 +56,22 @@ class OrderHistoryAdapter(
 
     private fun getDeliveryStatusString(statusId: Long): String {
         return when(statusId) {
-            1L -> "Pending"
-            2L -> "Driver assigned"
-            3L -> "On the way"
+            OrderStatusCode.PENDING -> "Pending"
+            OrderStatusCode.DRIVER_ASSIGNED -> "Driver assigned"
+            OrderStatusCode.ON_THE_WAY -> "On the way"
+            OrderStatusCode.PENDING_PAYMENT -> "Pending payment"
+            OrderStatusCode.FAILED -> "Failed"
             else -> "Delivered"
         }
     }
 
     private fun getDeliveryStatusColour(statusId: Long): Int {
         return when(statusId) {
-            1L -> Color.parseColor("#FC7400")
-            2L -> Color.parseColor("#FC7400")
-            3L -> Color.parseColor("#27AE60")
+            OrderStatusCode.PENDING -> Color.parseColor("#FC7400")
+            OrderStatusCode.DRIVER_ASSIGNED -> Color.parseColor("#FC7400")
+            OrderStatusCode.ON_THE_WAY -> Color.parseColor("#27AE60")
+            OrderStatusCode.FAILED -> Color.parseColor("#ff4626")
+            OrderStatusCode.PENDING_PAYMENT -> Color.parseColor("#FC7400")
             else -> Color.parseColor("#4E007C")
         }
     }
