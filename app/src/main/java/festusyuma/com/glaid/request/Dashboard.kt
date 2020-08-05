@@ -29,7 +29,7 @@ class Dashboard {
             Response.ErrorListener {
                 response ->
 
-                val sharedPref = context.getSharedPreferences("auth_token", Context.MODE_PRIVATE)
+                val sharedPref = context.getSharedPreferences(context.getString(R.string.cached_authentication), Context.MODE_PRIVATE)
                 with (sharedPref.edit()) {
                     //remove(context.getString(R.string.auth_key_name))
                     commit()

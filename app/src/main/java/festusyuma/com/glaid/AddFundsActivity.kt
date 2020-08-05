@@ -60,12 +60,12 @@ class AddFundsActivity : AppCompatActivity() {
         selectCardButton.setOnClickListener { cardsListCover.visibility = View.VISIBLE }
         clickToClose.setOnClickListener { cardsListCover.visibility = View.GONE }
 
-        authPref = getSharedPreferences("auth_token", Context.MODE_PRIVATE)
-        if (authPref.contains(getString(R.string.auth_key_name))) {
-            token = authPref.getString(getString(R.string.auth_key_name), token)
+        authPref = getSharedPreferences(getString(R.string.cached_authentication), Context.MODE_PRIVATE)
+        if (authPref.contains(getString(R.string.sh_authorization))) {
+            token = authPref.getString(getString(R.string.sh_authorization), token)
         }
 
-        dataPref = getSharedPreferences("cached_data", Context.MODE_PRIVATE)
+        dataPref = getSharedPreferences(getString(R.string.cached_data), Context.MODE_PRIVATE)
         if (dataPref.contains(getString(R.string.sh_wallet))) {
             val cardsJSons = dataPref.getString(getString(R.string.sh_payment_cards), null)
             val typeToken = object: TypeToken<MutableList<PaymentCards>>(){}.type

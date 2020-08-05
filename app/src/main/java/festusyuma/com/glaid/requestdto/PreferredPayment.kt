@@ -1,4 +1,4 @@
-package festusyuma.com.glaid.request
+package festusyuma.com.glaid.requestdto
 
 data class PreferredPayment (
     val type: String,

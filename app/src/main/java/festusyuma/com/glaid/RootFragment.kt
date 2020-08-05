@@ -34,12 +34,12 @@ class RootFragment : Fragment(R.layout.fragment_root) {
 
         errorMsg = requireActivity().findViewById(R.id.errorMsg)
 
-        val sharedPref = requireActivity().getSharedPreferences("cached_data", Context.MODE_PRIVATE)
+        val sharedPref = requireActivity().getSharedPreferences(getString(R.string.cached_data), Context.MODE_PRIVATE)
         val userJson = sharedPref?.getString("userDetails", "null")
 
         if (userJson != null) {
             val user = gson.fromJson(userJson, User::class.java)
-            greeting.text = getString(R.string.home_greeting_intro_text).format(user.fullName.getFirst())
+            greeting.text = getString(R.string.home_greeting_intro_text).format(user.fullName?.getFirst())
         }
 
         dieselBtn.setOnClickListener{

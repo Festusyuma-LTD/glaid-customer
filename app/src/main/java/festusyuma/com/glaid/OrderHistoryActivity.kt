@@ -20,15 +20,13 @@ class OrderHistoryActivity : AppCompatActivity() {
     private lateinit var orderHistoryAdapter: OrderHistoryAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
-        val w: Window = window
-        w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
-        w.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_order_history)
+    }
 
-        dataPref = getSharedPreferences("cached_data", Context.MODE_PRIVATE)
+    override fun onResume() {
+        super.onResume()
+        dataPref = getSharedPreferences(getString(R.string.cached_data), Context.MODE_PRIVATE)
         val layoutManager = LinearLayoutManager(this)
         val typeToken = object: TypeToken<MutableList<Order>>(){}.type
         val ordersJson = dataPref.getString(getString(R.string.sh_orders), null)

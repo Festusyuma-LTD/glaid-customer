@@ -17,7 +17,7 @@ class Dashboard {
             val dashboard = Dashboard()
             Log.v("ApiLog", "Response lass: $data")
 
-            val sharedPref = context.getSharedPreferences("cached_data", Context.MODE_PRIVATE)
+            val sharedPref = context.getSharedPreferences(context.getString(R.string.cached_data), Context.MODE_PRIVATE)
             val user = gson.toJson(dashboard.getUser(data.getJSONObject("user")))
             val prefPayment = if (data.isNull("preferredPaymentMethod")) {
                 "wallet"
@@ -153,6 +153,7 @@ class Dashboard {
     }
 
     fun convertOrderJSonToOrder(data: JSONObject): Order {
+        val id = data.getLong("id")
         val quantity = data.getDouble("quantity")
         val amount = data.getDouble("amount")
         val deliveryPrice = data.getDouble("deliveryPrice")
@@ -183,8 +184,6 @@ class Dashboard {
             val driverUser = driverJson.getJSONObject("user")
 
             Truck (
-                driverUser.getString("fullName"),
-                driverUser.getString("tel"),
                 truckJson.getString("make"),
                 truckJson.getString("model"),
                 truckJson.getString("year"),
@@ -205,6 +204,21 @@ class Dashboard {
             )
         }else null
 
-        return Order(driver, paymentMethod, gasType, gasUnit, quantity, amount, deliveryPrice, tax, statusId, address, scheduledDate, truck)
+        val driverRating = if (!data.isNull("driverRating")) {
+            val rating =  data.getJSONObject("driverRating")
+            rating.getDouble("userRating")
+        }else null
+
+        val customerRating = if (!data.isNull("customerRating")) {
+            val rating =  data.getJSONObject("customerRating")
+            rating.getDouble("userRating")
+        }else null
+
+        val order = Order(driver, paymentMethod, gasType, gasUnit, quantity, amount, deliveryPrice, tax, statusId, address, scheduledDate, truck)
+        order.driverRating = driverRating
+        order.customerRating = customerRating
+        order.id = id
+
+        return order
     }
 }

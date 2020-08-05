@@ -1,4 +1,4 @@
-package festusyuma.com.glaid.request
+package festusyuma.com.glaid.requestdto
 
 import festusyuma.com.glaid.model.Address
 import org.threeten.bp.LocalDateTime
