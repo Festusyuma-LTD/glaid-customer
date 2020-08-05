@@ -17,5 +17,8 @@ data class Order (
     var truck: Truck? = null,
     var driverRating: Double? = null,
     var customerRating: Double? = null,
-    var id: Long? = null
+    var id: Long? = null,
+    var tripStarted: LocalDateTime? = null,
+    var tripEnded: LocalDateTime? = null,
+    var created: LocalDateTime? = null
 )

@@ -9,6 +9,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import festusyuma.com.glaid.helpers.capitalizeWords
 import festusyuma.com.glaid.model.Order
+import kotlinx.android.synthetic.main.activity_order_details.*
+import org.threeten.bp.format.DateTimeFormatter
 import java.text.NumberFormat
 
 class OrderDetailsActivity : AppCompatActivity() {
@@ -59,11 +61,17 @@ class OrderDetailsActivity : AppCompatActivity() {
         deliveryAddress.text = order.deliveryAddress.address
         amount.text = getString(R.string.formatted_amount).format(numberFormatter.format(order.amount))
         status.text = getDeliveryStatusString(order.statusId)
+        locationTime.text = order.tripStarted?.format(DateTimeFormatter.ofPattern("HH:mm"))
+        destinationTime.text = order.tripEnded?.format(DateTimeFormatter.ofPattern("HH:mm"))
         driverName.text = getString(R.string.order_details_driver_name).format(
             order.driver?.fullName?.capitalizeWords()
         )
 
         val driverRating = order.driverRating
+
+        if (order.statusId != OrderStatusCode.DELIVERED) {
+            rateDriverBtn.visibility = View.GONE
+        }
 
         if (driverRating != null) {
             rateDriverBtn.visibility = View.GONE
@@ -74,16 +82,17 @@ class OrderDetailsActivity : AppCompatActivity() {
 
     private fun getDeliveryStatusString(statusId: Long): String {
         return when(statusId) {
-            1L -> "Pending"
-            2L -> "Driver assigned"
-            3L -> "On the way"
+            OrderStatusCode.PENDING -> "Pending"
+            OrderStatusCode.DRIVER_ASSIGNED -> "Driver assigned"
+            OrderStatusCode.ON_THE_WAY -> "On the way"
+            OrderStatusCode.PENDING_PAYMENT -> "Pending payment"
+            OrderStatusCode.FAILED -> "Failed"
             else -> "Delivered"
         }
     }
 
     fun backClick(view: View) {
-        val intent = Intent(this, OrderHistoryActivity::class.java)
-        startActivity(intent)
+        finish()
     }
 
     fun viewInvoiceClick(view: View) {
