@@ -24,6 +24,9 @@
     <string name="invite_friends">Invite Friends</string>
     <string name="get_started_button">get started button</string>
     <string name="liters">liters</string>
+    <string name="chat_user_name">Chat With %1$s</string>
+    <string name="type_a_message">Type a message</string>
+    <string name="chat_with_dafom">Chat With Dafom</string>
     <string name="dot">•</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

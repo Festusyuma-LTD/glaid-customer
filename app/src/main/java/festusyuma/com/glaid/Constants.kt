@@ -1,5 +1,6 @@
 package festusyuma.com.glaid
 
+import android.view.animation.AlphaAnimation
 import com.android.volley.DefaultRetryPolicy
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
@@ -14,6 +15,8 @@ const val EXTRA_FORGOT_PASSWORD_CHOICE = "email"
 const val EXTRA_RECOVERY_TYPE = "recoverType"
 const val EXTRA_QUESTION = "question"
 const val COUNTRY_CODE = "+234"
+
+val buttonClickAnim: AlphaAnimation? = AlphaAnimation(1f, 0.8f)
 
 const val API_LOG_TAG = "apiLog"
 const val APP_LOG_TAG = "appLog"
@@ -36,6 +39,9 @@ val defaultRetryPolicy = DefaultRetryPolicy(
     DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
     DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
 )
+
+const val CHAT_EMAIL = "CHAT_EMAIL"
+const val CHAT_NAME = "CHAT_NAME"
 
 class OrderStatusCode {
     companion object {

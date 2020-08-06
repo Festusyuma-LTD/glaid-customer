@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".controller.ChatActivity">
+
+    <TextView
+        android:id="@+id/chatTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center_vertical"
+        android:text="@string/chat_with_dafom"
+        android:textColor="#333333"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/defaultBackBtn"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="20dp"
+        
+        android:onClick="editBackBtnClick"
+        app:layout_constraintBottom_toBottomOf="@+id/chatTitle"
+        app:layout_constraintEnd_toStartOf="@+id/chatTitle"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/chatTitle" />
+
+    <ImageView
+        android:id="@+id/btnImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/todo"
+        android:onClick="editBackBtnClick"
+        app:layout_constraintBottom_toBottomOf="@+id/defaultBackBtn"
+        app:layout_constraintEnd_toEndOf="@+id/defaultBackBtn"
+        app:layout_constraintStart_toStartOf="@+id/defaultBackBtn"
+        app:layout_constraintTop_toTopOf="@+id/defaultBackBtn"
+        app:srcCompat="@drawable/h_back_btn" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="0dp"
+        android:layout_height="03dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/ic_glaidline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chatTitle" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/chatView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/chatMessageBox"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
+        android:id="@+id/chatMessageBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/ic_chat_input"
+        android:ems="10"
+        android:hint="@string/type_a_message"
+        android:inputType="textMultiLine"
+        android:maxLines="3"
+        android:minLines="2"
+        android:paddingStart="10dp"
+        
+        android:paddingTop="1dp"
+        android:paddingEnd="40dp"
+        
+        android:paddingBottom="1dp"
+        android:scrollbars="vertical"
+        android:importantForAutofill="no"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        android:textColorHint="@color/mapFillColor"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="@string/jargon" />
+
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="30dp"
+        android:layout_height="35dp"
+        android:layout_marginEnd="10dp"
+        
+        android:layout_marginBottom="10dp"
+        android:clickable="true"
+        android:contentDescription="@string/todo"
+        android:focusable="true"
+        android:onClick="sendMessageClick"
+        app:layout_constraintEnd_toEndOf="@+id/chatMessageBox"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:srcCompat="@drawable/ic_send_btn" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
