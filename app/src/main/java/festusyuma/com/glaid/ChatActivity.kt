@@ -18,7 +18,7 @@ import festusyuma.com.glaid.adapters.ChatReceiveItem
 import festusyuma.com.glaid.adapters.ChatSendItem
 import festusyuma.com.glaid.model.User
 import festusyuma.com.glaid.model.fs.FSChatMessage
-import festusyuma.com.glaid.requestdto.Chat
+import festusyuma.com.glaid.model.Chat
 
 class ChatActivity : AppCompatActivity() {
 
