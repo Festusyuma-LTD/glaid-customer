@@ -57,11 +57,11 @@ class OrderOnTheWayFragment : Fragment(R.layout.order_on_the_way) {
         amount.text = getString(R.string.formatted_amount).format(numberFormatter.format(livePendingOrder.amount.value))
         gasType.text = livePendingOrder.gasType.value?.capitalizeWords()
 
-        driverPhone.setOnClickListener { callCustomer() }
+        driverPhone.setOnClickListener { callDriver() }
         driverChat.setOnClickListener { chat() }
     }
 
-    private fun callCustomer() {
+    private fun callDriver() {
         val tel = livePendingOrder.driver.value?.tel
         if (tel != null) {
             val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", tel.addCountryCode(), null))
