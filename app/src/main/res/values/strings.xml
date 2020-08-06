@@ -161,6 +161,10 @@
     <string name="fs_pending_orders">Pending Orders</string>
     <string name="fs_pending_orders_driver_id">driverId</string>
     <string name="fs_pending_orders_status">status</string>
+    <string name="fs_chat_rooms">Chat Rooms</string>
+    <string name="fs_messages">messages</string>
+    <string name="fs_order_messages">Order Messages</string>
+    <string name="fs_support_messages">Support Messages</string>
     <string name="item">Item</string>
     <string name="price">Price</string>
     <string name="diesel">Diesel</string>
