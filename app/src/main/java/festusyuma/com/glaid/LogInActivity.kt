@@ -17,16 +17,11 @@ import com.wang.avi.AVLoadingIndicatorView
 import festusyuma.com.glaid.helpers.Api
 import festusyuma.com.glaid.helpers.Dashboard
 import festusyuma.com.glaid.request.Authentication
+import festusyuma.com.glaid.request.LoadingAndErrorHandler
 import festusyuma.com.glaid.requestdto.LoginRequest
 import org.json.JSONObject
 
 class LogInActivity : AppCompatActivity() {
-
-    private var operationRunning = false
-
-    private lateinit var loadingCover: ConstraintLayout
-    private lateinit var loadingAvi: AVLoadingIndicatorView
-    private lateinit var errorMsg: TextView
 
     private lateinit var emailInput: EditText
     private lateinit var passwordInput: EditText
@@ -34,10 +29,6 @@ class LogInActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_log_in)
-
-        loadingCover = findViewById(R.id.loadingCoverConstraint)
-        loadingAvi = loadingCover.findViewById(R.id.avi)
-        errorMsg = findViewById(R.id.errorMsg)
 
         emailInput = findViewById(R.id.emailInput)
         passwordInput = findViewById(R.id.passwordInput)

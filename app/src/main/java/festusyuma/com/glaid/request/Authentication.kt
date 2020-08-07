@@ -54,7 +54,6 @@ open class Authentication(private val c: Activity): LoadingAndErrorHandler(c) {
                                 }
                                 Dashboard.store(c, userDetails)
                                 callback()
-                                setLoading(false)
 
                             }.addOnFailureListener { errorOccurred() }
                     }else {
