@@ -47,7 +47,7 @@ class DashboardRequest(private val c: Activity): Authentication(c) {
             }
 
             req.retryPolicy = defaultRetryPolicy
-            req.tag = "update_order_status"
+            req.tag = "dashboard"
             queue.add(req)
         }
     }

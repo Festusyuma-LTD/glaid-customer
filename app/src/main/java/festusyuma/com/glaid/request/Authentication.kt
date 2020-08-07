@@ -69,7 +69,7 @@ open class Authentication(private val c: Activity): LoadingAndErrorHandler(c) {
             )
 
             req.retryPolicy = defaultRetryPolicy
-            req.tag = "login"
+            req.tag = "authentication"
             queue.add(req)
         }
     }

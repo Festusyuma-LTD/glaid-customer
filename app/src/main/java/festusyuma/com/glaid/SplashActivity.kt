@@ -2,6 +2,7 @@ package festusyuma.com.glaid
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -12,83 +13,37 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import festusyuma.com.glaid.helpers.Api
 import festusyuma.com.glaid.helpers.Dashboard
+import festusyuma.com.glaid.request.DashboardRequest
 
 
 class SplashActivity : AppCompatActivity() {
 
-    private val handler = Handler()
-    private lateinit var queue: RequestQueue
+    private val splashDelayTimeZone: Long = 1000
+    private lateinit var authPref: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        queue = Volley.newRequestQueue(this)
-    }
+        val authPrefName = getString(R.string.cached_authentication)
+        val tokenKeyName = getString(R.string.sh_authorization)
 
-    private val runnable = Runnable {
-
-        if (!isFinishing) {
-            val sharedPref = getSharedPreferences(getString(R.string.cached_authentication), Context.MODE_PRIVATE)
-            if (sharedPref.contains(getString(R.string.sh_authorization))) {
-
-                val auth = sharedPref.getString(getString(R.string.sh_authorization), "")
-                if (auth != null) {
-                    queue.add(dashboard(auth))
-                }
-            }else startActivity(Intent(applicationContext, CarouselActivity::class.java))
-        }
-    }
-
-    private fun dashboard(token: String): JsonObjectRequest {
-
-        return object : JsonObjectRequest(
-            Method.GET,
-            Api.DASHBOARD,
-            null,
-            Response.Listener {
-                response ->
-                Dashboard.store(this, response.getJSONObject("data"))
-
-                startActivity(Intent(this, MapsActivity::class.java))
-                finishAffinity()
-            },
-            Response.ErrorListener { response->
-                if (response.networkResponse == null) {
+        authPref = getSharedPreferences(authPrefName, Context.MODE_PRIVATE)
+        if (authPref.contains(tokenKeyName)) {
+            val auth = authPref.getString(tokenKeyName, null)
+            if (auth != null) {
+                DashboardRequest(this).getUserDetails {
                     startActivity(Intent(this, MapsActivity::class.java))
                     finishAffinity()
-                }else {
-                    Log.v("ApiLog", response.networkResponse.statusCode.toString())
-                    logout()
                 }
-            }
-        ) {
-            override fun getHeaders(): MutableMap<String, String> {
-                return mutableMapOf(
-                    "Authorization" to "Bearer $token"
-                )
-            }
-        }
+            }else startCarouselActivity()
+        }else startCarouselActivity()
     }
 
-    override fun onResume() {
-        super.onResume()
-        handler.postDelayed(runnable, 1000)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        handler.removeCallbacks(runnable)
-    }
-
-    fun logout() {
-        val sharedPref = getSharedPreferences(getString(R.string.cached_authentication), Context.MODE_PRIVATE)
-        with(sharedPref.edit()) {
-            remove(getString(R.string.sh_authorization))
-            commit()
-        }
-
-        startActivity(Intent(this, MainActivity::class.java))
-        finishAffinity()
+    private fun startCarouselActivity() {
+        Handler().postDelayed({
+            startActivity(Intent(this, CarouselActivity::class.java))
+            finishAffinity()
+        }, splashDelayTimeZone)
     }
 }
