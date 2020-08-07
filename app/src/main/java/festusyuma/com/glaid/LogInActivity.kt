@@ -16,6 +16,7 @@ import com.android.volley.toolbox.Volley
 import com.wang.avi.AVLoadingIndicatorView
 import festusyuma.com.glaid.helpers.Api
 import festusyuma.com.glaid.helpers.Dashboard
+import festusyuma.com.glaid.request.Authentication
 import festusyuma.com.glaid.requestdto.LoginRequest
 import org.json.JSONObject
 
@@ -48,123 +49,18 @@ class LogInActivity : AppCompatActivity() {
     }
 
     fun signInMethod(view: View) {
-        if (!operationRunning) {
-            setLoading(true)
+        val loginRequest = LoginRequest(
+            emailInput.text.toString(),
+            passwordInput.text.toString()
+        )
 
-            val loginRequest = LoginRequest(
-                emailInput.text.toString(),
-                passwordInput.text.toString()
-            )
-
-            val queue = Volley.newRequestQueue(this)
-            val loginRequestJson = JSONObject(gson.toJson(loginRequest))
-
-            val request = JsonObjectRequest(
-                Request.Method.POST,
-                Api.LOGIN,
-                loginRequestJson,
-                Response.Listener {
-                    response ->
-                    if (response.getInt("status") == 200) {
-                        val sharedPref = getSharedPreferences(getString(R.string.cached_authentication), Context.MODE_PRIVATE)
-                        val data = response.getJSONObject("data")
-                        val serverToken = data.getString("token")
-
-                        auth.signInWithCustomToken(serverToken)
-                            .addOnSuccessListener {res->
-                                val user = res.user
-
-                                user?.getIdToken(true)
-                                    ?.addOnSuccessListener {tokenRes ->
-                                        val token = tokenRes.token
-                                        if (token != null) {
-                                            with (sharedPref.edit()) {
-                                                putString(getString(R.string.sh_authorization), token)
-                                                commit()
-                                            }
-
-                                            queue.add(dashboard(token))
-                                        }else errorOccurred()
-                                    }
-                                    ?.addOnFailureListener { errorOccurred() }
-                            }.addOnFailureListener { errorOccurred() }
-                    }else {
-                        setLoading(false)
-                        showError(response.getString("message"))
-                    }
-                },
-                Response.ErrorListener { response ->
-                    if (response.networkResponse != null) {
-                        showError(getString(R.string.error_occurred))
-                        response.printStackTrace()
-                    }else showError(getString(R.string.internet_error_msg))
-
-                    setLoading(false)
-                }
-            )
-
-            queue.add(request)
-        }
-    }
-
-    private fun errorOccurred(message: String? = null) {
-        setLoading(false)
-        showError(message?: "An error occurred")
-    }
-
-    private fun setLoading(loading: Boolean) {
-        if (loading) {
-            loadingCover.visibility = View.VISIBLE
-            operationRunning = true
-        }else {
-            loadingCover.visibility = View.GONE
-            operationRunning = false
-        }
-    }
-
-    private fun showError(msg: String) {
-        errorMsg.text = msg
-        errorMsg.visibility = View.VISIBLE
-    }
-
-    fun hideError(view: View) {
-        errorMsg.visibility = View.INVISIBLE
-    }
-
-    private fun dashboard(token: String): JsonObjectRequest {
-
-        return object : JsonObjectRequest(
-            Method.GET,
-            Api.DASHBOARD,
-            null,
-            Response.Listener {
-                response ->
-                Dashboard.store(this, response.getJSONObject("data"))
-
-                startActivity(Intent(this, MapsActivity::class.java))
-                finishAffinity()
-            },
-            Response.ErrorListener { response->
-                Log.v("ApiLog", response.networkResponse.statusCode.toString())
-                logout()
-            }
-        ) {
-            override fun getHeaders(): MutableMap<String, String> {
-                return mutableMapOf(
-                    "Authorization" to "Bearer $token"
-                )
-            }
+        Authentication(this).login(loginRequest) {
+            startActivity(Intent(this, MapsActivity::class.java))
+            finishAffinity()
         }
     }
 
     fun logout() {
-        val sharedPref = getSharedPreferences(getString(R.string.cached_authentication), Context.MODE_PRIVATE)
-        with(sharedPref.edit()) {
-            remove(getString(R.string.sh_authorization))
-            commit()
-        }
-
-        startActivity(Intent(this, MainActivity::class.java))
-        finishAffinity()
+        Authentication(this).logout()
     }
 }

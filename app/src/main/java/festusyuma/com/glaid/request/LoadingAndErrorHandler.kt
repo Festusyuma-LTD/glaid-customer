@@ -28,7 +28,12 @@ open class LoadingAndErrorHandler(private val c: Activity) {
         }
     }
 
+    fun errorOccurred() {
+        showError("An error occurred")
+    }
+
     fun showError(msg: String) {
+        setLoading(false)
         errorMsg.text = msg
         errorMsg.visibility = View.VISIBLE
     }

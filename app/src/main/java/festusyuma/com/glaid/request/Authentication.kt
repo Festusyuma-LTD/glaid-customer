@@ -4,13 +4,76 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import festusyuma.com.glaid.MainActivity
-import festusyuma.com.glaid.R
-import festusyuma.com.glaid.auth
+import com.android.volley.Request
+import com.android.volley.RequestQueue
+import com.android.volley.Response
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
+import festusyuma.com.glaid.*
+import festusyuma.com.glaid.helpers.Api
+import festusyuma.com.glaid.helpers.Dashboard
+import festusyuma.com.glaid.requestdto.LoginRequest
+import org.json.JSONObject
 
 open class Authentication(private val c: Activity): LoadingAndErrorHandler(c) {
 
+    val queue: RequestQueue = Volley.newRequestQueue(c)
     private lateinit var authPref: SharedPreferences
+
+    fun login(loginRequest: LoginRequest, callback: () -> Unit) {
+        if (!operationRunning) {
+            setLoading(true)
+
+            val loginRequestJson = JSONObject(gson.toJson(loginRequest))
+            val req = JsonObjectRequest(
+                Request.Method.POST,
+                Api.LOGIN,
+                loginRequestJson,
+                Response.Listener { response ->
+                    if (response.getInt("status") == 200) {
+                        val authKeyName = c.getString(R.string.cached_authentication)
+                        val tokenKeyName = c.getString(R.string.sh_authorization)
+                        authPref = c.getSharedPreferences(authKeyName, Context.MODE_PRIVATE)
+
+                        val data = response.getJSONObject("data")
+                        val serverToken = data.getString("token")
+                        val userDetails = data.getJSONObject("user")
+
+                        if (serverToken.isBlank()) {
+                            showError("An error occurred")
+                            setLoading(false)
+                            return@Listener
+                        }
+
+                        auth.signInWithCustomToken(serverToken)
+                            .addOnSuccessListener {
+
+                                with (authPref.edit()) {
+                                    putString(tokenKeyName, serverToken)
+                                    commit()
+                                }
+                                Dashboard.store(c, userDetails)
+                                callback()
+                                setLoading(false)
+
+                            }.addOnFailureListener { errorOccurred() }
+                    }else {
+                        showError(response.getString("message"))
+                    }
+                },
+                Response.ErrorListener { response ->
+                    if (response.networkResponse != null) {
+                        showError(c.getString(R.string.error_occurred))
+                        response.printStackTrace()
+                    }else showError(c.getString(R.string.internet_error_msg))
+                }
+            )
+
+            req.retryPolicy = defaultRetryPolicy
+            req.tag = "login"
+            queue.add(req)
+        }
+    }
 
     fun getAuthentication(callback: (authentication: MutableMap<String, String>) -> Unit) {
         val authKeyName = c.getString(R.string.cached_authentication)

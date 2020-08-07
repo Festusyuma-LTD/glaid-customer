@@ -20,6 +20,5 @@
         android:visibility="invisible"
         android:gravity="start|center_vertical"
         android:paddingHorizontal="20dp"
-        android:paddingVertical="20dp"
-        android:onClick="hideError"/>
+        android:paddingVertical="20dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
