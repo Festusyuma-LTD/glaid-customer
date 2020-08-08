@@ -132,6 +132,34 @@ open class Authentication(private val c: Activity): LoadingAndErrorHandler(c) {
         }
     }
 
+    fun validateOtp(passwordResetRequest: PasswordResetRequest, callback: () -> Unit) {
+        if (!operationRunning) {
+            setLoading(true)
+
+            val passwordRequestJson = JSONObject(gson.toJson(passwordResetRequest))
+            val req = JsonObjectRequest(
+                Request.Method.POST,
+                Api.VALIDATE_OTP,
+                passwordRequestJson,
+                Response.Listener { response ->
+                    if (response.getInt("status") == 200) {
+                        callback()
+                    }else showError(response.getString("message"))
+                },
+                Response.ErrorListener { response ->
+                    if (response.networkResponse != null) {
+                        showError(c.getString(R.string.error_occurred))
+                        response.printStackTrace()
+                    }else showError(c.getString(R.string.internet_error_msg))
+                }
+            )
+
+            req.retryPolicy = defaultRetryPolicy
+            req.tag = "authentication"
+            queue.add(req)
+        }
+    }
+
     fun getAuthentication(callback: (authentication: MutableMap<String, String>) -> Unit) {
         val authKeyName = c.getString(R.string.cached_authentication)
         val tokenKeyName = c.getString(R.string.sh_authorization)
