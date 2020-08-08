@@ -33,6 +33,7 @@ import kotlinx.android.synthetic.main.drawer_header.*
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.scale
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.common.ConnectionResult
@@ -114,6 +115,10 @@ class MapsActivity :
 
         if (isServiceOk()) initMap()
         startFragment()
+
+        livePendingOrder.id.observe(this, Observer { id ->
+            if (id != null) startOrderStatusListener()
+        })
     }
 
     override fun onResume() {
