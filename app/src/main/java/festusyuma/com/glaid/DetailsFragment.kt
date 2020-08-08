@@ -44,9 +44,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
     private lateinit var gasTypeObj: GasType
     private lateinit var errorMsg: TextView
 
-    private lateinit var queue: RequestQueue
     private val preDefinedQuantitiesElem: MutableList<LinearLayout> = mutableListOf()
-
     private var selectedElem: View? = null
     private var selectedQuantity: Double? = null
 
@@ -72,7 +70,6 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
     }
 
     private fun customOrderClickListener() {
-        queue.cancelAll("getGasTypeDetails")
         liveOrder.quantity.value = null
         startCustomOrderFragment()
     }
@@ -81,7 +78,6 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         if (selectedElem == null) {
             LoadingAndErrorHandler(requireActivity()).showError("Select Quantity")
         }else {
-            queue.cancelAll("getGasTypeDetails")
             liveOrder.quantity.value = selectedQuantity
 
             val homeAddressJson = dataPref.getString(getString(R.string.sh_home_address), null)
