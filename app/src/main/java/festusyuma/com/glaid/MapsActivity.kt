@@ -221,14 +221,25 @@ class MapsActivity :
                     val order = snapshot.toObject(FSPendingOrder::class.java)
                     if (order != null) {
                         if (order.status != livePendingOrder.statusId.value) {
-                            when(order.status) {
-                                OrderStatusCode.DRIVER_ASSIGNED -> driverAssignedData(order)
-                                OrderStatusCode.ON_THE_WAY -> startTrackingDriver()
-                                OrderStatusCode.DELIVERED -> orderCompleted()
-                            }
+                            updateMapWithStatusId(order)
                         }
                     }
                 }
+            }
+        }
+    }
+
+    private fun updateMapWithStatusId(order: FSPendingOrder) {
+        val statusId = order.status
+        isOnTrip = statusId == OrderStatusCode.ON_THE_WAY
+
+        when(statusId) {
+            OrderStatusCode.DRIVER_ASSIGNED -> driverAssignedData(order)
+            OrderStatusCode.ON_THE_WAY -> startTrackingDriver()
+            else -> {
+                orderCompleted()
+                if (this::driverMarker.isInitialized) driverMarker.remove()
+                removePolyLine()
             }
         }
     }
@@ -293,19 +304,6 @@ class MapsActivity :
                 }
 
                 return@forEach
-            }
-        }
-    }
-
-    private fun updateMapWithStatusId(statusId: Long?) {
-        isOnTrip = statusId == OrderStatusCode.ON_THE_WAY
-
-        when (statusId) {
-            OrderStatusCode.DRIVER_ASSIGNED -> startDriverAssignedFragment()
-            OrderStatusCode.ON_THE_WAY -> startOnTheWayFragment()
-            else -> {
-                if (this::driverMarker.isInitialized) driverMarker.remove()
-
             }
         }
     }
