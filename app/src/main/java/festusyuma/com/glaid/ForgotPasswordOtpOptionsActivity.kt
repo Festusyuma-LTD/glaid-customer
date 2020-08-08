@@ -24,12 +24,6 @@ import org.json.JSONObject
 class ForgotPasswordOtpOptionsActivity : AppCompatActivity() {
 
     private lateinit var otpChoice : String
-    private var operationRunning = false
-
-    private lateinit var loadingCover: ConstraintLayout
-    private lateinit var loadingAvi: AVLoadingIndicatorView
-    private lateinit var errorMsg: TextView
-
     private lateinit var forgotPasswordIntroText: TextView
     private lateinit var getOtpInputLabel: TextView
     private lateinit var getOtpInput: EditText
@@ -37,10 +31,6 @@ class ForgotPasswordOtpOptionsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forgot_password_otp)
-
-        loadingCover = findViewById(R.id.loadingCoverConstraint)
-        loadingAvi = loadingCover.findViewById(R.id.avi)
-        errorMsg = findViewById(R.id.errorMsg)
 
         forgotPasswordIntroText = findViewById(R.id.forgotPasswordIntroText)
         getOtpInputLabel = findViewById(R.id.getOtpInputLabel)
