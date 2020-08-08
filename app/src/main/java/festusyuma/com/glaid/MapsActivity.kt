@@ -265,7 +265,7 @@ class MapsActivity :
 
         livePendingOrder.driver.value = driver
         livePendingOrder.truck.value = truck
-        updateLocalOrderStatus(order.status!!)
+        updateLocalOrderStatus(order.status!!, driver, truck)
         startDriverAssignedFragment()
     }
 
@@ -287,7 +287,7 @@ class MapsActivity :
         listener.remove()
     }
 
-    private fun updateLocalOrderStatus(statusId: Long) {
+    private fun updateLocalOrderStatus(statusId: Long, driver: User? = null, truck: Truck? = null) {
         val typeToken = object: TypeToken<MutableList<Order>>(){}.type
         val ordersJson = dataPref.getString(getString(R.string.sh_orders), null)
         val orders = if (ordersJson != null) {
@@ -297,6 +297,9 @@ class MapsActivity :
         orders.forEach {
             if (it.id == livePendingOrder.id.value) {
                 it.statusId = statusId
+
+                if (driver != null) it.driver = driver
+                if (truck != null) it.truck = truck
 
                 with(dataPref.edit()) {
                     putString(getString(R.string.sh_orders), gson.toJson(orders))
