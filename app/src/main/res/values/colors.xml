@@ -9,5 +9,5 @@
     <color name="AppPrimaryColorSolid">#EDE5F2</color>
     <color name="AppPrimaryPurple">#4e007c</color>
     <color name="danger">#FF1F00</color>
-<!--    <color name="">#ede5f2</color>-->
+    <color name="polyLineColor" >#FC7400</color>
 </resources>

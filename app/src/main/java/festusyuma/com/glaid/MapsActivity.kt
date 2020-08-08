@@ -10,6 +10,8 @@ import android.content.res.Resources
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.TextView
@@ -30,24 +32,38 @@ import kotlinx.android.synthetic.main.activity_maps.*
 import kotlinx.android.synthetic.main.drawer_header.*
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.scale
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
-import festusyuma.com.glaid.helpers.Dashboard
+import com.google.gson.reflect.TypeToken
+import com.google.maps.internal.PolylineEncoding
+import com.google.maps.model.DirectionsRoute
 import festusyuma.com.glaid.model.FSLocation
 import festusyuma.com.glaid.model.Order
 import festusyuma.com.glaid.model.Truck
 import festusyuma.com.glaid.model.User
 import festusyuma.com.glaid.model.fs.FSPendingOrder
 import festusyuma.com.glaid.model.live.PendingOrder
-import festusyuma.com.glaid.request.OrderRequests
+import festusyuma.com.glaid.utilities.LatLngInterpolator
+import festusyuma.com.glaid.utilities.MarkerAnimation
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private var firstLaunch = true
+    private var locationUpdate = false
+    private var isOnTrip = false
+    private var isCameraSticky = true
     private val errorDialogRequest = 9001
+
+    private val updateInterval =  1000L
+    private val fastestInterval = 1000L
+    private val defaultZoom = 15.0f
+    private val defaultTilt = 0f
+    private val defaultBearing = 0f
 
     private val requestCode = 42
     private val permissions = listOf(
@@ -57,12 +73,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private var locationPermissionsGranted = false
 
-    private lateinit var mMap: GoogleMap
+    private lateinit var userLocationBtn: ImageView
+    private lateinit var gMap: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var locationCallback: LocationCallback
     private lateinit var userMarker: Marker
     private lateinit var driverMarker: Marker
-
-    private lateinit var userLocationBtn: ImageView
+    private lateinit var polyline: Polyline
 
     private lateinit var authPref: SharedPreferences
     private lateinit var dataPref: SharedPreferences
@@ -73,6 +90,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
+
+        livePendingOrder = ViewModelProviders.of(this).get(PendingOrder::class.java)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        locationCallback = locationCallback()
 
         nav_view.itemIconTintList = null;
         dataPref = getSharedPreferences(getString(R.string.cached_data), Context.MODE_PRIVATE)
@@ -99,9 +120,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             return
         }
 
-        if (this::livePendingOrder.isInitialized) {
-            if (livePendingOrder.id.value != null) startOrderStatusListener()
-        }
+        if (livePendingOrder.id.value != null) startOrderStatusListener()
     }
 
     private fun isServiceOk(): Boolean {
@@ -129,23 +148,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
     }
 
-    private fun startFragment() {
-        if (dataPref.contains(getString(R.string.sh_pending_order))) {
-            val orderJson = dataPref.getString(getString(R.string.sh_pending_order), null)
-            if (orderJson != null) {
-                val order = gson.fromJson(orderJson, Order::class.java)
-                initiateLivePendingOrder(order)
-                startOrderStatusListener()
-
-                when(order.statusId) {
-                    1L -> startPendingOrderFragment()
-                    2L -> startDriverAssignedFragment()
-                    3L -> startOnTheWayFragment()
-                }
-            }else startRootFragment()
-        }else startRootFragment()
-    }
-
     private fun getLocationPermission() {
         val deniedPermissions = mutableListOf<String>()
 
@@ -163,6 +165,23 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    private fun startFragment() {
+        if (dataPref.contains(getString(R.string.sh_pending_order))) {
+            val orderJson = dataPref.getString(getString(R.string.sh_pending_order), null)
+            if (orderJson != null) {
+                val order = gson.fromJson(orderJson, Order::class.java)
+                initiateLivePendingOrder(order)
+                when(order.statusId) {
+                    1L -> startPendingOrderFragment()
+                    2L -> startDriverAssignedFragment()
+                    3L -> startOnTheWayFragment()
+                }
+
+                startOrderStatusListener()
+            }else startRootFragment()
+        }else startRootFragment()
+    }
+
     private fun initiateLivePendingOrder(order: Order) {
         livePendingOrder = ViewModelProviders.of(this).get(PendingOrder::class.java)
         livePendingOrder.id.value = order.id
@@ -172,171 +191,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         livePendingOrder.quantity.value = order.quantity
         livePendingOrder.statusId.value = order.statusId
         livePendingOrder.driver.value = order.driver
-    }
-
-    private fun startRootFragment() {
-        supportFragmentManager.beginTransaction()
-            .setCustomAnimations(R.anim.slide_up, R.anim.slide_down, R.anim.slide_up, R.anim.slide_down)
-            .replace(R.id.frameLayoutFragment, RootFragment())
-            .commit()
-    }
-
-    private fun startPendingOrderFragment() {
-        supportFragmentManager.beginTransaction()
-            .setCustomAnimations(R.anim.slide_up, R.anim.slide_down, R.anim.slide_up, R.anim.slide_down)
-            .replace(R.id.frameLayoutFragment, PendingOrderFragment())
-            .commit()
-    }
-
-    private fun startDriverAssignedFragment() {
-        supportFragmentManager.beginTransaction()
-            .setCustomAnimations(R.anim.slide_up, R.anim.slide_down, R.anim.slide_up, R.anim.slide_down)
-            .replace(R.id.frameLayoutFragment, DriverAssignedFragment())
-            .commit()
-    }
-
-    private fun startOnTheWayFragment() {
-        supportFragmentManager.beginTransaction()
-            .setCustomAnimations(R.anim.slide_up, R.anim.slide_down, R.anim.slide_up, R.anim.slide_down)
-            .replace(R.id.frameLayoutFragment, OrderOnTheWayFragment())
-            .commit()
-    }
-
-    private fun initUserLocationBtn() {
-        userLocationBtn = findViewById(R.id.userLocationBtn)
-        userLocationBtn.setOnClickListener {
-            getUserLocation { markUserLocation(it) }
-            getUserLocation("festusyuma@gmail.com") {
-                Log.v(FIRE_STORE_LOG_TAG, "$it")
-            }
-        }
-    }
-
-    // This method is called when a user Allow or Deny our requested permissions. So it will help us to move forward if the permissions are granted
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        if (requestCode == this.requestCode) {
-            if (grantResults.isNotEmpty()) {
-                var granted = true
-
-                for (grants in grantResults) {
-                    if (grants == PackageManager.PERMISSION_DENIED) {
-                        granted = false
-                    }
-                }
-
-                locationPermissionsGranted = granted
-                if (locationPermissionsGranted) {
-                    initUserLocationBtn()
-                }
-            }
-        }
-    }
-
-    // Callback when map ready
-    @SuppressLint("MissingPermission")
-    override fun onMapReady(googleMap: GoogleMap) {
-        mMap = googleMap
-
-        if (locationPermissionsGranted) {
-            getUserLocation {markUserLocation(it)}
-
-            mMap.isMyLocationEnabled = true
-            mMap.uiSettings.isMyLocationButtonEnabled = false
-
-            if (this::livePendingOrder.isInitialized) markDriverLocation()
-        }
-
-        try {
-            // Customise the styling
-            googleMap.setMapStyle(
-                MapStyleOptions.loadRawResourceStyle(
-                    this, R.raw.uber_map_style
-                )
-            )
-        } catch (e: Resources.NotFoundException) {
-            Log.e("FragmentActivity.TAG", "Error parsing style. Error: ", e)
-        }
-    }
-
-    private fun getUserLocation(listener: (lc: Location) -> Unit): Task<Location>? {
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-
-        try {
-            if (locationPermissionsGranted) {
-                if (isLocationEnabled()) {
-                    return fusedLocationClient.lastLocation
-                        .addOnSuccessListener {lc ->
-                            if (lc != null) {
-                                listener(lc)
-                            }else Toast.makeText(this, "Unable to get location, Please check GPS", Toast.LENGTH_SHORT).show()
-                        }
-                }
-             }else Toast.makeText(this, "Permission not granted", Toast.LENGTH_SHORT).show()
-        }catch (e: SecurityException) {
-            Log.v("ApiLog", "${e.message}")
-        }
-
-        return null
-    }
-
-    private fun getUserLocation(uid: String, listener: (lc: FSLocation) -> Unit) {
-        val locationRef =
-            db.collection(getString(R.string.fs_user_locations))
-                .document(uid)
-
-        locationRef.get()
-            .addOnSuccessListener {
-                val lc = it.toObject(FSLocation::class.java)
-                if (lc != null) listener(lc)
-            }
-    }
-
-    private fun markUserLocation(lc: Location) {
-        val userLocation = LatLng(lc.latitude, lc.longitude)
-
-        val mapIcon = AppCompatResources.getDrawable(this, R.drawable.customlocation)!!.toBitmap()
-        if (!this::userMarker.isInitialized) {
-            userMarker = mMap.addMarker(
-                MarkerOptions()
-                    .position(userLocation).title("User")
-                    .icon(BitmapDescriptorFactory.fromBitmap(mapIcon))
-                    .rotation(lc.bearing)
-            )
-        }else {
-            userMarker.position = userLocation
-            userMarker.rotation = lc.bearing
-        }
-
-        moveCamera(userLocation)
-    }
-
-    private fun markDriverLocation() {
-        val driverId = livePendingOrder.driver.value?.id
-        if (driverId != null) {
-            getUserLocation(driverId.toString()) {lc ->
-
-                lc.geoPoint?: return@getUserLocation
-                lc.bearing?: return@getUserLocation
-                val driverLocation = LatLng(lc.geoPoint.latitude, lc.geoPoint.longitude)
-
-                updateMarkerPosition(driverLocation, lc)
-                moveCamera(driverLocation, 17f)
-            }
-        }
-    }
-
-    private fun updateMarkerPosition(driverLocation: LatLng, lc: FSLocation) {
-        if (!this::driverMarker.isInitialized) {
-            val mapIcon = AppCompatResources.getDrawable(this, R.drawable.truck_marker)!!.toBitmap()
-            driverMarker = mMap.addMarker(
-                MarkerOptions()
-                    .position(driverLocation).title("Driver")
-                    .icon(BitmapDescriptorFactory.fromBitmap(mapIcon))
-            )
-        }else {
-            driverMarker.position = driverLocation
-            driverMarker.rotation = lc.bearing!!
-        }
     }
 
     private fun startOrderStatusListener() {
@@ -391,6 +245,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         livePendingOrder.driver.value = driver
         livePendingOrder.truck.value = truck
+        updateLocalOrderStatus(order.status!!)
         startDriverAssignedFragment()
     }
 
@@ -412,8 +267,248 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         listener.remove()
     }
 
-    private fun moveCamera(location: LatLng, zoom: Float = 15.0f) {
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, zoom))
+    private fun updateLocalOrderStatus(statusId: Long) {
+        val typeToken = object: TypeToken<MutableList<Order>>(){}.type
+        val ordersJson = dataPref.getString(getString(R.string.sh_orders), null)
+        val orders = if (ordersJson != null) {
+            gson.fromJson(ordersJson, typeToken)
+        }else mutableListOf<Order>()
+
+        orders.forEach {
+            if (it.id == livePendingOrder.id.value) {
+                it.statusId = statusId
+
+                with(dataPref.edit()) {
+                    putString(getString(R.string.sh_orders), gson.toJson(orders))
+                    commit()
+                }
+
+                return@forEach
+            }
+        }
+    }
+
+    private fun updateMapWithStatusId(statusId: Long?) {
+        isOnTrip = statusId == OrderStatusCode.ON_THE_WAY
+
+        when (statusId) {
+            OrderStatusCode.DRIVER_ASSIGNED -> startDriverAssignedFragment()
+            OrderStatusCode.ON_THE_WAY -> startOnTheWayFragment()
+            else -> {
+                if (this::driverMarker.isInitialized) driverMarker.remove()
+
+            }
+        }
+    }
+
+    private fun startRootFragment() {
+        supportFragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.slide_up, R.anim.slide_down, R.anim.slide_up, R.anim.slide_down)
+            .replace(R.id.frameLayoutFragment, RootFragment())
+            .commit()
+    }
+
+    private fun startPendingOrderFragment() {
+        supportFragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.slide_up, R.anim.slide_down, R.anim.slide_up, R.anim.slide_down)
+            .replace(R.id.frameLayoutFragment, PendingOrderFragment())
+            .commit()
+    }
+
+    private fun startDriverAssignedFragment() {
+        supportFragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.slide_up, R.anim.slide_down, R.anim.slide_up, R.anim.slide_down)
+            .replace(R.id.frameLayoutFragment, DriverAssignedFragment())
+            .commit()
+    }
+
+    private fun startOnTheWayFragment() {
+        supportFragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.slide_up, R.anim.slide_down, R.anim.slide_up, R.anim.slide_down)
+            .replace(R.id.frameLayoutFragment, OrderOnTheWayFragment())
+            .commit()
+    }
+
+    private fun initUserLocationBtn() {
+        userLocationBtn = findViewById(R.id.userLocationBtn)
+        userLocationBtn.setOnClickListener {
+            /*if (isOnTrip) calculateDirections { addPolyLine(it) }*/
+            goToUserLocation()
+        }
+    }
+
+    private fun getZoom(): Float {
+        return if (isOnTrip) 20.0f else defaultZoom
+    }
+
+    private fun getTilt(): Float {
+        return if (isOnTrip) 45.0f else defaultTilt
+    }
+
+    private fun getBearing(): Float {
+        return if (isOnTrip) userMarker.rotation else defaultBearing
+    }
+
+    // This method is called when a user Allow or Deny our requested permissions. So it will help us to move forward if the permissions are granted
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        if (requestCode == this.requestCode) {
+            if (grantResults.isNotEmpty()) {
+                var granted = true
+
+                for (grants in grantResults) {
+                    if (grants == PackageManager.PERMISSION_DENIED) {
+                        granted = false
+                    }
+                }
+
+                locationPermissionsGranted = granted
+                if (locationPermissionsGranted) {
+                    initUserLocationBtn()
+                    if (!locationUpdate) startLocationUpdates()
+                }
+            }
+        }
+    }
+
+    // Callback when map ready
+    @SuppressLint("MissingPermission")
+    override fun onMapReady(googleMap: GoogleMap) {
+        gMap = googleMap
+
+        if (locationPermissionsGranted) {
+            getUserLocation {markUserLocation(it)}
+            gMap.uiSettings.isMyLocationButtonEnabled = false
+            gMap.uiSettings.isMyLocationButtonEnabled = false
+            if (!locationUpdate) startLocationUpdates()
+
+            if (this::livePendingOrder.isInitialized) markDriverLocation()
+        }
+
+        try {
+            // Customise the styling
+            googleMap.setMapStyle(
+                MapStyleOptions.loadRawResourceStyle(
+                    this, R.raw.uber_map_style
+                )
+            )
+        } catch (e: Resources.NotFoundException) {
+            Log.e("FragmentActivity.TAG", "Error parsing style. Error: ", e)
+        }
+    }
+
+    private fun getUserLocation(listener: (lc: Location) -> Unit): Task<Location>? {
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        try {
+            if (locationPermissionsGranted) {
+                if (isLocationEnabled()) {
+                    return fusedLocationClient.lastLocation
+                        .addOnSuccessListener {lc ->
+                            if (lc != null) {
+                                listener(lc)
+                            }else Toast.makeText(this, "Unable to get location, Please check GPS", Toast.LENGTH_SHORT).show()
+                        }
+                }
+             }else Toast.makeText(this, "Permission not granted", Toast.LENGTH_SHORT).show()
+        }catch (e: SecurityException) {
+            Log.v("ApiLog", "${e.message}")
+        }
+
+        return null
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun startLocationUpdates() {
+        locationUpdate = true
+        val locationRequest = LocationRequest()
+        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        locationRequest.interval = updateInterval
+        locationRequest.fastestInterval = fastestInterval
+
+        fusedLocationClient.requestLocationUpdates(
+            locationRequest,
+            locationCallback,
+            Looper.getMainLooper()
+        )
+    }
+
+    private fun getUserLocation(uid: String, listener: (lc: FSLocation) -> Unit) {
+        val locationRef =
+            db.collection(getString(R.string.fs_user_locations))
+                .document(uid)
+
+        locationRef.get()
+            .addOnSuccessListener {
+                val lc = it.toObject(FSLocation::class.java)
+                if (lc != null) listener(lc)
+            }
+    }
+
+    private fun markUserLocation(lc: Location) {
+        val userLocation = LatLng(lc.latitude, lc.longitude)
+
+        val mapIcon =
+            AppCompatResources
+                .getDrawable(this, R.drawable.customlocation)!!
+                .toBitmap()
+                .scale(64, 96, false)
+
+        if (!this::userMarker.isInitialized) {
+            userMarker = gMap.addMarker(
+                MarkerOptions()
+                    .position(userLocation).title("User")
+                    .icon(BitmapDescriptorFactory.fromBitmap(mapIcon))
+                    .rotation(lc.bearing)
+                    .flat(true)
+            )
+        }else {
+            MarkerAnimation.animateMarkerToGB(userMarker, userLocation, LatLngInterpolator.Spherical())
+            userMarker.rotation = lc.bearing
+        }
+
+        val cameraPosition = CameraPosition(userLocation, getZoom(), getTilt(), getBearing())
+        if (isCameraSticky) moveCamera(cameraPosition)
+    }
+
+    private fun goToUserLocation() {
+        if (this::userMarker.isInitialized) {
+            val cameraPosition = CameraPosition(userMarker.position, getZoom(), getTilt(), getBearing())
+            moveCamera(cameraPosition)
+            isCameraSticky = true
+        }
+    }
+
+    private fun markDriverLocation() {
+        val driverId = livePendingOrder.driver.value?.id
+        if (driverId != null) {
+            getUserLocation(driverId.toString()) {lc ->
+
+                lc.geoPoint?: return@getUserLocation
+                lc.bearing?: return@getUserLocation
+                val driverLocation = LatLng(lc.geoPoint.latitude, lc.geoPoint.longitude)
+
+                updateMarkerPosition(driverLocation, lc)
+                /*moveCamera(driverLocation, 17f)*/
+            }
+        }
+    }
+
+    private fun updateMarkerPosition(driverLocation: LatLng, lc: FSLocation) {
+        if (!this::driverMarker.isInitialized) {
+            val mapIcon = AppCompatResources.getDrawable(this, R.drawable.truck_marker)!!.toBitmap()
+            driverMarker = gMap.addMarker(
+                MarkerOptions()
+                    .position(driverLocation).title("Driver")
+                    .icon(BitmapDescriptorFactory.fromBitmap(mapIcon))
+            )
+        }else {
+            driverMarker.position = driverLocation
+            driverMarker.rotation = lc.bearing!!
+        }
+    }
+
+    private fun moveCamera(position: CameraPosition) {
+        gMap.animateCamera(CameraUpdateFactory.newCameraPosition(position), 1000, null)
     }
 
     // This will check if the user has turned on location from the setting
@@ -423,6 +518,40 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
             LocationManager.NETWORK_PROVIDER
         )
+    }
+
+    private fun addPolyLine(route: DirectionsRoute) {
+        if (this::gMap.isInitialized) {
+            Handler(Looper.getMainLooper()).post {
+                val decodedPathD = PolylineEncoding.decode(route.overviewPolyline.encodedPath)
+                val decodedPath = decodedPathD.map { LatLng(it.lat, it.lng) }
+                val polylineOptions =
+                    PolylineOptions()
+                        .addAll(decodedPath)
+                        .color(R.color.polyLineColor)
+                        .width(20f)
+
+                if (this::polyline.isInitialized) polyline.remove()
+                polyline = gMap.addPolyline(polylineOptions)
+            }
+        }
+    }
+
+    private fun removePolyLine() {
+        if (this::polyline.isInitialized) polyline.remove()
+    }
+
+    private fun locationCallback(): LocationCallback {
+
+        return object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult?) {
+                if (locationResult != null) {
+                    val stickyCameraState = isCameraSticky
+                    markUserLocation(locationResult.lastLocation)
+                    isCameraSticky = stickyCameraState
+                }
+            }
+        }
     }
 
     // edit profile intent
@@ -472,10 +601,5 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     fun paymentClick(view: View) {
         val paymentIntent = Intent(this, PaymentActivity::class.java)
         startActivity(paymentIntent)
-    }
-
-    fun hideError(view: View) {
-        val errorMsg: TextView = findViewById(R.id.errorMsg)
-        errorMsg.visibility = View.INVISIBLE
     }
 }
