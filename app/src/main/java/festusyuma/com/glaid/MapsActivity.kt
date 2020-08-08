@@ -385,7 +385,6 @@ class MapsActivity :
         gMap.setOnCameraMoveStartedListener(this)
 
         if (locationPermissionsGranted) {
-            getUserLocation {markUserLocation(it)}
             gMap.uiSettings.isMyLocationButtonEnabled = false
             gMap.uiSettings.isMyLocationButtonEnabled = false
             if (!locationUpdate) startLocationUpdates()
@@ -402,27 +401,6 @@ class MapsActivity :
         } catch (e: Resources.NotFoundException) {
             Log.e("FragmentActivity.TAG", "Error parsing style. Error: ", e)
         }
-    }
-
-    private fun getUserLocation(listener: (lc: Location) -> Unit): Task<Location>? {
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-
-        try {
-            if (locationPermissionsGranted) {
-                if (isLocationEnabled()) {
-                    return fusedLocationClient.lastLocation
-                        .addOnSuccessListener {lc ->
-                            if (lc != null) {
-                                listener(lc)
-                            }else Toast.makeText(this, "Unable to get location, Please check GPS", Toast.LENGTH_SHORT).show()
-                        }
-                }
-             }else Toast.makeText(this, "Permission not granted", Toast.LENGTH_SHORT).show()
-        }catch (e: SecurityException) {
-            Log.v("ApiLog", "${e.message}")
-        }
-
-        return null
     }
 
     @SuppressLint("MissingPermission")
@@ -609,5 +587,10 @@ class MapsActivity :
     fun paymentClick(view: View) {
         val paymentIntent = Intent(this, PaymentActivity::class.java)
         startActivity(paymentIntent)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (this::listener.isInitialized) listener.remove()
     }
 }
