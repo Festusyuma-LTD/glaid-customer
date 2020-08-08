@@ -13,6 +13,7 @@ import festusyuma.com.glaid.*
 import festusyuma.com.glaid.helpers.Api
 import festusyuma.com.glaid.helpers.Dashboard
 import festusyuma.com.glaid.requestdto.LoginRequest
+import festusyuma.com.glaid.requestdto.PasswordResetRequest
 import festusyuma.com.glaid.requestdto.UserRegistrationRequest
 import org.json.JSONObject
 
@@ -84,6 +85,34 @@ open class Authentication(private val c: Activity): LoadingAndErrorHandler(c) {
                 Request.Method.POST,
                 Api.REGISTER,
                 userRequestJson,
+                Response.Listener { response ->
+                    if (response.getInt("status") == 200) {
+                        callback()
+                    }else showError(response.getString("message"))
+                },
+                Response.ErrorListener { response ->
+                    if (response.networkResponse != null) {
+                        showError(c.getString(R.string.error_occurred))
+                        response.printStackTrace()
+                    }else showError(c.getString(R.string.internet_error_msg))
+                }
+            )
+
+            req.retryPolicy = defaultRetryPolicy
+            req.tag = "authentication"
+            queue.add(req)
+        }
+    }
+
+    fun resetPassword(passwordResetRequest: PasswordResetRequest, callback: () -> Unit) {
+        if (!operationRunning) {
+            setLoading(true)
+
+            val passwordRequestJson = JSONObject(gson.toJson(passwordResetRequest))
+            val req = JsonObjectRequest(
+                Request.Method.POST,
+                Api.RESET_PASSWORD,
+                passwordRequestJson,
                 Response.Listener { response ->
                     if (response.getInt("status") == 200) {
                         callback()

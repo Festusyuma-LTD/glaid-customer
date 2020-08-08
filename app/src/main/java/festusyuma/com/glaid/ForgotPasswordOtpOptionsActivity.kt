@@ -15,13 +15,15 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.wang.avi.AVLoadingIndicatorView
 import festusyuma.com.glaid.helpers.Api
+import festusyuma.com.glaid.request.Authentication
+import festusyuma.com.glaid.request.LoadingAndErrorHandler
 import festusyuma.com.glaid.requestdto.PasswordResetRequest
 import org.json.JSONObject
 
 
 class ForgotPasswordOtpOptionsActivity : AppCompatActivity() {
 
-    lateinit var otpChoice : String
+    private lateinit var otpChoice : String
     private var operationRunning = false
 
     private lateinit var loadingCover: ConstraintLayout
@@ -72,61 +74,15 @@ class ForgotPasswordOtpOptionsActivity : AppCompatActivity() {
     }
 
     fun getOtpMethod(view: View) {
-        if (!operationRunning) {
-            setLoading(true)
+        val inp = getOtpInput.text.toString()
+        val passwordResetRequest = PasswordResetRequest()
+        if (otpChoice == "email") passwordResetRequest.email = inp else passwordResetRequest.tel = inp
 
-            val inp = getOtpInput.text.toString()
-            val passwordResetRequest = PasswordResetRequest()
-            if (otpChoice == "email") passwordResetRequest.email = inp else passwordResetRequest.tel = inp
-
-            val queue = Volley.newRequestQueue(this)
-            val resetJsonObject = JSONObject(gson.toJson(passwordResetRequest))
-
-            val request = JsonObjectRequest(
-                Request.Method.POST,
-                Api.RESET_PASSWORD,
-                resetJsonObject,
-                Response.Listener {
-                        response ->
-                    if (response.getInt("status") == 200) {
-                        val signUpIntent = Intent(this, ForgotPassOtpFinalScreenActivity::class.java)
-                        signUpIntent.putExtra("resetRequest", passwordResetRequest)
-
-                        startActivity(signUpIntent)
-                    }else showError(response.getString("message"))
-
-                    setLoading(false)
-                },
-                Response.ErrorListener {
-                        response ->
-                    response.printStackTrace()
-                    showError("An error occurred")
-                    setLoading(false)
-                }
-            )
-
-            queue.add(request)
+        Authentication(this).resetPassword(passwordResetRequest) {
+            val intent = Intent(this, ForgotPassOtpFinalScreenActivity::class.java)
+            intent.putExtra("resetRequest", passwordResetRequest)
+            LoadingAndErrorHandler(this).setLoading(false)
+            startActivity(intent)
         }
-    }
-
-    private fun setLoading(loading: Boolean) {
-        if (loading) {
-            loadingCover.visibility = View.VISIBLE
-            loadingAvi.show()
-            operationRunning = true
-        }else {
-            loadingCover.visibility = View.GONE
-            loadingAvi.hide()
-            operationRunning = false
-        }
-    }
-
-    private fun showError(msg: String) {
-        errorMsg.text = msg
-        errorMsg.visibility = View.VISIBLE
-    }
-
-    fun hideError(view: View) {
-        errorMsg.visibility = View.INVISIBLE
     }
 }
