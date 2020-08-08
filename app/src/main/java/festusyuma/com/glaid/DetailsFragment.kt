@@ -23,6 +23,8 @@ import festusyuma.com.glaid.helpers.capitalizeWords
 import festusyuma.com.glaid.model.Address
 import festusyuma.com.glaid.model.GasType
 import festusyuma.com.glaid.model.live.LiveOrder
+import festusyuma.com.glaid.request.GasRequests
+import festusyuma.com.glaid.request.LoadingAndErrorHandler
 import kotlinx.android.synthetic.main.fragment_details.*
 import org.json.JSONArray
 import org.json.JSONObject
@@ -61,13 +63,11 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         authToken = authSharedPref?.getString(getString(R.string.sh_authorization), "")?: ""
         gasType = requireArguments().getString("type", "diesel")
 
-        queue = Volley.newRequestQueue(requireContext())
-        val req = getGasType()
-        req.tag = "getGasTypeDetails"
-        queue.add(req)
+        GasRequests(requireActivity()).getGasType(gasType) {
+            setDetails(it)
+        }
 
         quantityBtn.setOnClickListener {customOrderClickListener()}
-
         orderNowBtn.setOnClickListener { orderNowClickListener() }
     }
 
@@ -79,7 +79,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
 
     private fun orderNowClickListener() {
         if (selectedElem == null) {
-            showError("Select Quantity")
+            LoadingAndErrorHandler(requireActivity()).showError("Select Quantity")
         }else {
             queue.cancelAll("getGasTypeDetails")
             liveOrder.quantity.value = selectedQuantity
@@ -114,41 +114,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
             .commit()
     }
 
-    private fun getGasType(): JsonObjectRequest {
-
-        val url = if (gasType == "diesel") Api.GET_DIESEL_LIST else Api.GET_GAS_LIST
-
-        return object : JsonObjectRequest(
-            Method.GET,
-            url,
-            null,
-            Response.Listener {
-                response ->
-                Log.v("ApiLog", "Response $response")
-                setDetails(response.getJSONObject("data"))
-            },
-            Response.ErrorListener { response->
-                if (response.networkResponse == null) {
-                    showError(getString(R.string.internet_error_msg))
-                }else {
-                    if (response.networkResponse.statusCode == 403) {
-                        logout()
-                    }else {
-                        Log.v("ApiLog", response.networkResponse.statusCode.toString())
-                        showError("An error occurred")
-                    }
-                }
-            }
-        ) {
-            override fun getHeaders(): MutableMap<String, String> {
-                return mutableMapOf(
-                    "Authorization" to "Bearer $authToken"
-                )
-            }
-        }
-    }
-
-    fun setDetails(data: JSONObject) {
+    private fun setDetails(data: JSONObject) {
         val predefinedQuantitiesList = data.getJSONArray("predefinedQuantities")
         val gasTypeJson = data.getJSONObject("gasType")
         gasTypeObj = GasType(
@@ -202,28 +168,5 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         selected.background = ContextCompat.getDrawable(requireContext(), R.drawable.fragmentbuttonchecked)
         selectedElem = selected
         selectedQuantity = quantity
-    }
-
-    fun logout() {
-        val act = requireActivity()
-
-        val sharedPref = act.getSharedPreferences(getString(R.string.cached_authentication), Context.MODE_PRIVATE)
-        with(sharedPref.edit()) {
-            remove(getString(R.string.sh_authorization))
-            commit()
-        }
-
-        startActivity(Intent(act, MainActivity::class.java))
-        act.finishAffinity()
-    }
-
-    private fun showError(msg: String) {
-        errorMsg.text = msg
-        errorMsg.visibility = View.VISIBLE
-    }
-
-    override fun onPause() {
-        super.onPause()
-        queue.cancelAll("getGasTypeDetails")
     }
 }
