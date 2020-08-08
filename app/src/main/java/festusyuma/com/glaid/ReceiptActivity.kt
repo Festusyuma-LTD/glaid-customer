@@ -9,6 +9,7 @@ import android.widget.TextView
 import festusyuma.com.glaid.helpers.capitalizeWords
 import festusyuma.com.glaid.model.Order
 import festusyuma.com.glaid.model.User
+import org.threeten.bp.format.DateTimeFormatter
 import java.text.NumberFormat
 
 class ReceiptActivity : AppCompatActivity() {
@@ -70,7 +71,7 @@ class ReceiptActivity : AppCompatActivity() {
         }else orderNumberStr
 
         orderNumber = findViewById(R.id.orderNumber)
-        orderDate = findViewById(R.id.orderNumber)
+        orderDate = findViewById(R.id.orderDateField)
         orderGasType = findViewById(R.id.orderGasUnit)
         orderQuantity = findViewById(R.id.orderQuantity)
         orderAmount = findViewById(R.id.orderAmount)
@@ -82,6 +83,7 @@ class ReceiptActivity : AppCompatActivity() {
         customerAddress = findViewById(R.id.customerAddress)
 
         orderNumber.text = getString(R.string.order_number).format(orderNumberFormatted)
+        orderDate.text = order.created?.format(DateTimeFormatter.ofPattern("hh:mm a - dd/MM/yyyy"))
         orderGasType.text = order.gasType.capitalizeWords()
         orderQuantity.text = getString(R.string.formatted_quantity).format(
             order.quantity,
