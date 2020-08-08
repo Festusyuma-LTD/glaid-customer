@@ -21,9 +21,12 @@ import com.wang.avi.AVLoadingIndicatorView
 import festusyuma.com.glaid.helpers.Api
 import festusyuma.com.glaid.helpers.Dashboard
 import festusyuma.com.glaid.helpers.capitalizeWords
+import festusyuma.com.glaid.model.Order
 import festusyuma.com.glaid.requestdto.OrderRequest
 import festusyuma.com.glaid.model.PaymentCards
 import festusyuma.com.glaid.model.live.LiveOrder
+import festusyuma.com.glaid.request.LoadingAndErrorHandler
+import festusyuma.com.glaid.request.OrderRequests
 import festusyuma.com.glaid.requestdto.PreferredPayment
 import org.json.JSONObject
 import java.text.NumberFormat
@@ -33,12 +36,6 @@ import java.text.NumberFormat
  * A simple [Fragment] subclass.
  */
 class PaymentFragment : Fragment(R.layout.fragment_payment) {
-
-    private lateinit var loadingCover: ConstraintLayout
-    private lateinit var loadingAvi: AVLoadingIndicatorView
-    private lateinit var errorMsg: TextView
-    private var operationRunning = false
-    private lateinit var queue: RequestQueue
 
     private lateinit var authSharedPref: SharedPreferences
     private lateinit var dataPref: SharedPreferences
@@ -64,22 +61,14 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
         super.onActivityCreated(savedInstanceState)
 
         liveOrder = ViewModelProviders.of(requireActivity()).get(LiveOrder::class.java)
-        queue = Volley.newRequestQueue(requireContext())
         authSharedPref = requireActivity().getSharedPreferences(getString(R.string.cached_authentication), Context.MODE_PRIVATE)
         token = authSharedPref.getString(getString(R.string.sh_authorization), "")?: ""
         dataPref = requireActivity().getSharedPreferences(getString(R.string.cached_data), Context.MODE_PRIVATE)
 
-        initLoadingAndError()
         initElements()
         initCardListView()
         getCardsList()
         setPreferredPaymentMethod()
-    }
-
-    private fun initLoadingAndError() {
-        loadingCover = requireActivity().findViewById(R.id.loadingCoverConstraint)
-        loadingAvi = loadingCover.findViewById(R.id.avi)
-        errorMsg = requireActivity().findViewById(R.id.errorMsg)
     }
 
     private fun initElements() {
@@ -194,113 +183,51 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
     }
 
     private fun placeOrder() {
-        if (!operationRunning) {
-            setLoading(true)
-
-            if (liveOrder.paymentType.value != null) {
-                if (liveOrder.paymentType.value == "card" && liveOrder.paymentCard.value == null) {
-                    showError("An error occurred")
-                    setLoading(false)
-                    return
-                }
-
-                val address = liveOrder.deliveryAddress.value
-
-                if (address != null) {
-                    val order = OrderRequest(
-                        liveOrder.quantity.value,
-                        liveOrder.gasType.value?.id ?: 1,
-                        address,
-                        liveOrder.paymentType.value,
-                        liveOrder.paymentCard.value?.id,
-                        liveOrder.scheduledDate.value
-                    )
-
-                    orderRequest(order)
-                }else requireActivity().supportFragmentManager.popBackStackImmediate()
-            }else {
-                showError("Select payment method")
-                setLoading(false)
+        if (liveOrder.paymentType.value != null) {
+            if (liveOrder.paymentType.value == "card" && liveOrder.paymentCard.value == null) {
+                LoadingAndErrorHandler(requireActivity()).errorOccurred()
+                return
             }
+
+            val address = liveOrder.deliveryAddress.value
+            if (address != null) {
+                val order = OrderRequest(
+                    liveOrder.quantity.value,
+                    liveOrder.gasType.value?.id ?: 1,
+                    address,
+                    liveOrder.paymentType.value,
+                    liveOrder.paymentCard.value?.id,
+                    liveOrder.scheduledDate.value
+                )
+
+                orderRequest(order)
+            }else requireActivity().supportFragmentManager.popBackStackImmediate()
+        }else {
+            LoadingAndErrorHandler(requireActivity()).showError("Select payment method")
         }
     }
 
     private fun orderRequest(orderRequest: OrderRequest) {
-        val reqObj = JSONObject(gson.toJson(orderRequest))
-        val req = object : JsonObjectRequest(
-            Method.POST,
-            Api.CREATE_ORDER,
-            reqObj,
-            Response.Listener { response ->
-                if (response.getInt("status") == 200) {
-                    with(dataPref.edit()) {
-                        val orderJson = response.getJSONObject("data")
-                        val order = gson.toJson(Dashboard().convertOrderJSonToOrder(orderJson))
-                        putString(getString(R.string.sh_pending_order), order)
-                        commit()
-                    }
+        OrderRequests(requireActivity()).createOrder(orderRequest) { data ->
+            val typeToken = object: TypeToken<MutableList<Order>>(){}.type
+            val order = Dashboard().convertOrderJSonToOrder(data)
+            val ordersJson = dataPref.getString(getString(R.string.sh_orders), null)
 
-                    val intent = Intent(requireContext(), MapsActivity::class.java)
-                    startActivity(intent)
-                    requireActivity().finishAffinity()
-                }else {
-                    showError(response.getString("message"))
-                }
+            val orders = if (ordersJson != null) {
+                gson.fromJson(ordersJson, typeToken)
+            }else mutableListOf<Order>()
 
-                setLoading(false)
-            },
-            Response.ErrorListener { response->
-                if (response.networkResponse == null) showError(getString(R.string.internet_error_msg)) else {
-                    if (response.networkResponse.statusCode == 403) {
-                        logout()
-                    }else showError(getString(R.string.api_error_msg))
-                }
+            orders.add(0, order)
 
-                setLoading(false)
+            with(dataPref.edit()) {
+                putString(getString(R.string.sh_pending_order), gson.toJson(order))
+                putString(getString(R.string.sh_orders), gson.toJson(orders))
+                commit()
             }
-        ) {
-            override fun getHeaders(): MutableMap<String, String> {
-                return mutableMapOf(
-                    "Authorization" to "Bearer $token"
-                )
-            }
-        }
 
-        req.retryPolicy = defaultRetryPolicy
-        req.tag = "create_order"
-        queue.add(req)
-    }
-
-    private fun setLoading(loading: Boolean) {
-        if (loading) {
-            loadingCover.visibility = View.VISIBLE
-            loadingAvi.show()
-            operationRunning = true
-        }else {
-            loadingCover.visibility = View.GONE
-            operationRunning = false
+            val intent = Intent(requireContext(), MapsActivity::class.java)
+            startActivity(intent)
+            requireActivity().finishAffinity()
         }
     }
-
-    private fun showError(msg: String) {
-        errorMsg.text = msg
-        errorMsg.visibility = View.VISIBLE
-    }
-
-    private fun logout() {
-        val sharedPref = requireActivity().getSharedPreferences(getString(R.string.cached_authentication), Context.MODE_PRIVATE)
-        with(sharedPref.edit()) {
-            remove(getString(R.string.sh_authorization))
-            commit()
-        }
-
-        startActivity(Intent(requireContext(), MainActivity::class.java))
-        requireActivity().finishAffinity()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        queue.cancelAll("create_order")
-    }
-
 }

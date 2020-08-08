@@ -353,14 +353,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 return@addSnapshotListener
             }
 
-            Log.v(FIRE_STORE_LOG_TAG, "Got here")
             if (snapshot != null) {
-                Log.v(FIRE_STORE_LOG_TAG, "Got here too")
                 if (!snapshot.metadata.isFromCache) {
-                    Log.v(FIRE_STORE_LOG_TAG, "Got here defs")
                     val order = snapshot.toObject(FSPendingOrder::class.java)
                     if (order != null) {
-                        Log.v(FIRE_STORE_LOG_TAG, "Got here inside")
                         if (order.status != livePendingOrder.statusId.value) {
                             when(order.status) {
                                 OrderStatusCode.DRIVER_ASSIGNED -> driverAssignedData(order)
