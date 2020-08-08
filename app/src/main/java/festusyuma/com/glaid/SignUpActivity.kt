@@ -13,61 +13,26 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.wang.avi.AVLoadingIndicatorView
 import festusyuma.com.glaid.helpers.Api
+import festusyuma.com.glaid.request.Authentication
 import festusyuma.com.glaid.requestdto.UserRegistrationRequest
 import org.json.JSONObject
 import java.util.*
 
 class SignUpActivity : AppCompatActivity() {
 
-    private var operationRunning = false
-
-    private lateinit var loadingCover: ConstraintLayout
-    private lateinit var loadingAvi: AVLoadingIndicatorView
-    private lateinit var errorMsg: TextView
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
-
-        loadingCover = findViewById(R.id.loadingCoverConstraint)
-        loadingAvi = loadingCover.findViewById(R.id.avi)
-        errorMsg = findViewById(R.id.errorMsg)
     }
 
     fun signUp(view: View) {
-        if (!operationRunning) {
-            setLoading(true)
-            val userRequest = getUserRequest()
-
-            if (!hasError(userRequest)) {
-                val queue = Volley.newRequestQueue(this)
-                val userJsonObject = JSONObject(gson.toJson(userRequest))
-
-                val request = JsonObjectRequest(
-                    Request.Method.POST,
-                    Api.REGISTER,
-                    userJsonObject,
-                    Response.Listener {
-                        response ->
-                        if (response.getInt("status") == 200) {
-                            val signUpIntent = Intent(this, OneTimePasswordActivity::class.java)
-                            signUpIntent.putExtra("userRequest", userRequest)
-
-                            startActivity(signUpIntent)
-                        }else showError(response.getString("message"))
-
-                        setLoading(false)
-                    },
-                    Response.ErrorListener {
-                        response ->
-                        response.printStackTrace()
-                        showError("An error occurred")
-                        setLoading(false)
-                    }
-                )
-
-                queue.add(request)
-            }else setLoading(false)
+        val userRequest = getUserRequest()
+        if (!hasError(userRequest)) {
+            Authentication(this).register(userRequest) {
+                val intent = Intent(this, OneTimePasswordActivity::class.java)
+                intent.putExtra("userRequest", userRequest)
+                startActivity(intent)
+            }
         }
     }
 
@@ -143,26 +108,5 @@ class SignUpActivity : AppCompatActivity() {
         }else verifyPasswordError.text = ""
 
         return error
-    }
-
-    private fun setLoading(loading: Boolean) {
-        if (loading) {
-            loadingCover.visibility = View.VISIBLE
-            loadingAvi.show()
-            operationRunning = true
-        }else {
-            loadingCover.visibility = View.GONE
-            loadingAvi.hide()
-            operationRunning = false
-        }
-    }
-
-    private fun showError(msg: String) {
-        errorMsg.text = msg
-        errorMsg.visibility = View.VISIBLE
-    }
-
-    fun hideError(view: View) {
-        errorMsg.visibility = View.INVISIBLE
     }
 }
