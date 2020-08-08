@@ -63,12 +63,14 @@ class OrderDetailsActivity : AppCompatActivity() {
         status.text = getDeliveryStatusString(order.statusId)
         locationTime.text = order.tripStarted?.format(DateTimeFormatter.ofPattern("HH:mm"))
         destinationTime.text = order.tripEnded?.format(DateTimeFormatter.ofPattern("HH:mm"))
-        driverName.text = getString(R.string.order_details_driver_name).format(
-            order.driver?.fullName?.capitalizeWords()
-        )
+
+        driverName.text = if (order.driver != null) {
+            getString(R.string.order_details_driver_name).format(
+                order.driver?.fullName?.capitalizeWords()
+            )
+        }else getString(R.string.order_details_driver_not_assigned)
 
         val driverRating = order.driverRating
-
         if (order.statusId != OrderStatusCode.DELIVERED) {
             rateDriverBtn.visibility = View.GONE
         }

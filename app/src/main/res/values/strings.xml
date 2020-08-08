@@ -173,11 +173,11 @@
     <string name="delivery">Delivery</string>
     <string name="tax">Tax</string>
     <string name="billed_to">Billed to</string>
-    <string name="view_reciept">View Reciept</string>
     <string name="trip_start_soon">Driver will soon start trip</string>
     <string name="text_driver">Text Driver</string>
     <string name="cached_data">cached_data</string>
     <string name="order_details_driver_name" >Your driver was %1$s</string>
+    <string name="order_details_driver_not_assigned" >Waiting for driver to be assigned</string>
     <string name="please_rate_your_driver">Please rate your driver</string>
     <string name="rate_driver">Rate Driver</string>
     <string name="order_receipt">Order Receipt</string>

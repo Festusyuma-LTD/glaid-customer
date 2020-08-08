@@ -7,7 +7,6 @@ import festusyuma.com.glaid.gson
 import festusyuma.com.glaid.model.*
 import org.json.JSONArray
 import org.json.JSONObject
-import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 
 class Dashboard {
@@ -217,23 +216,17 @@ class Dashboard {
         val tripStarted = if (!data.isNull("tripStarted")) {
             val timeJson = data.getString("tripStarted")
             LocalDateTime.parse(timeJson)
-        }else {
-            val timeJson = data.getString("created")
-            LocalDateTime.parse(timeJson)
-        }
+        }else null
 
         val tripEnded = if (!data.isNull("tripEnded")) {
             val timeJson = data.getString("tripEnded")
             LocalDateTime.parse(timeJson)
-        }else {
-            val timeJson = data.getString("created")
-            LocalDateTime.parse(timeJson)
-        }
+        }else null
 
         val timeJson = data.getString("created")
         val created = LocalDateTime.parse(timeJson)
 
-        val order = Order(
+        return Order(
             driver,
             paymentMethod,
             gasType,
@@ -252,7 +245,5 @@ class Dashboard {
             tripEnded = tripEnded,
             created = created
         )
-
-        return order
     }
 }
