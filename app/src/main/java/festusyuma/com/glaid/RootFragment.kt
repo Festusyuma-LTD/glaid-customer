@@ -64,8 +64,4 @@ class RootFragment : Fragment(R.layout.fragment_root) {
             .addToBackStack(null)
             .commit()
     }
-
-    fun hideError(view: View) {
-        errorMsg.visibility = View.INVISIBLE
-    }
 }
