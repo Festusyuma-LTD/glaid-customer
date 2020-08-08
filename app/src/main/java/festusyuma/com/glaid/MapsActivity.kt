@@ -51,7 +51,11 @@ import festusyuma.com.glaid.model.live.PendingOrder
 import festusyuma.com.glaid.utilities.LatLngInterpolator
 import festusyuma.com.glaid.utilities.MarkerAnimation
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapsActivity :
+    AppCompatActivity(),
+    OnMapReadyCallback,
+    GoogleMap.OnCameraMoveStartedListener
+{
 
     private var firstLaunch = true
     private var locationUpdate = false
@@ -370,17 +374,21 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    override fun onCameraMoveStarted(p0: Int) {
+        isCameraSticky = false
+    }
+
     // Callback when map ready
     @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap) {
         gMap = googleMap
+        gMap.setOnCameraMoveStartedListener(this)
 
         if (locationPermissionsGranted) {
             getUserLocation {markUserLocation(it)}
             gMap.uiSettings.isMyLocationButtonEnabled = false
             gMap.uiSettings.isMyLocationButtonEnabled = false
             if (!locationUpdate) startLocationUpdates()
-
             if (this::livePendingOrder.isInitialized) markDriverLocation()
         }
 
