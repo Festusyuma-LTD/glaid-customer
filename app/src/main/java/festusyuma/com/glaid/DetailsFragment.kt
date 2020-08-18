@@ -22,6 +22,7 @@ import festusyuma.com.glaid.helpers.Api
 import festusyuma.com.glaid.helpers.capitalizeWords
 import festusyuma.com.glaid.model.Address
 import festusyuma.com.glaid.model.GasType
+import festusyuma.com.glaid.model.GasTypeQuantities
 import festusyuma.com.glaid.model.live.LiveOrder
 import festusyuma.com.glaid.request.GasRequests
 import festusyuma.com.glaid.request.LoadingAndErrorHandler
@@ -117,11 +118,32 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
             gasTypeJson.getLong("id"),
             gasTypeJson.getString("type"),
             gasTypeJson.getDouble("price"),
-            gasTypeJson.getString("unit").capitalizeWords()
+            gasTypeJson.getString("unit").capitalizeWords(),
+            gasTypeJson.getBoolean("hasFixedQuantity")
         )
+
+        if (gasTypeObj.hasFixedQuantities) {
+            gasTypeObj.fixedQuantities = getFixedQuantities(gasTypeJson.getJSONArray("fixedQuantities"))
+        }
 
         liveOrder.gasType.value = gasTypeObj
         setPredefinedQuantities(gasTypeObj,  predefinedQuantitiesList)
+    }
+
+    private fun getFixedQuantities(data: JSONArray): MutableList<GasTypeQuantities> {
+        val gasTypeQuantities: MutableList<GasTypeQuantities> = mutableListOf()
+
+        for (i in 0 until data.length()) {
+            val fixedQuantityJson = data[i] as JSONObject
+            val fixedQuantity = GasTypeQuantities(
+                fixedQuantityJson.getDouble("quantity"),
+                fixedQuantityJson.getDouble("price")
+            )
+
+            gasTypeQuantities.add(fixedQuantity)
+        }
+
+        return gasTypeQuantities
     }
 
     private fun setPredefinedQuantities(gasType: GasType, data: JSONArray) {
@@ -135,7 +157,11 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
                 val preView: View = LayoutInflater.from(requireContext()).inflate(R.layout.predefined_quantity, ConstraintLayout(requireContext()))
                 val prevViewElement = preView.findViewById<LinearLayout>(R.id.predefinedQCover)
                 val quantity = data[i] as Double
-                val totalPrice = quantity * gasType.price
+
+                val totalPrice = if (gasType.hasFixedQuantities) {
+                    gasType.fixedQuantities.find { it.quantity == quantity }?.price?: return
+                }else quantity * gasType.price
+
                 val imgV = preView.findViewById<ImageView>(R.id.predefinedImg)
                 val quantityTV = preView.findViewById<TextView>(R.id.quantity)
                 val addressTypeTV = preView.findViewById<TextView>(R.id.addressTypeLabel)
