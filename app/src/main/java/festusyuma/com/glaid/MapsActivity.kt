@@ -51,6 +51,7 @@ import festusyuma.com.glaid.model.fs.FSPendingOrder
 import festusyuma.com.glaid.model.live.PendingOrder
 import festusyuma.com.glaid.utilities.LatLngInterpolator
 import festusyuma.com.glaid.utilities.MarkerAnimation
+import kotlinx.android.synthetic.main.order_history_item.*
 
 class MapsActivity :
     AppCompatActivity(),
@@ -180,10 +181,11 @@ class MapsActivity :
             if (orderJson != null) {
                 val order = gson.fromJson(orderJson, Order::class.java)
                 initiateLivePendingOrder(order)
+
                 when(order.statusId) {
-                    1L -> startPendingOrderFragment()
-                    2L -> startDriverAssignedFragment()
-                    3L -> startOnTheWayFragment()
+                    OrderStatusCode.PENDING -> startPendingOrderFragment()
+                    OrderStatusCode.DRIVER_ASSIGNED -> startDriverAssignedFragment()
+                    OrderStatusCode.ON_THE_WAY -> startTrackingDriver()
                 }
 
                 startOrderStatusListener()
@@ -230,17 +232,16 @@ class MapsActivity :
     }
 
     private fun updateMapWithStatusId(order: FSPendingOrder) {
-        val statusId = order.status
+        val statusId = order.status?: return
         isOnTrip = statusId == OrderStatusCode.ON_THE_WAY
 
         when(statusId) {
             OrderStatusCode.DRIVER_ASSIGNED -> driverAssignedData(order)
-            OrderStatusCode.ON_THE_WAY -> startTrackingDriver()
-            else -> {
-                orderCompleted()
-                if (this::driverMarker.isInitialized) driverMarker.remove()
-                removePolyLine()
+            OrderStatusCode.ON_THE_WAY -> {
+                updateLocalOrderStatus(statusId)
+                startTrackingDriver()
             }
+            else -> orderCompleted(statusId)
         }
     }
 
@@ -270,10 +271,15 @@ class MapsActivity :
     }
 
     private fun startTrackingDriver() {
+
+
         startOnTheWayFragment()
     }
 
-    private fun orderCompleted() {
+    private fun orderCompleted(status: Long) {
+        if (this::driverMarker.isInitialized) driverMarker.remove()
+        removePolyLine()
+
         livePendingOrder.id.value = null
         livePendingOrder.amount.value = null
         livePendingOrder.gasType.value = null
@@ -597,6 +603,8 @@ class MapsActivity :
 
     override fun onPause() {
         super.onPause()
-        if (this::listener.isInitialized) listener.remove()
+        if (this::listener.isInitialized){
+            listener.remove()
+        }
     }
 }
