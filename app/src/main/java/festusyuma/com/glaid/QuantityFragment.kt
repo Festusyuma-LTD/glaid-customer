@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -18,6 +19,7 @@ import com.android.volley.toolbox.Volley
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.wang.avi.AVLoadingIndicatorView
 import festusyuma.com.glaid.model.Address
+import festusyuma.com.glaid.model.GasTypeQuantities
 import festusyuma.com.glaid.model.live.LiveOrder
 import kotlinx.android.synthetic.main.fragment_quantity.*
 import org.threeten.bp.LocalDateTime
@@ -56,6 +58,10 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
     private lateinit var dateTimeInput: TextView
     private lateinit var addressField: TextView
     private lateinit var doneBtn: ConstraintLayout
+    private lateinit var showFixedQuantities: View
+    private lateinit var fixedQuantityCover: ScrollView
+    private lateinit var fixedQuantities: LinearLayout
+    private lateinit var clickToClose: TextView
 
     private lateinit var dataPref: SharedPreferences
     private var homeAddress: Address? = null
@@ -66,6 +72,7 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
         AndroidThreeTen.init(requireContext());
         initCurrentDate()
         initElements()
+        initFixedQuantities()
 
         dataPref = requireActivity().getSharedPreferences(getString(R.string.cached_data), Context.MODE_PRIVATE)
         initDefaultAddress()
@@ -79,16 +86,16 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
             datePicker.show()
         }
 
-        locationField.setOnClickListener {
-            // load address fragment
-            requireActivity().supportFragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.slide_up, R.anim.slide_down,R.anim.slide_up, R.anim.slide_down)
-                .replace(R.id.addressFrameLayoutFragment, AddressFragment())
-                .addToBackStack(null)
-                .commit()
-        }
-
+        locationField.setOnClickListener { startAddressFragment() }
         addressSet()
+    }
+
+    private fun startAddressFragment() {
+        requireActivity().supportFragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.slide_up, R.anim.slide_down,R.anim.slide_up, R.anim.slide_down)
+            .replace(R.id.addressFrameLayoutFragment, AddressFragment())
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun initDefaultAddress() {
@@ -145,6 +152,50 @@ class QuantityFragment : Fragment(R.layout.fragment_quantity), DatePickerDialog.
 
         doneBtn = requireActivity().findViewById(R.id.doneBtn)
         doneBtn.setOnClickListener { makeOrderPayment() }
+    }
+
+    private fun initFixedQuantities() {
+        val gasType = liveOrder.gasType.value?: return
+
+        if (gasType.hasFixedQuantities) {
+            showFixedQuantities = requireActivity().findViewById(R.id.showFixedQuantities)
+            fixedQuantityCover = requireActivity().findViewById(R.id.fixedQuantityCover)
+            fixedQuantities = requireActivity().findViewById(R.id.fixedQuantities)
+
+            quantity.isEnabled = false
+            showFixedQuantities.visibility = View.VISIBLE
+            showFixedQuantities.setOnClickListener {
+                fixedQuantityCover.visibility = View.VISIBLE
+            }
+
+            clickToClose = requireActivity().findViewById(R.id.clickToClose)
+            clickToClose.setOnClickListener {
+                fixedQuantityCover.visibility = View.GONE
+            }
+
+            populateDefaultQuantities()
+        }
+    }
+
+    private fun populateDefaultQuantities() {
+        val gasType = liveOrder.gasType.value?: return
+
+        for (fixedQuantity in gasType.fixedQuantities) {
+            val fixedQuantityElem =  LayoutInflater.from(requireContext()).inflate(R.layout.fixed_quantity_list_item, ConstraintLayout(requireContext()))
+            val fQuantity: TextView = fixedQuantityElem.findViewById(R.id.quantity)
+            val fPrice: TextView = fixedQuantityElem.findViewById(R.id.price)
+
+            fQuantity.text = getString(R.string.formatted_quantity).format(fixedQuantity.quantity, gasType.unit)
+            fPrice.text = getString(R.string.formatted_amount).format(fixedQuantity.price.toString())
+
+            fixedQuantityElem.setOnClickListener {
+                quantity.setText(fixedQuantity.quantity.toString())
+                liveOrder.quantity.value = fixedQuantity.quantity
+                fixedQuantityCover.visibility = View.GONE
+            }
+
+            fixedQuantities.addView(fixedQuantityElem)
+        }
     }
 
     private fun toggleAddressType(addressType: String) {
