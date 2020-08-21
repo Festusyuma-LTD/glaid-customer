@@ -12,13 +12,7 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import com.android.volley.RequestQueue
-import com.android.volley.Response
-import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.Volley
 import com.google.gson.reflect.TypeToken
-import com.wang.avi.AVLoadingIndicatorView
-import festusyuma.com.glaid.helpers.Api
 import festusyuma.com.glaid.helpers.Dashboard
 import festusyuma.com.glaid.helpers.capitalizeWords
 import festusyuma.com.glaid.model.Order
@@ -27,8 +21,6 @@ import festusyuma.com.glaid.model.PaymentCards
 import festusyuma.com.glaid.model.live.LiveOrder
 import festusyuma.com.glaid.request.LoadingAndErrorHandler
 import festusyuma.com.glaid.request.OrderRequests
-import festusyuma.com.glaid.requestdto.PreferredPayment
-import org.json.JSONObject
 import java.text.NumberFormat
 
 
@@ -46,7 +38,7 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
     private lateinit var paymentMethod: TextView
     private lateinit var changePaymentMethod: TextView
     private lateinit var quantity: TextView
-    private lateinit var gasType: TextView
+    private lateinit var gasTypeTV: TextView
     private lateinit var totalAmount: TextView
     private lateinit var orderNowBtn: ConstraintLayout
 
@@ -77,20 +69,31 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
         quantity = requireActivity().findViewById(R.id.quantity)
         quantity.text = getString(R.string.formatted_quantity).format(liveOrder.quantity.value, liveOrder.gasType.value?.unit)
 
-        gasType = requireActivity().findViewById(R.id.gasType)
+        gasTypeTV = requireActivity().findViewById(R.id.gasType)
         val gasTypeString = liveOrder.gasType.value?.type
         if (gasTypeString != null) {
-            gasType.text = gasTypeString.capitalizeWords()
+            gasTypeTV.text = gasTypeString.capitalizeWords()
         }else requireActivity().supportFragmentManager.popBackStackImmediate()
 
         totalAmount = requireActivity().findViewById(R.id.totalAmount)
+        val gasType = liveOrder.gasType.value
         val q = liveOrder.quantity.value
-        val p = liveOrder.gasType.value?.price
+        if (gasType == null || q == null) {
+            goBack()
+            return
+        }
 
-        if (q != null && p != null) {
+        val p = if (gasType.hasFixedQuantities) {
+            gasType.fixedQuantities.find { it.quantity == q }?.price
+        }else gasType.price * q
+
+        if (p != null) {
             val numberFormatter = NumberFormat.getInstance()
-            totalAmount.text = getString(R.string.formatted_amount).format(numberFormatter.format((q * p)))
-        }else requireActivity().supportFragmentManager.popBackStackImmediate()
+            totalAmount.text = getString(R.string.formatted_amount).format(numberFormatter.format(p))
+        }else {
+            goBack()
+            return
+        }
 
         orderNowBtn = requireActivity().findViewById(R.id.orderNowBtn)
         orderNowBtn.setOnClickListener { placeOrder() }
@@ -229,5 +232,9 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
             startActivity(intent)
             requireActivity().finishAffinity()
         }
+    }
+
+    private fun goBack() {
+        requireActivity().supportFragmentManager.popBackStackImmediate()
     }
 }
