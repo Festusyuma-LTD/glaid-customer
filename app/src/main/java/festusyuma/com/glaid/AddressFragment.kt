@@ -215,11 +215,10 @@ class AddressFragment : Fragment(R.layout.fragment_address) {
                     }
 
                     Toast.makeText(requireContext(), "${address.type} address added", Toast.LENGTH_SHORT).show()
+                    setLoading(false)
                 }else {
                     showError(response.getString("message"))
                 }
-
-                setLoading(false)
             },
             Response.ErrorListener { response->
                 if (response.networkResponse == null) showError(getString(R.string.internet_error_msg)) else {
@@ -272,6 +271,7 @@ class AddressFragment : Fragment(R.layout.fragment_address) {
     private fun showError(msg: String) {
         errorMsg.text = msg
         errorMsg.visibility = View.VISIBLE
+        setLoading(false)
     }
 
     private fun logout() {
