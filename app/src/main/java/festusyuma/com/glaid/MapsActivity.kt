@@ -439,7 +439,7 @@ class MapsActivity :
             AppCompatResources
                 .getDrawable(this, R.drawable.customlocation)!!
                 .toBitmap()
-                .scale(64, 96, false)
+                .scale(48, 72, false)
 
         if (!this::userMarker.isInitialized) {
             userMarker = gMap.addMarker(
@@ -483,7 +483,9 @@ class MapsActivity :
 
     private fun updateMarkerPosition(driverLocation: LatLng, lc: FSLocation) {
         if (!this::driverMarker.isInitialized) {
-            val mapIcon = AppCompatResources.getDrawable(this, R.drawable.truck_marker)!!.toBitmap()
+            val mapIcon = AppCompatResources.getDrawable(this, R.drawable.truck_marker)!!
+                .toBitmap()
+                .scale(81, 81, false)
             driverMarker = gMap.addMarker(
                 MarkerOptions()
                     .position(driverLocation).title("Driver")
