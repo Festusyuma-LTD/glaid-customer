@@ -50,6 +50,7 @@ import festusyuma.com.glaid.model.Truck
 import festusyuma.com.glaid.model.User
 import festusyuma.com.glaid.model.fs.FSPendingOrder
 import festusyuma.com.glaid.model.live.PendingOrder
+import festusyuma.com.glaid.request.OrderRequests
 import festusyuma.com.glaid.utilities.LatLngInterpolator
 import festusyuma.com.glaid.utilities.MarkerAnimation
 import kotlinx.android.synthetic.main.order_history_item.*
@@ -239,7 +240,7 @@ class MapsActivity :
         isOnTrip = statusId == OrderStatusCode.ON_THE_WAY
 
         when(statusId) {
-            OrderStatusCode.DRIVER_ASSIGNED -> driverAssignedData(order)
+            OrderStatusCode.DRIVER_ASSIGNED -> driverAssignedData()
             OrderStatusCode.ON_THE_WAY -> {
                 updateLocalOrderStatus(statusId)
                 startTrackingDriver()
@@ -248,34 +249,18 @@ class MapsActivity :
         }
     }
 
-    private fun driverAssignedData(order: FSPendingOrder) {
-        livePendingOrder.statusId.value = order.status
+    private fun driverAssignedData() {
+        OrderRequests(this).getOrderDetails(livePendingOrder.id.value!!) {
+            livePendingOrder.statusId.value = it.statusId
+            livePendingOrder.driver.value = it.driver
+            livePendingOrder.truck.value = it.truck
 
-        val fsDriver = order.driver?: return
-        val driver = User(
-            fsDriver.email,
-            fsDriver.fullName,
-            fsDriver.tel,
-            order.driverId
-        )
-
-        order.truck?: return
-        val truck = Truck(
-            order.truck.make,
-            order.truck.model,
-            order.truck.year,
-            order.truck.color
-        )
-
-        livePendingOrder.driver.value = driver
-        livePendingOrder.truck.value = truck
-        updateLocalOrderStatus(order.status!!, driver, truck)
-        startDriverAssignedFragment()
+            updateLocalOrderStatus(it.statusId, it)
+            startDriverAssignedFragment()
+        }
     }
 
     private fun startTrackingDriver() {
-
-
         startOnTheWayFragment()
     }
 
@@ -296,7 +281,7 @@ class MapsActivity :
         listener.remove()
     }
 
-    private fun updateLocalOrderStatus(statusId: Long, driver: User? = null, truck: Truck? = null) {
+    private fun updateLocalOrderStatus(statusId: Long, order: Order? = null) {
         val typeToken = object: TypeToken<MutableList<Order>>(){}.type
         val ordersJson = dataPref.getString(getString(R.string.sh_orders), null)
         val orders = if (ordersJson != null) {
@@ -307,8 +292,10 @@ class MapsActivity :
             if (it.id == livePendingOrder.id.value) {
                 it.statusId = statusId
 
-                if (driver != null) it.driver = driver
-                if (truck != null) it.truck = truck
+                if (order != null) {
+                    it.driver = order.driver
+                    it.truck = order.truck
+                }
 
                 with(dataPref.edit()) {
                     putString(getString(R.string.sh_orders), gson.toJson(orders))

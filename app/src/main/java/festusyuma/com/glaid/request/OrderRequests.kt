@@ -5,6 +5,8 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import festusyuma.com.glaid.*
 import festusyuma.com.glaid.helpers.Api
+import festusyuma.com.glaid.helpers.Dashboard
+import festusyuma.com.glaid.model.Order
 import festusyuma.com.glaid.requestdto.OrderRequest
 import festusyuma.com.glaid.requestdto.RatingRequest
 import org.json.JSONObject
@@ -45,7 +47,7 @@ class OrderRequests(private val c: Activity): Authentication(c) {
         }
     }
 
-    fun getOrderDetails(orderId: Long, callback: (response: JSONObject) -> Unit) {
+    fun getOrderDetails(orderId: Long, callback: (order: Order) -> Unit) {
         getAuthentication { authorization ->
             val req = object : JsonObjectRequest(
                 Method.GET,
@@ -53,7 +55,7 @@ class OrderRequests(private val c: Activity): Authentication(c) {
                 null,
                 Response.Listener { response ->
                     if (response.getInt("status") == 200) {
-                        callback(response.getJSONObject("data"))
+                        callback(Dashboard().convertOrderJSonToOrder(response.getJSONObject("data")))
                     }else showError(response.getString("message"))
 
                     setLoading(false)
