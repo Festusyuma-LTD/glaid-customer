@@ -54,7 +54,8 @@ class Dashboard {
         return User(
             data.getString("email").capitalizeWords(),
             data.getString("fullName").capitalizeWords(),
-            data.getString("tel")
+            data.getString("tel"),
+            rating = data.getDouble("rating")
         )
     }
 

@@ -31,6 +31,7 @@ import com.google.android.gms.maps.model.*
 import kotlinx.android.synthetic.main.activity_maps.*
 import kotlinx.android.synthetic.main.drawer_header.*
 import android.widget.ImageView
+import android.widget.RatingBar
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.scale
 import androidx.lifecycle.Observer
@@ -108,10 +109,12 @@ class MapsActivity :
         if (userJson != null) {
             val fullNameTV: TextView = drawer_header.findViewById(R.id.fullName)
             val emailTV: TextView = drawer_header.findViewById(R.id.email)
+            val rating: RatingBar = drawer_header.findViewById(R.id.userRating)
             val user = gson.fromJson(userJson, User::class.java)
 
             fullNameTV.text = user.fullName
             emailTV.text = user.email
+            rating.rating = user.rating.toFloat()
         }
 
         if (isServiceOk()) initMap()
@@ -562,10 +565,8 @@ class MapsActivity :
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
-            driverRating.rating = 4.5f
         } else {
             drawerLayout.openDrawer(GravityCompat.START);
-            driverRating.rating = 4.5f
         }
     }
 
