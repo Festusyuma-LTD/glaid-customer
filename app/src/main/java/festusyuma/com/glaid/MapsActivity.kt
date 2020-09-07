@@ -92,7 +92,13 @@ class MapsActivity :
     private lateinit var authPref: SharedPreferences
     private lateinit var dataPref: SharedPreferences
     private lateinit var livePendingOrder: PendingOrder
+
+    //Listeners
     private lateinit var listener: ListenerRegistration
+    private lateinit var driverLocationListener: ListenerRegistration
+
+    //Api Requests
+    private lateinit var orderRequests: OrderRequests
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -118,6 +124,7 @@ class MapsActivity :
             rating.rating = user.rating.toFloat()
         }
 
+        initRequests()
         if (isServiceOk()) initMap()
     }
 
@@ -130,6 +137,10 @@ class MapsActivity :
         }
 
         if (livePendingOrder.id.value != null) startOrderStatusListener()
+    }
+
+    private fun initRequests() {
+        orderRequests = OrderRequests(this)
     }
 
     private fun isServiceOk(): Boolean {
@@ -235,6 +246,27 @@ class MapsActivity :
         }
     }
 
+    private fun startDriverLocationListener() {
+        val driverId = livePendingOrder.driver.value?.id.toString()
+        val locationRef =
+            db.collection(getString(R.string.fs_user_locations))
+                .document(driverId)
+
+        driverLocationListener = locationRef.addSnapshotListener(this, MetadataChanges.INCLUDE) {
+            snapshot, e ->
+
+            if (e != null) {
+                Log.v(FIRE_STORE_LOG_TAG, "$e")
+                return@addSnapshotListener
+            }
+
+            if (snapshot != null) {
+                val fsLocation = snapshot.toObject(FSLocation::class.java)!!
+                updateDriverMarkerPosition(fsLocation)
+            }
+        }
+    }
+
     private fun updateMapWithStatusId(order: FSPendingOrder) {
         val statusId = order.status?: return
         isOnTrip = statusId == OrderStatusCode.ON_THE_WAY
@@ -247,7 +279,7 @@ class MapsActivity :
     }
 
     private fun driverAssignedData() {
-        OrderRequests(this).getOrderDetails(livePendingOrder.id.value!!) {
+        orderRequests.getOrderDetails(livePendingOrder.id.value!!) {
             livePendingOrder.statusId.value = it.statusId
             livePendingOrder.driver.value = it.driver
             livePendingOrder.truck.value = it.truck
@@ -261,8 +293,8 @@ class MapsActivity :
         livePendingOrder.statusId.value = statusId
         updateLocalOrderStatus(statusId)
 
-        Log.v(API_LOG_TAG, "Started tracking");
         calculateDirections { addPolyLine(it) }
+        startDriverLocationListener()
         startDriverAssignedFragment()
     }
 
@@ -281,6 +313,7 @@ class MapsActivity :
 
         startRootFragment()
         listener.remove()
+        driverLocationListener.remove()
     }
 
     private fun updateLocalOrderStatus(statusId: Long, order: Order? = null) {
@@ -499,7 +532,6 @@ class MapsActivity :
             )
         }else {
             driverMarker.position = location
-            driverMarker.rotation = lc.bearing!!
         }
     }
 
