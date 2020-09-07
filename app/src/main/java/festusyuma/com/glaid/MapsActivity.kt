@@ -29,31 +29,30 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import kotlinx.android.synthetic.main.activity_maps.*
-import kotlinx.android.synthetic.main.drawer_header.*
 import android.widget.ImageView
 import android.widget.RatingBar
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.scale
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
-import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
 import com.google.gson.reflect.TypeToken
+import com.google.maps.DirectionsApiRequest
+import com.google.maps.GeoApiContext
+import com.google.maps.PendingResult
 import com.google.maps.internal.PolylineEncoding
+import com.google.maps.model.DirectionsResult
 import com.google.maps.model.DirectionsRoute
 import festusyuma.com.glaid.model.FSLocation
 import festusyuma.com.glaid.model.Order
-import festusyuma.com.glaid.model.Truck
 import festusyuma.com.glaid.model.User
 import festusyuma.com.glaid.model.fs.FSPendingOrder
 import festusyuma.com.glaid.model.live.PendingOrder
 import festusyuma.com.glaid.request.OrderRequests
 import festusyuma.com.glaid.utilities.LatLngInterpolator
 import festusyuma.com.glaid.utilities.MarkerAnimation
-import kotlinx.android.synthetic.main.order_history_item.*
 
 class MapsActivity :
     AppCompatActivity(),
@@ -87,6 +86,7 @@ class MapsActivity :
     private lateinit var locationCallback: LocationCallback
     private lateinit var userMarker: Marker
     private lateinit var driverMarker: Marker
+    private lateinit var geoApiContext: GeoApiContext
     private lateinit var polyline: Polyline
 
     private lateinit var authPref: SharedPreferences
@@ -119,11 +119,6 @@ class MapsActivity :
         }
 
         if (isServiceOk()) initMap()
-        startFragment()
-
-        livePendingOrder.id.observe(this, Observer { id ->
-            if (id != null) startOrderStatusListener()
-        })
     }
 
     override fun onResume() {
@@ -160,6 +155,11 @@ class MapsActivity :
         getLocationPermission()
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        geoApiContext =
+            GeoApiContext.Builder()
+                .apiKey(getString(R.string.google_api_key))
+                .build()
     }
 
     private fun getLocationPermission() {
@@ -189,7 +189,7 @@ class MapsActivity :
                 when(order.statusId) {
                     OrderStatusCode.PENDING -> startPendingOrderFragment()
                     OrderStatusCode.DRIVER_ASSIGNED -> startDriverAssignedFragment()
-                    OrderStatusCode.ON_THE_WAY -> startTrackingDriver()
+                    OrderStatusCode.ON_THE_WAY -> startTrackingDriver(order.statusId)
                 }
 
                 startOrderStatusListener()
@@ -241,10 +241,7 @@ class MapsActivity :
 
         when(statusId) {
             OrderStatusCode.DRIVER_ASSIGNED -> driverAssignedData()
-            OrderStatusCode.ON_THE_WAY -> {
-                updateLocalOrderStatus(statusId)
-                startTrackingDriver()
-            }
+            OrderStatusCode.ON_THE_WAY -> startTrackingDriver(statusId)
             else -> orderCompleted(statusId)
         }
     }
@@ -260,8 +257,13 @@ class MapsActivity :
         }
     }
 
-    private fun startTrackingDriver() {
-        startOnTheWayFragment()
+    private fun startTrackingDriver(statusId: Long) {
+        livePendingOrder.statusId.value = statusId
+        updateLocalOrderStatus(statusId)
+
+        Log.v(API_LOG_TAG, "Started tracking");
+        calculateDirections { addPolyLine(it) }
+        startDriverAssignedFragment()
     }
 
     private fun orderCompleted(status: Long) {
@@ -322,6 +324,8 @@ class MapsActivity :
     }
 
     private fun startDriverAssignedFragment() {
+        markDriverLocation()
+
         supportFragmentManager.beginTransaction()
             .setCustomAnimations(R.anim.slide_up, R.anim.slide_down, R.anim.slide_up, R.anim.slide_down)
             .replace(R.id.frameLayoutFragment, DriverAssignedFragment())
@@ -390,7 +394,11 @@ class MapsActivity :
             gMap.uiSettings.isMyLocationButtonEnabled = false
             gMap.uiSettings.isMyLocationButtonEnabled = false
             if (!locationUpdate) startLocationUpdates()
-            if (this::livePendingOrder.isInitialized) markDriverLocation()
+
+            startFragment()
+            livePendingOrder.id.observe(this, Observer { id ->
+                if (id != null) startOrderStatusListener()
+            })
         }
 
         try {
@@ -470,29 +478,27 @@ class MapsActivity :
         val driverId = livePendingOrder.driver.value?.id
         if (driverId != null) {
             getUserLocation(driverId.toString()) {lc ->
-
-                lc.geoPoint?: return@getUserLocation
-                lc.bearing?: return@getUserLocation
-                val driverLocation = LatLng(lc.geoPoint.latitude, lc.geoPoint.longitude)
-
-                updateMarkerPosition(driverLocation, lc)
-                /*moveCamera(driverLocation, 17f)*/
+                updateDriverMarkerPosition(lc)
             }
         }
     }
 
-    private fun updateMarkerPosition(driverLocation: LatLng, lc: FSLocation) {
+    private fun updateDriverMarkerPosition(lc: FSLocation) {
+        lc.geoPoint!!
+        val location = LatLng(lc.geoPoint.latitude, lc.geoPoint.longitude)
+
         if (!this::driverMarker.isInitialized) {
             val mapIcon = AppCompatResources.getDrawable(this, R.drawable.truck_marker)!!
                 .toBitmap()
                 .scale(81, 81, false)
+
             driverMarker = gMap.addMarker(
                 MarkerOptions()
-                    .position(driverLocation).title("Driver")
+                    .position(location).title("Driver")
                     .icon(BitmapDescriptorFactory.fromBitmap(mapIcon))
             )
         }else {
-            driverMarker.position = driverLocation
+            driverMarker.position = location
             driverMarker.rotation = lc.bearing!!
         }
     }
@@ -510,6 +516,42 @@ class MapsActivity :
         )
     }
 
+    @SuppressLint("MissingPermission")
+    private fun calculateDirections(callback: (route: DirectionsRoute) -> Unit) {
+        val driverId = livePendingOrder.driver.value?.id?: return
+        getUserLocation(driverId.toString()) {
+            it.geoPoint!!
+            val driverLocation = com.google.maps.model.LatLng(
+                it.geoPoint.latitude,
+                it.geoPoint.longitude
+            )
+
+            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+                val userLocation = com.google.maps.model.LatLng(
+                    location.latitude,
+                    location.longitude
+                )
+
+                val directionsRequest = DirectionsApiRequest(geoApiContext)
+                directionsRequest.alternatives(true)
+                directionsRequest.origin(userLocation)
+                directionsRequest.destination(driverLocation).setCallback(
+                    object: PendingResult.Callback<DirectionsResult> {
+                        override fun onFailure(e: Throwable?) {
+                            Log.v(API_LOG_TAG, "Error getting directions ${e?.message}")
+                        }
+
+                        override fun onResult(result: DirectionsResult?) {
+                            result?: return
+                            if (result.routes.isNotEmpty()) callback(result.routes[0])
+                        }
+
+                    }
+                )
+            }
+        }
+    }
+
     private fun addPolyLine(route: DirectionsRoute) {
         if (this::gMap.isInitialized) {
             Handler(Looper.getMainLooper()).post {
@@ -519,7 +561,7 @@ class MapsActivity :
                     PolylineOptions()
                         .addAll(decodedPath)
                         .color(R.color.polyLineColor)
-                        .width(20f)
+                        .width(10f)
 
                 if (this::polyline.isInitialized) polyline.remove()
                 polyline = gMap.addPolyline(polylineOptions)
