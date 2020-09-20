@@ -45,7 +45,9 @@ import com.google.maps.PendingResult
 import com.google.maps.internal.PolylineEncoding
 import com.google.maps.model.DirectionsResult
 import com.google.maps.model.DirectionsRoute
+import festusyuma.com.glaid.helpers.capitalizeWords
 import festusyuma.com.glaid.model.FSLocation
+import festusyuma.com.glaid.model.GasType
 import festusyuma.com.glaid.model.Order
 import festusyuma.com.glaid.model.User
 import festusyuma.com.glaid.model.fs.FSPendingOrder
@@ -124,8 +126,30 @@ class MapsActivity :
             rating.rating = user.rating.toFloat()
         }
 
+        initGasTypeText()
         initRequests()
         if (isServiceOk()) initMap()
+    }
+
+    private fun initGasTypeText() {
+        val dieselPriceFeed: TextView = findViewById(R.id.dieselPriceFeed)
+        val gasPriceFeed: TextView = findViewById(R.id.gasPriceFeed)
+        val typeToken = object: TypeToken<MutableList<GasType>>(){}.type
+        val gasTypeJson = dataPref.getString(getString(R.string.sh_gas_type), null)
+
+        if (gasTypeJson != null) {
+            val gasTypes: List<GasType> = gson.fromJson(gasTypeJson, typeToken)
+            val diesel = gasTypes.find { it.type == "diesel" }
+            val gas = gasTypes.find { it.type == "gas" }
+
+            dieselPriceFeed.text = getString(R.string.gas_price_text).format(
+                diesel?.type?.capitalizeWords(), diesel?.price?.toFloat(), diesel?.unit
+            )
+
+            gasPriceFeed.text = getString(R.string.gas_price_text).format(
+                gas?.type?.capitalizeWords(), gas?.price?.toFloat(), gas?.unit
+            )
+        }
     }
 
     override fun onResume() {
