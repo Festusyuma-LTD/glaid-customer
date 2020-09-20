@@ -17,18 +17,20 @@ class Dashboard {
             Log.v("ApiLog", "Response lass: $data")
 
             val sharedPref = context.getSharedPreferences(context.getString(R.string.cached_data), Context.MODE_PRIVATE)
-            val user = gson.toJson(dashboard.getUser(data.getJSONObject("user")))
-            val prefPayment = if (data.isNull("preferredPaymentMethod")) {
+            val gasType = gson.toJson(dashboard.getGasType(data.getJSONArray("gasType")))
+            val customer = data.getJSONObject("customer")
+            val user = gson.toJson(dashboard.getUser(customer.getJSONObject("user")))
+            val prefPayment = if (customer.isNull("preferredPaymentMethod")) {
                 "wallet"
-            }else dashboard.getPreferredPayment(data.getJSONObject("preferredPaymentMethod"))
-            val wallet = gson.toJson(dashboard.getWallet(data.getJSONObject("wallet")))
-            val paymentCards = gson.toJson(dashboard.getPaymentCards(data.getJSONArray("paymentCards")))
-            val homeAddress = gson.toJson(dashboard.getHomeAddress(data.getJSONArray("address")))
-            val businessAddress = gson.toJson(dashboard.getBusinessAddress(data.getJSONArray("address")))
-            val pendingOrder = dashboard.pendingOrder(data.getJSONArray("orders"))
-            val orders = gson.toJson(dashboard.getOrders(data.getJSONArray("orders")))
+            }else dashboard.getPreferredPayment(customer.getJSONObject("preferredPaymentMethod"))
+            val wallet = gson.toJson(dashboard.getWallet(customer.getJSONObject("wallet")))
+            val paymentCards = gson.toJson(dashboard.getPaymentCards(customer.getJSONArray("paymentCards")))
+            val homeAddress = gson.toJson(dashboard.getHomeAddress(customer.getJSONArray("address")))
+            val businessAddress = gson.toJson(dashboard.getBusinessAddress(customer.getJSONArray("address")))
+            val pendingOrder = dashboard.pendingOrder(customer.getJSONArray("orders"))
+            val orders = gson.toJson(dashboard.getOrders(customer.getJSONArray("orders")))
 
-            dashboard.getOrders(data.getJSONArray("orders"))
+            dashboard.getOrders(customer.getJSONArray("orders"))
 
             with(sharedPref.edit()) {
                 clear()
@@ -39,12 +41,49 @@ class Dashboard {
                 putString(context.getString(R.string.sh_home_address), homeAddress)
                 putString(context.getString(R.string.sh_business_address), businessAddress)
                 putString(context.getString(R.string.sh_orders), orders)
+                putString(context.getString(R.string.sh_gas_type), gasType)
                 if (pendingOrder != null) {
                     putString(context.getString(R.string.sh_pending_order), gson.toJson(pendingOrder))
                 }
                 commit()
             }
         }
+    }
+
+    private fun getGasType(data: JSONArray): List<GasType> {
+        val gasTypes: MutableList<GasType> = mutableListOf()
+
+        for (i in 0 until data.length()) {
+            val gasJson = data[i] as JSONObject
+            val gasType = GasType(
+                gasJson.getLong("id"),
+                gasJson.getString("type"),
+                gasJson.getDouble("price"),
+                gasJson.getString("unit"),
+                gasJson.getBoolean("hasFixedQuantity")
+            )
+
+            if (gasType.hasFixedQuantities) {
+                val fixedQuantities: MutableList<GasTypeQuantities> = mutableListOf();
+                val fixedQuantitiesJson = gasJson.getJSONArray("fixedQuantities")
+
+                for (j in 0 until fixedQuantitiesJson.length()) {
+                    val fixedQuantityJson = fixedQuantitiesJson[i] as JSONObject
+                    val fixedQuantity = GasTypeQuantities(
+                        fixedQuantityJson.getDouble("quantity"),
+                        fixedQuantityJson.getDouble("price")
+                    )
+
+                    fixedQuantities.add(fixedQuantity)
+                }
+
+                gasType.fixedQuantities = fixedQuantities
+            }
+
+            gasTypes.add(gasType)
+        }
+
+        return gasTypes
     }
 
     fun getUser(data: JSONObject): User {
