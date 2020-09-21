@@ -1,7 +1,6 @@
 package festusyuma.com.glaid
 
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
@@ -14,17 +13,11 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import com.android.volley.RequestQueue
-import com.android.volley.Response
-import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.Volley
-import festusyuma.com.glaid.helpers.Api
-import festusyuma.com.glaid.helpers.capitalizeWords
+import com.google.gson.reflect.TypeToken
 import festusyuma.com.glaid.model.Address
 import festusyuma.com.glaid.model.GasType
 import festusyuma.com.glaid.model.GasTypeQuantities
 import festusyuma.com.glaid.model.live.LiveOrder
-import festusyuma.com.glaid.request.GasRequests
 import festusyuma.com.glaid.request.LoadingAndErrorHandler
 import kotlinx.android.synthetic.main.fragment_details.*
 import org.json.JSONArray
@@ -40,7 +33,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
     private lateinit var liveOrder: LiveOrder
 
     private var operationRunning = true
-    private lateinit var gasType: String
+    private lateinit var gasTypeKey: String
     private lateinit var authToken: String
     private lateinit var gasTypeObj: GasType
     private lateinit var errorMsg: TextView
@@ -50,21 +43,19 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
     private var selectedQuantity: Double? = null
 
     private lateinit var dataPref: SharedPreferences
+    private lateinit var authSharedPref: SharedPreferences
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        authSharedPref = requireActivity().getSharedPreferences(getString(R.string.cached_authentication), Context.MODE_PRIVATE)
         dataPref = requireActivity().getSharedPreferences(getString(R.string.cached_data), Context.MODE_PRIVATE)
         errorMsg = requireActivity().findViewById(R.id.errorMsg)
         liveOrder = ViewModelProviders.of(requireActivity()).get(LiveOrder::class.java)
 
-        val authSharedPref = this.activity?.getSharedPreferences(getString(R.string.cached_authentication), Context.MODE_PRIVATE)
-        authToken = authSharedPref?.getString(getString(R.string.sh_authorization), "")?: ""
-        gasType = requireArguments().getString("type", "diesel")
-
-        GasRequests(requireActivity()).getGasType(gasType) {
-            setDetails(it)
-        }
+        authToken = authSharedPref.getString(getString(R.string.sh_authorization), "") ?: ""
+        gasTypeKey = requireArguments().getString("type", "diesel")
+        setDetails()
 
         quantityBtn.setOnClickListener {customOrderClickListener()}
         orderNowBtn.setOnClickListener { orderNowClickListener() }
@@ -111,23 +102,20 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
             .commit()
     }
 
-    private fun setDetails(data: JSONObject) {
-        val predefinedQuantitiesList = data.getJSONArray("predefinedQuantities")
-        val gasTypeJson = data.getJSONObject("gasType")
-        gasTypeObj = GasType(
-            gasTypeJson.getLong("id"),
-            gasTypeJson.getString("type"),
-            gasTypeJson.getDouble("price"),
-            gasTypeJson.getString("unit").capitalizeWords(),
-            gasTypeJson.getBoolean("hasFixedQuantity")
-        )
+    private fun setDetails() {
+        val typeToken = object: TypeToken<MutableList<GasType>>(){}.type
+        val gasTypeJson = dataPref.getString(getString(R.string.sh_gas_type), null)
 
-        if (gasTypeObj.hasFixedQuantities) {
-            gasTypeObj.fixedQuantities = getFixedQuantities(gasTypeJson.getJSONArray("fixedQuantities"))
+        if (gasTypeJson != null) {
+            val gasTypes: List<GasType> = gson.fromJson(gasTypeJson, typeToken)
+            val gasType = gasTypes.find { it.type == gasTypeKey }
+            Log.v(API_LOG_TAG, "$gasType")
+
+            if (gasType != null) {
+                liveOrder.gasType.value = gasType
+                setPredefinedQuantities(gasType, gasType.fixedQuantities)
+            }
         }
-
-        liveOrder.gasType.value = gasTypeObj
-        setPredefinedQuantities(gasTypeObj,  predefinedQuantitiesList)
     }
 
     private fun getFixedQuantities(data: JSONArray): MutableList<GasTypeQuantities> {
@@ -146,20 +134,20 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         return gasTypeQuantities
     }
 
-    private fun setPredefinedQuantities(gasType: GasType, data: JSONArray) {
+    private fun setPredefinedQuantities(gasType: GasType, data: List<GasTypeQuantities>) {
         val numberFormatter = NumberFormat.getInstance()
         val imgDrawable = if (gasType.type == "gas") {
             R.drawable.gas
         }else R.drawable.pump
 
         if (context != null) {
-            for (i in 0 until data.length()) {
+            for (fixedQuantity in data) {
                 val preView: View = LayoutInflater.from(requireContext()).inflate(R.layout.predefined_quantity, ConstraintLayout(requireContext()))
                 val prevViewElement = preView.findViewById<LinearLayout>(R.id.predefinedQCover)
-                val quantity = data[i] as Double
+                val quantity = fixedQuantity.quantity
 
                 val totalPrice = if (gasType.hasFixedQuantities) {
-                    gasType.fixedQuantities.find { it.quantity == quantity }?.price?: return
+                    fixedQuantity.price
                 }else quantity * gasType.price
 
                 val imgV = preView.findViewById<ImageView>(R.id.predefinedImg)

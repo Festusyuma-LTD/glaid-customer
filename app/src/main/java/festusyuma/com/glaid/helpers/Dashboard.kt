@@ -63,23 +63,20 @@ class Dashboard {
                 gasJson.getBoolean("hasFixedQuantity")
             )
 
-            if (gasType.hasFixedQuantities) {
-                val fixedQuantities: MutableList<GasTypeQuantities> = mutableListOf();
-                val fixedQuantitiesJson = gasJson.getJSONArray("fixedQuantities")
+            val fixedQuantities: MutableList<GasTypeQuantities> = mutableListOf();
+            val fixedQuantitiesJson = gasJson.getJSONArray("fixedQuantities")
 
-                for (j in 0 until fixedQuantitiesJson.length()) {
-                    val fixedQuantityJson = fixedQuantitiesJson[i] as JSONObject
-                    val fixedQuantity = GasTypeQuantities(
-                        fixedQuantityJson.getDouble("quantity"),
-                        fixedQuantityJson.getDouble("price")
-                    )
+            for (j in 0 until fixedQuantitiesJson.length()) {
+                val fixedQuantityJson = fixedQuantitiesJson[j] as JSONObject
+                val fixedQuantity = GasTypeQuantities(
+                    fixedQuantityJson.getDouble("quantity"),
+                    fixedQuantityJson.getDouble("price")
+                )
 
-                    fixedQuantities.add(fixedQuantity)
-                }
-
-                gasType.fixedQuantities = fixedQuantities
+                fixedQuantities.add(fixedQuantity)
             }
 
+            gasType.fixedQuantities = fixedQuantities
             gasTypes.add(gasType)
         }
 
