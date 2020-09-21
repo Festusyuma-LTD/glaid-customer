@@ -220,13 +220,7 @@ class MapsActivity :
             if (orderJson != null) {
                 val order = gson.fromJson(orderJson, Order::class.java)
                 initiateLivePendingOrder(order)
-
-                when(order.statusId) {
-                    OrderStatusCode.PENDING -> startPendingOrderFragment()
-                    OrderStatusCode.DRIVER_ASSIGNED -> startDriverAssignedFragment()
-                    OrderStatusCode.ON_THE_WAY -> startTrackingDriver(order.statusId)
-                }
-
+                updateMapWithStatusId(order.statusId)
                 startOrderStatusListener()
             }else startRootFragment()
         }else startRootFragment()
@@ -251,7 +245,7 @@ class MapsActivity :
             db.collection(getString(R.string.fs_pending_orders))
                 .document(orderId.toString())
 
-        listener = locationRef.addSnapshotListener(this, MetadataChanges.INCLUDE) { snapshot, e ->
+        listener = locationRef.addSnapshotListener(this) { snapshot, e ->
             if (e != null) {
                 Log.v(FIRE_STORE_LOG_TAG, "$e")
                 return@addSnapshotListener
@@ -261,8 +255,9 @@ class MapsActivity :
                 if (!snapshot.metadata.isFromCache) {
                     val order = snapshot.toObject(FSPendingOrder::class.java)
                     if (order != null) {
-                        if (order.status != livePendingOrder.statusId.value) {
-                            updateMapWithStatusId(order)
+                        if (order.status != livePendingOrder.statusId.value && order.status != null) {
+                            Log.v(FIRE_STORE_LOG_TAG, "Listener ran")
+                            updateMapWithStatusId(order.status)
                         }
                     }
                 }
@@ -291,11 +286,12 @@ class MapsActivity :
         }
     }
 
-    private fun updateMapWithStatusId(order: FSPendingOrder) {
-        val statusId = order.status?: return
+    private fun updateMapWithStatusId(statusId: Long?) {
+        statusId?: return
         isOnTrip = statusId == OrderStatusCode.ON_THE_WAY
 
         when(statusId) {
+            OrderStatusCode.PENDING -> startPendingOrderFragment()
             OrderStatusCode.DRIVER_ASSIGNED -> driverAssignedData()
             OrderStatusCode.ON_THE_WAY -> startTrackingDriver(statusId)
             else -> orderCompleted(statusId)
@@ -336,8 +332,8 @@ class MapsActivity :
         livePendingOrder.truck.value = null
 
         startRootFragment()
-        listener.remove()
-        driverLocationListener.remove()
+        if (this::listener.isInitialized) listener.remove()
+        if (this::driverLocationListener.isInitialized) driverLocationListener.remove()
     }
 
     private fun updateLocalOrderStatus(statusId: Long, order: Order? = null) {
@@ -453,9 +449,6 @@ class MapsActivity :
             if (!locationUpdate) startLocationUpdates()
 
             startFragment()
-            livePendingOrder.id.observe(this, Observer { id ->
-                if (id != null) startOrderStatusListener()
-            })
         }
 
         try {
@@ -693,6 +686,7 @@ class MapsActivity :
         super.onPause()
         if (this::listener.isInitialized){
             listener.remove()
+            Log.v(FIRE_STORE_LOG_TAG, "Listener ended")
         }
     }
 }
