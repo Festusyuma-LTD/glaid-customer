@@ -42,7 +42,7 @@
 
         <meta-data
             android:name="CLOUDINARY_URL"
-            android:value="cloudinary://@myCloudName"/>
+            android:value="cloudinary://@festusyumanew"/>
 
         <activity
             android:name=".MapsActivity"

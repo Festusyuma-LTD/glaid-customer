@@ -190,4 +190,6 @@
     <string name="start_a_live_chat">Start a live chat</string>
     <string name="or">OR</string>
     <string name="gas_price_text">%1$s: &#8358;%2$.2f/%3$s</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="profile_image">profile image</string>
 </resources>

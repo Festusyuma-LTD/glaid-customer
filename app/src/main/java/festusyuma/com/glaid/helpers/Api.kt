@@ -20,6 +20,7 @@ class Api {
         const val CREATE_ORDER: String = "${API_BASE_URL}customer/booking/order/new"
         const val GET_ORDERS: String = "${API_BASE_URL}customer/booking/list"
         const val RATE_DRIVER: String = "${API_BASE_URL}customer/booking/rate_driver"
+        const val UPLOAD_IMAGE: String = "${API_BASE_URL}user/upload_image"
         fun removeCardUrl(cardId: Long): String {
             return "${API_BASE_URL}customer/payment/card/$cardId/remove"
         }
