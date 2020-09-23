@@ -1,6 +1,7 @@
 package festusyuma.com.glaid.request
 
 import android.app.Activity
+import android.content.Context
 import android.net.Uri
 import android.util.Log
 import com.android.volley.Response
@@ -13,6 +14,7 @@ import festusyuma.com.glaid.R
 import festusyuma.com.glaid.defaultRetryPolicy
 import festusyuma.com.glaid.gson
 import festusyuma.com.glaid.helpers.Api
+import festusyuma.com.glaid.model.User
 import org.json.JSONObject
 
 class UserRequests(private val c: Activity): Authentication(c) {
@@ -31,6 +33,18 @@ class UserRequests(private val c: Activity): Authentication(c) {
                         imageUploadJson,
                         Response.Listener { response ->
                             if (response.getInt("status") == 200) {
+                                val dataPref = c.getSharedPreferences(c.getString(R.string.cached_data), Context.MODE_PRIVATE)
+                                val userJson = dataPref.getString(c.getString(R.string.sh_user_details), null)
+                                if (userJson != null) {
+                                    val user = gson.fromJson(userJson, User::class.java)
+                                    user.profileImage = imageUrl
+
+                                    with(dataPref.edit()) {
+                                        putString(c.getString(R.string.sh_user_details), gson.toJson(user))
+                                        commit()
+                                    }
+                                }
+
                                 callback(imageUrl)
                             }else showError(response.getString("message"))
                         },

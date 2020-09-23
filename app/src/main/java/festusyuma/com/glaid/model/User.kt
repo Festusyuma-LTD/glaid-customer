@@ -6,5 +6,6 @@ data class User (
     var tel: String?,
 
     var id: Long? = null,
-    var rating: Double = 0.0
+    var rating: Double = 0.0,
+    var profileImage: String? = null
 )

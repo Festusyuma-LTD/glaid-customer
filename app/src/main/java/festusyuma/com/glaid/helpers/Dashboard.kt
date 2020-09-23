@@ -91,7 +91,8 @@ class Dashboard {
             data.getString("email").capitalizeWords(),
             data.getString("fullName").capitalizeWords(),
             data.getString("tel"),
-            rating = data.getDouble("rating")
+            rating = data.getDouble("rating"),
+            profileImage = data.getString("profileImage")
         )
     }
 

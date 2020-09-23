@@ -11,9 +11,11 @@ import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.cloudinary.android.MediaManager
 import festusyuma.com.glaid.helpers.Api
 import festusyuma.com.glaid.helpers.Dashboard
 import festusyuma.com.glaid.request.DashboardRequest
+import java.lang.Exception
 
 
 class SplashActivity : AppCompatActivity() {
@@ -22,6 +24,12 @@ class SplashActivity : AppCompatActivity() {
     private lateinit var authPref: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        try {
+            MediaManager.get()
+        }catch (e: Exception) {
+            MediaManager.init(this)
+        }
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 

@@ -36,7 +36,6 @@ class EditProfileActivity : AppCompatActivity() {
 
         val dataPref = getSharedPreferences(getString(R.string.cached_data), Context.MODE_PRIVATE)
         userRequests = UserRequests(this)
-        MediaManager.init(this);
 
         if (dataPref.contains(getString(R.string.sh_user_details))) {
 
@@ -74,6 +73,7 @@ class EditProfileActivity : AppCompatActivity() {
         telTV.text = userDetails.tel
         homeAddressTV.text = homeAddress?.address
         workAddressTV.text = businessAddress?.address
+        userDetails.profileImage?.let { setProfileImage(it) }
     }
 
     fun logout(view: View) {
