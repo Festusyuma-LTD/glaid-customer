@@ -24,13 +24,11 @@ class CarouselActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_carousel)
         val w: Window = window
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            w.setFlags(
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-            )
-        }
-//        tabLayout = findViewById<TabLayout>(R.id.tabsC)
+        w.setFlags(
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        )
+        //        tabLayout = findViewById<TabLayout>(R.id.tabsC)
         viewPager = findViewById(R.id.carouselviewpager)
         viewPager.adapter = CarouselAdapter(supportFragmentManager, lifecycle)
         //disable animation

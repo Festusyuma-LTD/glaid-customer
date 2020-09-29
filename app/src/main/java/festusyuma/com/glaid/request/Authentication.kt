@@ -85,12 +85,12 @@ open class Authentication(private val c: Activity): LoadingAndErrorHandler(c) {
                 Request.Method.POST,
                 Api.REGISTER,
                 userRequestJson,
-                Response.Listener { response ->
+                { response ->
                     if (response.getInt("status") == 200) {
                         callback()
                     }else showError(response.getString("message"))
                 },
-                Response.ErrorListener { response ->
+                { response ->
                     if (response.networkResponse != null) {
                         showError(c.getString(R.string.error_occurred))
                         response.printStackTrace()
@@ -113,12 +113,12 @@ open class Authentication(private val c: Activity): LoadingAndErrorHandler(c) {
                 Request.Method.POST,
                 Api.RESET_PASSWORD,
                 passwordRequestJson,
-                Response.Listener { response ->
+                { response ->
                     if (response.getInt("status") == 200) {
                         callback()
                     }else showError(response.getString("message"))
                 },
-                Response.ErrorListener { response ->
+                { response ->
                     if (response.networkResponse != null) {
                         showError(c.getString(R.string.error_occurred))
                         response.printStackTrace()
@@ -141,12 +141,12 @@ open class Authentication(private val c: Activity): LoadingAndErrorHandler(c) {
                 Request.Method.POST,
                 Api.VALIDATE_OTP,
                 passwordRequestJson,
-                Response.Listener { response ->
+                { response ->
                     if (response.getInt("status") == 200) {
                         callback()
                     }else showError(response.getString("message"))
                 },
-                Response.ErrorListener { response ->
+                { response ->
                     if (response.networkResponse != null) {
                         showError(c.getString(R.string.error_occurred))
                         response.printStackTrace()

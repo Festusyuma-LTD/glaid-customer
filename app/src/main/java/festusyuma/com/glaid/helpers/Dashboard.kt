@@ -2,6 +2,7 @@ package festusyuma.com.glaid.helpers
 
 import android.content.Context
 import android.util.Log
+import festusyuma.com.glaid.API_LOG_TAG
 import festusyuma.com.glaid.R
 import festusyuma.com.glaid.gson
 import festusyuma.com.glaid.model.*
@@ -51,6 +52,7 @@ class Dashboard {
     }
 
     private fun getGasType(data: JSONArray): List<GasType> {
+        Log.v(API_LOG_TAG, "entered, ${data.length()}")
         val gasTypes: MutableList<GasType> = mutableListOf()
 
         for (i in 0 until data.length()) {
