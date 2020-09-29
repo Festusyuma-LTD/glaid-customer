@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.util.Log
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
@@ -16,6 +17,7 @@ import festusyuma.com.glaid.requestdto.LoginRequest
 import festusyuma.com.glaid.requestdto.PasswordResetRequest
 import festusyuma.com.glaid.requestdto.UserRegistrationRequest
 import org.json.JSONObject
+import kotlin.math.log
 
 open class Authentication(private val c: Activity): LoadingAndErrorHandler(c) {
 
@@ -39,7 +41,6 @@ open class Authentication(private val c: Activity): LoadingAndErrorHandler(c) {
 
                         val data = response.getJSONObject("data")
                         val serverToken = data.getString("token")
-                        val userDetails = data.getJSONObject("user")
 
                         if (serverToken.isBlank()) {
                             showError("An error occurred")
@@ -54,8 +55,10 @@ open class Authentication(private val c: Activity): LoadingAndErrorHandler(c) {
                                     putString(tokenKeyName, serverToken)
                                     commit()
                                 }
-                                Dashboard.store(c, userDetails)
-                                callback()
+
+                                DashboardRequest(c).getUserDetails {
+                                    callback()
+                                }
 
                             }.addOnFailureListener { errorOccurred() }
                     }else {
@@ -166,6 +169,8 @@ open class Authentication(private val c: Activity): LoadingAndErrorHandler(c) {
 
         authPref = c.getSharedPreferences(authKeyName, Context.MODE_PRIVATE)
         if (authPref.contains(tokenKeyName)) {
+            if (auth.currentUser == null) logout()
+
             auth.currentUser?.getIdToken(true)
                 ?.addOnSuccessListener {
                     val token = it.token
