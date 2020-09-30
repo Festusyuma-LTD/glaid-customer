@@ -447,9 +447,9 @@ class MapsActivity :
             gMap.uiSettings.isMyLocationButtonEnabled = false
             gMap.uiSettings.isMyLocationButtonEnabled = false
             if (!locationUpdate) startLocationUpdates()
-
-            startFragment()
         }
+
+        startFragment()
 
         try {
             // Customise the styling
