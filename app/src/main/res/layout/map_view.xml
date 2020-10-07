@@ -44,13 +44,13 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/menuButton"
-            app:layout_constraintBottom_toBottomOf="@+id/menuButton"
+            app:layout_constraintTop_toTopOf="parent"
             android:orientation="vertical"
-            android:background="#6DFFFFFF"
-            android:layout_marginEnd="20dp"
-            android:paddingHorizontal="5dp">
+            android:background="#EEFFFFFF"
+            android:paddingHorizontal="5dp"
+            android:layout_marginTop="30dp">
 
             <TextView
                 android:id="@+id/dieselPriceFeed"
