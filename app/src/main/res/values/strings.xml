@@ -192,4 +192,5 @@
     <string name="gas_price_text">%1$s: &#8358;%2$.2f/%3$s</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="profile_image">profile image</string>
+    <string name="cancel_order">Cancel order</string>
 </resources>
