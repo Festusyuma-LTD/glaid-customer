@@ -177,6 +177,8 @@ class OrderRequests(private val c: Activity): BaseRequest(c) {
                     commit()
                 }
             }
+
+            setLoading(false)
         }
     }
 }
