@@ -193,4 +193,6 @@
     <string name="edit_profile">Edit Profile</string>
     <string name="profile_image">profile image</string>
     <string name="cancel_order">Cancel order</string>
+    <string name="change_password">Change Password</string>
+    <string name="upload_image">Upload Image</string>
 </resources>
