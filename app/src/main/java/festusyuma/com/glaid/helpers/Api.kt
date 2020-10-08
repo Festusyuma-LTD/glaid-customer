@@ -28,5 +28,9 @@ class Api {
         fun orderDetails(orderId: Long): String {
             return "${API_BASE_URL}customer/booking/order/$orderId"
         }
+
+        fun cancelOrder(orderId: Long): String {
+            return "${API_BASE_URL}customer/booking/order/$orderId/cancel"
+        }
     }
 }

@@ -7,7 +7,7 @@ import festusyuma.com.glaid.R
 import festusyuma.com.glaid.defaultRetryPolicy
 import org.json.JSONObject
 
-class BaseRequest(private val c: Activity): Authentication(c) {
+open class BaseRequest(private val c: Activity): Authentication(c) {
 
     protected fun jsonObjectRequest(method: Int, url: String, data: JSONObject? = null, callback: (response: JSONObject) -> Unit) {
         val req = JsonObjectRequest(
