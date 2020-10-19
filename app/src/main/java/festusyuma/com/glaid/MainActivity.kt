@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
     private val rcSignIn: Int = 55
     private lateinit var mGoogleSignInClient: GoogleSignInClient
     private lateinit var loadingError: LoadingAndErrorHandler
+    private lateinit var authentication: Authentication
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,29 +30,26 @@ class MainActivity : AppCompatActivity() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.server_client_id))
             .requestEmail()
+            .requestProfile()
             .build()
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         loadingError = LoadingAndErrorHandler(this)
+        authentication = Authentication(this)
     }
 
     fun signInWithGoogle(view: View) {
-        if (!loadingError.operationRunning) {
-            loadingError.setLoading(true)
-
-            val account = GoogleSignIn.getLastSignedInAccount(this)
-            Log.v(API_LOG_TAG, "id token ${account?.idToken}")
-            if (account != null) {
-                mGoogleSignInClient.signOut()
-                    .addOnCompleteListener{ startGoogleSignInActivity() }
-            }else startGoogleSignInActivity()
-        }
+        val account = GoogleSignIn.getLastSignedInAccount(this)
+        Log.v(API_LOG_TAG, "id token ${account?.serverAuthCode}")
+        if (account != null) {
+            mGoogleSignInClient.signOut()
+                .addOnCompleteListener{ startGoogleSignInActivity() }
+        }else startGoogleSignInActivity()
     }
 
     private fun startGoogleSignInActivity() {
         val signInIntent = mGoogleSignInClient.signInIntent
         startActivityForResult(signInIntent, rcSignIn)
-        loadingError.setLoading(false)
     }
 
     fun signUpWithMail(view: View){
@@ -81,7 +79,7 @@ class MainActivity : AppCompatActivity() {
                 loginType = LoginType.GOOGLE
             )
 
-            Authentication(this).login(loginRequest) {
+            authentication.login(loginRequest) {
                 startActivity(Intent(this, MapsActivity::class.java))
                 finishAffinity()
             }
