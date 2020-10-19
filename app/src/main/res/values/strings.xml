@@ -193,4 +193,6 @@
     <string name="edit_profile">Edit Profile</string>
     <string name="profile_image">profile image</string>
     <string name="server_client_id">399800857143-gb4705t084ca39sqko66bs3bogtbf2pt.apps.googleusercontent.com</string>
+    <string name="facebook_app_id">802141560613453</string>
+    <string name="fb_login_protocol_scheme">fb802141560613453</string>
 </resources>
