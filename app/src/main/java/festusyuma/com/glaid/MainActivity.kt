@@ -11,7 +11,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import festusyuma.com.glaid.request.Authentication
 import festusyuma.com.glaid.request.LoadingAndErrorHandler
+import festusyuma.com.glaid.requestdto.LoginRequest
 
 
 class MainActivity : AppCompatActivity() {
@@ -38,7 +40,8 @@ class MainActivity : AppCompatActivity() {
             loadingError.setLoading(true)
 
             val account = GoogleSignIn.getLastSignedInAccount(this)
-            if (account == null) {
+            Log.v(API_LOG_TAG, "id token ${account?.idToken}")
+            if (account != null) {
                 mGoogleSignInClient.signOut()
                     .addOnCompleteListener{ startGoogleSignInActivity() }
             }else startGoogleSignInActivity()
@@ -73,6 +76,16 @@ class MainActivity : AppCompatActivity() {
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
             val account = completedTask.getResult(ApiException::class.java)
+            val loginRequest = LoginRequest(
+                token = account?.idToken,
+                loginType = LoginType.GOOGLE
+            )
+
+            Authentication(this).login(loginRequest) {
+                startActivity(Intent(this, MapsActivity::class.java))
+                finishAffinity()
+            }
+
             Log.v(API_LOG_TAG, "id token ${account?.idToken}")
         } catch (e: ApiException) {
             Log.w(API_LOG_TAG, "signInResult:failed code=" + e.statusCode)

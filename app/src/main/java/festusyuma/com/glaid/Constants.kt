@@ -73,3 +73,15 @@ class PaymentType {
         }
     }
 }
+
+class LoginType {
+    companion object {
+        const val EMAIL = "email"
+        const val GOOGLE = "google"
+        const val FACEBOOK = "facebook"
+
+        fun all(): List<String> {
+            return listOf(EMAIL, GOOGLE, FACEBOOK)
+        }
+    }
+}
