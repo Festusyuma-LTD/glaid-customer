@@ -113,6 +113,7 @@
             android:textColor="#FFFFFF"
             android:textSize="16sp"
             android:textStyle="bold"
+            android:onClick="signInWithGoogle"
             app:layout_constraintBottom_toTopOf="@+id/dividerCover"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -199,4 +200,7 @@
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <include layout="@layout/error_message" />
+    <include layout="@layout/loading" />
 </androidx.constraintlayout.widget.ConstraintLayout>
