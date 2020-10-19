@@ -33,10 +33,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="-2dp"
-                android:layout_marginLeft="-2dp" />
+                android:layout_marginStart="-2dp" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -54,7 +52,6 @@
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:drawableStart="@drawable/ic_order_history"
-                    android:drawableLeft="@drawable/ic_order_history"
                     android:drawablePadding="20dp"
                     android:gravity="start"
                     android:onClick="orderHistoryClick"
@@ -76,7 +73,6 @@
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:drawableStart="@drawable/ic_help"
-                    android:drawableLeft="@drawable/ic_help"
                     android:drawablePadding="20dp"
                     android:gravity="start"
                     android:onClick="paymentClick"
@@ -98,7 +94,6 @@
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:drawableStart="@drawable/ic_help"
-                    android:drawableLeft="@drawable/ic_help"
                     android:drawablePadding="20dp"
                     android:gravity="start"
                     android:onClick="helpClick"
@@ -115,7 +110,6 @@
                     android:layout_width="270dp"
                     android:layout_height="340dp"
                     android:layout_marginEnd="65dp"
-                    android:layout_marginRight="65dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/guideline3"
                     app:srcCompat="@drawable/ic_fuelstation"

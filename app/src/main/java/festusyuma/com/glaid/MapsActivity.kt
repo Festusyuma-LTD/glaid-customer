@@ -321,6 +321,7 @@ class MapsActivity :
     private fun orderCompleted(status: Long) {
         if (this::driverMarker.isInitialized) driverMarker.remove()
         removePolyLine()
+        updateLocalOrderStatus(status)
 
         livePendingOrder.id.value = null
         livePendingOrder.amount.value = null

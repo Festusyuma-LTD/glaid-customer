@@ -195,4 +195,7 @@
     <string name="server_client_id">399800857143-gb4705t084ca39sqko66bs3bogtbf2pt.apps.googleusercontent.com</string>
     <string name="facebook_app_id">802141560613453</string>
     <string name="fb_login_protocol_scheme">fb802141560613453</string>
+    <string name="cancel_order">Cancel order</string>
+    <string name="change_password">Change Password</string>
+    <string name="upload_image">Upload Image</string>
 </resources>

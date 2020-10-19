@@ -241,4 +241,8 @@ class AddFundsActivity : AppCompatActivity() {
         startActivity(Intent(this, MainActivity::class.java))
         finishAffinity()
     }
+
+    fun goBack(view: View) {
+        finish()
+    }
 }
